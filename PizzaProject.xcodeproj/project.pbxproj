@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2901C6772CBC6D38000B493B /* FoodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2901C6762CBC6D38000B493B /* FoodType.swift */; };
 		29344E952CA615DB005AEDA1 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29344E942CA615DB005AEDA1 /* ProductViewModel.swift */; };
 		29344E982CA61880005AEDA1 /* ProductModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29344E972CA61880005AEDA1 /* ProductModel.swift */; };
 		29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2901C6762CBC6D38000B493B /* FoodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodType.swift; sourceTree = "<group>"; };
 		29344E942CA615DB005AEDA1 /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		29344E972CA61880005AEDA1 /* ProductModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductModel.swift; sourceTree = "<group>"; };
 		29A37C862C96FF0200ADB7D4 /* PizzaProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +148,7 @@
 		29DCE2262CA70FF90085FF76 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				2901C6762CBC6D38000B493B /* FoodType.swift */,
 				29DCE2272CA7100B0085FF76 /* Colors.swift */,
 			);
 			path = Constants;
@@ -233,6 +236,7 @@
 				29344E982CA61880005AEDA1 /* ProductModel.swift in Sources */,
 				29DCE2252CA706910085FF76 /* BannerCollectrionCell.swift in Sources */,
 				29A37C8E2C96FF0200ADB7D4 /* ProductViewController.swift in Sources */,
+				2901C6772CBC6D38000B493B /* FoodType.swift in Sources */,
 				29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */,
 				29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */,
 				29DCE2232CA700130085FF76 /* ProductContainerCell.swift in Sources */,

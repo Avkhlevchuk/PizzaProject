@@ -10,17 +10,18 @@ import SnapKit
 
 class ProductViewController: UIViewController {
     let productContainer = ProductContainerCell()
+    let productViewModel = ProductViewModel()
     
     lazy var tableView: UITableView = {
-        let tableview = UITableView()
-        tableview.backgroundColor = Colors.backgroundColor
-        tableview.dataSource = self
-        tableview.delegate = self
-        tableview.rowHeight = 130
-        tableview.estimatedRowHeight = 150
-        tableview.separatorStyle = .none
-        tableview.register(ProductCell.self , forCellReuseIdentifier: ProductCell.reuseId)
-        return tableview
+        let tableView = UITableView()
+        tableView.backgroundColor = Colors.backgroundColor
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.estimatedRowHeight = 150
+        tableView.separatorStyle = .none
+        tableView.register(ProductCell.self , forCellReuseIdentifier: ProductCell.reuseId)
+        tableView.register(ProductContainerCell.self , forCellReuseIdentifier: ProductContainerCell.reuseId)
+        return tableView
     }()
     
     override func viewDidLoad() {
@@ -28,27 +29,34 @@ class ProductViewController: UIViewController {
 
         setupViews()
         setupConstraints()
+        setupBinding()
+        
+        productViewModel.fetchProducts()
+        
     }
         
     func setupViews() {
         view.backgroundColor = Colors.backgroundColor
         view.addSubview(tableView)
-        view.addSubview(productContainer)
     }
     
     func setupConstraints() {
         
-        productContainer.snp.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
-            make.left.right.equalTo(view)
-            make.height.equalTo(50)
+            make.left.right.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+
+        }
+    }
+    
+    func setupBinding() {
+        productContainer.onFilterButtonTapped = {
+            print("taped button in collection")
         }
         
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(productContainer.snp.bottom)
-            make.left.right.equalTo(view)
-            make.bottom.equalTo(view)
-
+        productViewModel.onProductUpdate = { [weak self] in
+            self?.tableView.reloadData()
         }
     }
     
@@ -59,25 +67,49 @@ class ProductViewController: UIViewController {
 extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        
+        switch section {
+            case 0:
+                return 1
+            case 1:
+                return productViewModel.products.count
+            default :
+                return 0
+        
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if  indexPath.section == 0 {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProductContainerCell.reuseId, for: indexPath) as? ProductContainerCell else { return UITableViewCell()}
-//            
-//            return cell
-//        }
         
-        if indexPath.row < 10 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProductCell.reuseId, for: indexPath) as? ProductCell else { return UITableViewCell() }
+        switch indexPath.section {
+            case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProductContainerCell.reuseId, for: indexPath) as? ProductContainerCell else { return UITableViewCell() }
+            
+            cell.onFilterButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                self.productContainer.onFilterButtonTapped?()
+            }
+            
+            let filter = productViewModel.allFilters
+            cell.update(filter)
             return cell
+            case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProductCell.reuseId, for: indexPath) as? ProductCell else { return UITableViewCell() }
+            let product = productViewModel.products[indexPath.row]
+            cell.update(product)
+            return cell
+            
+        default:
+            return UITableViewCell()
+            
         }
-        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("taped on cell")
     }
 }
-

@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
-class ProductCell: UITableViewCell  {
+class ProductCell: UITableViewCell {
+    
+    var productContainerCell = ProductContainerCell()
     
     static let reuseId = "ProductCell"
     
@@ -50,6 +52,7 @@ class ProductCell: UITableViewCell  {
         let label = UILabel()
         label.text = "Пеперони, моцарела, помидоры"
         label.textColor = .black
+        label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
@@ -110,4 +113,13 @@ class ProductCell: UITableViewCell  {
         }
     }
     
+}
+
+extension ProductCell {
+    func update(_ product: Pizza) {
+        nameLabel.text = product.name
+        descriptionLabel.text = product.ingredients
+        priceButton.setTitle("от \(product.price) ₽", for: .normal)
+        photoImageView.image = UIImage(named: product.image)
+    }
 }

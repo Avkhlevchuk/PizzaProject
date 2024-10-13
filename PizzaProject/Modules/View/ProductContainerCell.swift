@@ -7,15 +7,19 @@
 
 import UIKit
 
-class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    var foodType: [FoodType] = []
+    
+    let productViewModel = ProductViewModel()
+    
+    var onFilterButtonTapped: (()->())?
     
     static let reuseId = "ProductContainerCell"
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 100, height: 25)
-        layout.minimumLineSpacing = 40
         layout.collectionView?.backgroundColor = Colors.backgroundColor
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -26,8 +30,8 @@ class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollect
         collectionView.backgroundColor = .white
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        collectionView.layer.cornerRadius = 15
-        collectionView.layer.masksToBounds = true
+        collectionView.layer.cornerRadius = 40
+        //collectionView.layer.masksToBounds = true
         return collectionView
     }()
     
@@ -36,6 +40,9 @@ class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollect
         
         setupView()
         setupConstraints()
+        setupBinding()
+        
+        productViewModel.fetchFilters()
     }
 
     required init?(coder: NSCoder) {
@@ -49,18 +56,54 @@ class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollect
     
     func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.left.right.equalTo(contentView)
+            make.top.bottom.equalTo(contentView)
+            make.height.equalTo(50)
+        }
+    }
+    
+    func setupBinding() {
+        productViewModel.onFilterFetch = { [weak self] in
+            self?.collectionView.reloadData()
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return foodType.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionCell.reuseId, for: indexPath) as? BannerCollectionCell else { return UICollectionViewCell() }
+
+        cell.update(foodType[indexPath.row])
+        
+        cell.onButtonTapped = { [weak self] in
+            guard let self = self else { return }
+            self.onFilterButtonTapped?()
+        }
+        
         return cell
     }
+//MARK: - UICollectionViewDelegateFlowLayout
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+           let foodType = foodType[indexPath.row]
+           let label = UILabel()
+           label.text = foodType.rawValue
+           label.font = UIFont.systemFont(ofSize: 14)
+           label.sizeToFit()
+           
+           // Добавляем отступы для текста
+           let itemWidth = label.frame.width + 15
+           let itemHeight: CGFloat = 25
+           
+           return CGSize(width: itemWidth, height: itemHeight)
+       }
     
+}
+
+extension ProductContainerCell {
+    func update (_ foodType: [FoodType]) {
+        self.foodType = foodType
+    }
 }

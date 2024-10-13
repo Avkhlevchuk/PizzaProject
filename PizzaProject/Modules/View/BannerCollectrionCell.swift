@@ -9,14 +9,21 @@ import UIKit
 
 class BannerCollectionCell: UICollectionViewCell {
     
+    var onButtonTapped: (()->())?
+    
     static let reuseId = "BannerCollectionCell"
     
-    let typeFoodLabel: UILabel = {
-        $0.font = .boldSystemFont(ofSize: 14)
-        $0.textColor = .gray
-        $0.text = "Римские пиццы"
+    let typeFoodLabel: UIButton = {
+        $0.setTitle("Римские пиццы", for: .normal)
+        $0.setTitleColor(.gray, for: .normal)
+        $0.titleLabel?.font = .boldSystemFont(ofSize: 14)
+        $0.addTarget(nil, action: #selector(buttonTapped), for: .touchUpInside)
         return $0
-    }(UILabel())
+    }(UIButton())
+    
+    @objc func buttonTapped() {
+        onButtonTapped?()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,7 +36,6 @@ class BannerCollectionCell: UICollectionViewCell {
     }
     
     func setupView() {
-//        contentView.backgroundColor = .blue
         contentView.addSubview(typeFoodLabel)
     }
     
@@ -38,5 +44,12 @@ class BannerCollectionCell: UICollectionViewCell {
             make.top.bottom.equalTo(contentView)
             make.left.equalTo(contentView).inset(20)
         }
+    }
+}
+
+//MARK: - Update View
+extension BannerCollectionCell {
+    func update(_ filter: FoodType) {
+        typeFoodLabel.setTitle("\(filter.rawValue)", for: .normal)
     }
 }
