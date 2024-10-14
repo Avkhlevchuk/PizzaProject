@@ -41,6 +41,7 @@ class ShortBannerCollectionCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Пеперони"
         label.textColor = .black
+        label.numberOfLines = 0
         label.font = UIFont.boldSystemFont(ofSize: 15)
         return label
     }()
@@ -89,16 +90,27 @@ class ShortBannerCollectionCell: UICollectionViewCell {
         }
         
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(containerView).inset(10)
+            make.top.equalTo(contentView).inset(10)
             make.left.equalTo(contentView).inset(10)
             
         }
         
         verticalStackView.snp.makeConstraints { make in
+            make.width.equalTo(120)
+            make.height.greaterThanOrEqualTo(50)
+            make.centerY.equalTo(contentView)
             make.left.equalTo(imageView.snp.right).offset(5)
-            make.top.bottom.equalTo(containerView).offset(25)
-
         }
         
+    }
+}
+
+//MARK: - Update view
+
+extension ShortBannerCollectionCell {
+    func update(_ product: Pizza) {
+        imageView.image = UIImage(named: product.image)
+        nameLabel.text = product.name
+        priceButton.setTitle("от \(product.price) ₽", for: .normal)
     }
 }
