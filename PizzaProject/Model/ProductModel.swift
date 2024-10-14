@@ -8,9 +8,7 @@
 import Foundation
 
 class ProductModel {
-    
-
-    
+ 
 }
 
 struct Pizza {

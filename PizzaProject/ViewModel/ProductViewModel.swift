@@ -20,7 +20,7 @@ class ProductViewModel {
         Pizza(id: 5, name: "Тройная пеперони", ingredients: "Пикантная пепперони, увеличенная порция моцареллы, томаты, фирменный томатный соус", price: 777, image: "default", foodType: .pizza)
     ]
     
-    let allFilters = [FoodType.romanPizza, FoodType.pizza, FoodType.combo, FoodType.snack, FoodType.breakfast]
+    let allFilters = [FoodType.romanPizza, FoodType.pizza, FoodType.combo, FoodType.snack, FoodType.breakfast, FoodType.milkshake, FoodType.drink, FoodType.coffee]
     
     func fetchProduct(index: Int) -> Pizza {
         return products[index]

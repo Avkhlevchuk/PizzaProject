@@ -27,11 +27,14 @@ class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollect
         collectionView.dataSource = self
 //        collectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         collectionView.register(BannerCollectionCell.self, forCellWithReuseIdentifier: BannerCollectionCell.reuseId)
-        collectionView.backgroundColor = .white
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        collectionView.layer.cornerRadius = 40
-        //collectionView.layer.masksToBounds = true
+        collectionView.backgroundColor = .white
+       
+        // Закругление ячейки cell
+        
+//        collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+//        collectionView.layer.cornerRadius = 40
+//        collectionView.layer.masksToBounds = true
         return collectionView
     }()
     
@@ -93,7 +96,6 @@ class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollect
            label.font = UIFont.systemFont(ofSize: 14)
            label.sizeToFit()
            
-           // Добавляем отступы для текста
            let itemWidth = label.frame.width + 15
            let itemHeight: CGFloat = 25
            

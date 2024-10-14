@@ -13,4 +13,8 @@ enum FoodType: String {
     case combo = "Комбо"
     case snack = "Закуска"
     case breakfast = "Завтрак"
+    case milkshake = "Молочные коктели"
+    case coffee = "Кофе"
+    case drink = "Напиток"
+    
 }
