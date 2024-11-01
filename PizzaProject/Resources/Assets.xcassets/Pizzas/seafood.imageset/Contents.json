@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "rimskaya-eger-min-768x768.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
