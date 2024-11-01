@@ -36,11 +36,6 @@ class ProductViewController: UIViewController {
         
         productViewModel.fetchProducts()
         
-        let gesture = UISwipeGestureRecognizer(target: self, action: #selector(dismissVC))
-                gesture.direction = .down
-                view.isUserInteractionEnabled = true // For UIImageView
-                view.addGestureRecognizer(gesture)
-        
     }
     
     @objc private func dismissVC() {
@@ -135,7 +130,9 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("taped on cell")
         
-        let detailVC = DetailViewController()
+        let selectedProduct = productViewModel.products[indexPath.row]
+        let detailProductViewModel = DetailProductViewModel(product: selectedProduct)
+        let detailVC = DetailViewController(detailProductViewModel: detailProductViewModel)
         detailVC.modalPresentationStyle = .fullScreen
         present(detailVC, animated: true)
         

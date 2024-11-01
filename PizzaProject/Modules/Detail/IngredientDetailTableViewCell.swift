@@ -105,3 +105,10 @@ class IngredientDetailTableViewCell: UITableViewCell {
         }
     }
 }
+
+//MARK: - Update View
+extension IngredientDetailTableViewCell {
+    func update(_ product: Pizza) {
+        descriptionLabel.text = product.ingredients
+    }
+}

@@ -23,7 +23,7 @@ class DetailProductViewCell: UITableViewCell {
     
     lazy var detailProductImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "pizza")
+        imageView.image = UIImage(named: "peperoni")
         imageView.contentMode = .scaleAspectFill
         let width = UIScreen.main.bounds.width * 0.9
         imageView.heightAnchor.constraint(equalToConstant: width).isActive = true
@@ -85,5 +85,12 @@ class DetailProductViewCell: UITableViewCell {
             make.top.equalTo(sizePizzaSegmentedControl.snp.bottom).offset(10)
             make.left.right.equalTo(containerView).inset(10)
         }
+    }
+}
+
+//MARK: Update View
+extension DetailProductViewCell {
+    func update(_ product: Pizza) {
+        detailProductImageView.image = UIImage(named: product.image)        
     }
 }

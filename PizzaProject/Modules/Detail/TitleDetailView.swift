@@ -81,3 +81,11 @@ public extension UIView {
         return blurBackground
     }
 }
+
+//MARK: - Update View
+
+extension TitleDetailView {
+    func update(_ product: Pizza) {
+        titleLabel.text = product.name
+    }
+}

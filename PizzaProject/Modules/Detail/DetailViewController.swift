@@ -11,6 +11,7 @@ import SnapKit
 class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var titleDetailView = TitleDetailView()
+    private let detailProductViewModel: DetailProductViewModel
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -40,12 +41,22 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return segmentedControl
     }()
     
+    init (detailProductViewModel: DetailProductViewModel) {
+        self.detailProductViewModel = detailProductViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
         setupConstraints()
         setupBinding()
+        
 
     }
     
@@ -76,6 +87,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         titleDetailView.onCloseButtonTaped = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
+        
+        detailProductViewModel.onProductUpdate = { [weak self] in
+            guard let self = self else { return }
+            let pizzaProduct = self.detailProductViewModel.getProduct()
+            self.titleDetailView.update(pizzaProduct)
+        }
+        
+        titleDetailView.update(detailProductViewModel.getProduct())
     }
 //MARK: - UITableViewDataSource, UITableViewDelegate
     
@@ -98,15 +117,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        let product = detailProductViewModel.getProduct()
+        
         switch indexPath.section {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailProductViewCell.reuseId, for: indexPath) as? DetailProductViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
+            cell.update(product)
             return cell
         case 1:
-            //
             guard let cell = tableView.dequeueReusableCell(withIdentifier: IngredientDetailTableViewCell.reuseId, for: indexPath) as? IngredientDetailTableViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
+            cell.update(product)
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ToppingsContainerCell.reuseId, for: indexPath) as? ToppingsContainerCell else { return UITableViewCell() }
