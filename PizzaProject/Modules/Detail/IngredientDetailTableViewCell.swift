@@ -6,10 +6,49 @@
 //
 
 import UIKit
+import EasyTipView
 
-class IngredientDetailTableViewCell: UITableViewCell {
+class IngredientDetailTableViewCell: UITableViewCell, EasyTipViewDelegate {
+    func easyTipViewDidTap(_ tipView: EasyTipView) {
+        print("Tooltip dismissed")
+    }
     
-    static let reuseId = "IngridientDetailTableViewCell"
+    func easyTipViewDidDismiss(_ tipView: EasyTipView) {
+        print("Tooltip dismissed")
+    }
+    
+    
+    var onInfoButtonTapped: (()->())?
+    
+    static let reuseId = "IngredientDetailTableViewCell"
+    
+    @objc private func showTooltip() {
+        var preferences = EasyTipView.Preferences()
+        preferences.drawing.backgroundColor = .darkGray
+        preferences.drawing.foregroundColor = .white
+        preferences.drawing.font = UIFont.systemFont(ofSize: 14)
+        preferences.drawing.arrowPosition = EasyTipView.ArrowPosition.right
+        preferences.drawing.textAlignment = .left
+        
+        EasyTipView.show(
+            forView: infoWeightDescriptionButton,
+            withinSuperview: self.contentView,
+            text: """
+                Sweet Chilli shrimp
+                Nutrition facts (per 100 g)
+                Weight                            630 g
+                Calories                   229.2 kcal
+                Protein                                8.7 g
+                Fats                                   7.2 g
+                Carbohydrates                30.9 g
+                May contain: gluten, milk and its products
+                (including lactose), as well as some other
+                allergens: vdo.do/ru_nutrition
+                """,
+            preferences: preferences,
+            delegate: self
+        )
+    }
     
     lazy var containterDescriptionView: UIView = {
         let view = UIView()
@@ -44,9 +83,14 @@ class IngredientDetailTableViewCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "info.circle"), for: .normal)
         button.tintColor = .black
-        button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        button.addTarget(self, action: #selector(showTooltip), for: .touchUpInside)
         return button
     }()
+    
+    @objc private func infoWeightDescriptionButtonTapped() {
+        onInfoButtonTapped?()
+        
+    }
     
     lazy var weightLabel: UILabel = {
         let label = UILabel()
@@ -76,6 +120,7 @@ class IngredientDetailTableViewCell: UITableViewCell {
         [descriptionLabel, removeIngredientsButton, infoWeightDescriptionButton, weightLabel].forEach {
             containterDescriptionView.addSubview($0)
         }
+        
     }
     
     func setupContaints() {
@@ -86,8 +131,8 @@ class IngredientDetailTableViewCell: UITableViewCell {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.left.top.equalTo(containterDescriptionView).offset(10)
-            make.right.equalTo(infoWeightDescriptionButton.snp.left)
+            make.left.top.equalTo(containterDescriptionView).offset(15)
+            make.right.equalTo(infoWeightDescriptionButton.snp.left).inset(10)
         }
         
         removeIngredientsButton.snp.makeConstraints { make in
@@ -96,7 +141,9 @@ class IngredientDetailTableViewCell: UITableViewCell {
         }
         
         infoWeightDescriptionButton.snp.makeConstraints { make in
-            make.right.top.equalTo(containterDescriptionView).inset(8)
+            make.top.equalTo(containterDescriptionView).inset(12)
+            make.right.equalTo(containterDescriptionView).inset(15)
+            make.height.width.equalTo(24)
         }
         
         weightLabel.snp.makeConstraints { make in
@@ -111,4 +158,21 @@ extension IngredientDetailTableViewCell {
     func update(_ product: Pizza) {
         descriptionLabel.text = product.ingredients
     }
+}
+
+//MARK: - ToolBar
+
+extension IngredientDetailTableViewCell: UIToolTipInteractionDelegate {
+    
+    func toolTipInteraction(_ interaction: UIToolTipInteraction, configurationAt point: CGPoint) -> UIToolTipConfiguration? {
+
+            let configuration: UIToolTipConfiguration?
+            if let accessibilityName = backgroundColor?.accessibilityName {
+                configuration = UIToolTipConfiguration(toolTip: "The color is \(accessibilityName).")
+            } else {
+                configuration = nil
+            }
+            
+            return configuration
+        }
 }

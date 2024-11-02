@@ -17,6 +17,8 @@
 		294F56172CC0322C0015E241 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294F56162CC0322C0015E241 /* DetailViewController.swift */; };
 		294F56192CC05E1A0015E241 /* CustomeSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294F56182CC05E1A0015E241 /* CustomeSegmentControl.swift */; };
 		296302BF2CD56A7C005545C8 /* DetailProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296302BE2CD56A7C005545C8 /* DetailProductViewModel.swift */; };
+		296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296302C02CD586AF005545C8 /* ToolTipView.swift */; };
+		296B83142CD68692003CFFD7 /* EasyTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 296B83132CD68692003CFFD7 /* EasyTipView */; };
 		29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */; };
 		29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */; };
 		29A37C8E2C96FF0200ADB7D4 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8D2C96FF0200ADB7D4 /* ProductViewController.swift */; };
@@ -46,6 +48,7 @@
 		294F56162CC0322C0015E241 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		294F56182CC05E1A0015E241 /* CustomeSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeSegmentControl.swift; sourceTree = "<group>"; };
 		296302BE2CD56A7C005545C8 /* DetailProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProductViewModel.swift; sourceTree = "<group>"; };
+		296302C02CD586AF005545C8 /* ToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolTipView.swift; sourceTree = "<group>"; };
 		29A37C862C96FF0200ADB7D4 /* PizzaProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -71,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29A37CA22C9703AD00ADB7D4 /* SnapKit in Frameworks */,
+				296B83142CD68692003CFFD7 /* EasyTipView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				294F56182CC05E1A0015E241 /* CustomeSegmentControl.swift */,
+				296302C02CD586AF005545C8 /* ToolTipView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 			name = PizzaProject;
 			packageProductDependencies = (
 				29A37CA12C9703AD00ADB7D4 /* SnapKit */,
+				296B83132CD68692003CFFD7 /* EasyTipView */,
 			);
 			productName = PizzaProject;
 			productReference = 29A37C862C96FF0200ADB7D4 /* PizzaProject.app */;
@@ -255,6 +261,7 @@
 			mainGroup = 29A37C7D2C96FF0200ADB7D4;
 			packageReferences = (
 				29A37CA02C9703AD00ADB7D4 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				296B83122CD68692003CFFD7 /* XCRemoteSwiftPackageReference "EasyTipView" */,
 			);
 			productRefGroup = 29A37C872C96FF0200ADB7D4 /* Products */;
 			projectDirPath = "";
@@ -301,6 +308,7 @@
 				29F5799C2CCCEBCB006418EA /* DetailProductViewCell.swift in Sources */,
 				29F579A02CCE3E13006418EA /* ToppingsCollectionCell.swift in Sources */,
 				29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */,
+				296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */,
 				294F56172CC0322C0015E241 /* DetailViewController.swift in Sources */,
 				29AE064A2CCC138C00C746CC /* TitleDetailView.swift in Sources */,
 				29DCE2232CA700130085FF76 /* ProductContainerCell.swift in Sources */,
@@ -529,6 +537,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		296B83122CD68692003CFFD7 /* XCRemoteSwiftPackageReference "EasyTipView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/teodorpatras/EasyTipView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
 		29A37CA02C9703AD00ADB7D4 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -540,6 +556,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		296B83132CD68692003CFFD7 /* EasyTipView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 296B83122CD68692003CFFD7 /* XCRemoteSwiftPackageReference "EasyTipView" */;
+			productName = EasyTipView;
+		};
 		29A37CA12C9703AD00ADB7D4 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 29A37CA02C9703AD00ADB7D4 /* XCRemoteSwiftPackageReference "SnapKit" */;

@@ -71,8 +71,8 @@ class DetailProductViewCell: UITableViewCell {
         }
         
         detailProductImageView.snp.makeConstraints { make in
-            make.left.equalTo(containerView).inset(25)
             make.top.equalTo(containerView).inset(25)
+            make.centerX.equalTo(containerView)
         }
         
         sizePizzaSegmentedControl.snp.makeConstraints { make in

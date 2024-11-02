@@ -12,6 +12,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var titleDetailView = TitleDetailView()
     private let detailProductViewModel: DetailProductViewModel
+    var ingredientDetailProductTableView = IngredientDetailTableViewCell()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -56,8 +57,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         setupViews()
         setupConstraints()
         setupBinding()
-        
-
     }
     
     func setupViews() {
@@ -95,6 +94,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         titleDetailView.update(detailProductViewModel.getProduct())
+        
+    
     }
 //MARK: - UITableViewDataSource, UITableViewDelegate
     
@@ -129,6 +130,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             guard let cell = tableView.dequeueReusableCell(withIdentifier: IngredientDetailTableViewCell.reuseId, for: indexPath) as? IngredientDetailTableViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
             cell.update(product)
+            
+            cell.onInfoButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                self.ingredientDetailProductTableView.onInfoButtonTapped?()
+            }
+            
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ToppingsContainerCell.reuseId, for: indexPath) as? ToppingsContainerCell else { return UITableViewCell() }
@@ -148,3 +155,16 @@ extension DetailViewController {
         tableView.deselectRow(at: indexPath, animated: false)
     }
 }
+
+
+extension DetailViewController: UIToolTipInteractionDelegate {
+    // If both delegate methods are implemented, this one takes precedence
+    func toolTipInteraction(_ interaction: UIToolTipInteraction, toolTipAt point: CGPoint) -> String? {
+        return "Hi There - I'm showing a tooltip"
+    }
+    
+    func toolTipInteraction(_ interaction: UIToolTipInteraction, toolTipAt point: CGPoint, boundingRect outRect: UnsafeMutablePointer<CGRect>) -> String? {
+        return "Bounding rect delegate function"
+    }
+}
+

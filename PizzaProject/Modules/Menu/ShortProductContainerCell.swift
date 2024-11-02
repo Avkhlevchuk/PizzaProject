@@ -33,7 +33,7 @@ class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICo
     lazy var collectionView: UICollectionView = {
         var layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 220 , height: 125)
+        layout.itemSize = CGSize(width: 230 , height: 125)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.delegate = self
