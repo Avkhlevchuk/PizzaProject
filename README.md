@@ -1,7 +1,7 @@
 # PizzaProject
 
 ## Overview
-The Pizza Project is an iOS application developed to offer a seamless pizza ordering experience,
+The Pizza Project is an iOS application that offers a pizza ordering experience,
 allowing users to customize their pizza with various toppings and crust options. This project 
 showcases advanced UI features, MVVM architecture, and interactive design, built using Swift.
 
