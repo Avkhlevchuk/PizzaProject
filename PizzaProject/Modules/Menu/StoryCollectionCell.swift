@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class StoryCollectionCell: UICollectionViewCell {
+final class StoryCollectionCell: UICollectionViewCell {
     
     static let reuseId = "StoryCollectionCell"
         

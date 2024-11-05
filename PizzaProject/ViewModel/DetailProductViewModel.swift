@@ -11,6 +11,8 @@ class DetailProductViewModel {
     
     var product: Pizza
     
+    var order = [Order]()
+    
     var onProductUpdate: (()-> ())?
     
     init (product: Pizza) {

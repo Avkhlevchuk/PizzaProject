@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     let productViewModel = ProductViewModel()
     
     static let reuseId = "StoryContainerCell"

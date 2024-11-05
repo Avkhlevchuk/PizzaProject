@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
    
     let productViewModel = ProductViewModel()
     

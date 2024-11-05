@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CategoryCollectionCell: UICollectionViewCell {
+final class CategoryCollectionCell: UICollectionViewCell {
     
     var onButtonTapped: (()->())?
     

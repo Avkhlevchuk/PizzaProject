@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var foodType: [FoodType] = []
     

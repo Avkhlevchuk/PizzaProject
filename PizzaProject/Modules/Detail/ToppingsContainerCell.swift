@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
     static let reuseId = "IngredientsContainerCell"
     

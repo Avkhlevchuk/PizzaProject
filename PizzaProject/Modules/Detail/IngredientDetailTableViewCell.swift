@@ -6,49 +6,60 @@
 //
 
 import UIKit
-import EasyTipView
 
-class IngredientDetailTableViewCell: UITableViewCell, EasyTipViewDelegate {
-    func easyTipViewDidTap(_ tipView: EasyTipView) {
-        print("Tooltip dismissed")
-    }
-    
-    func easyTipViewDidDismiss(_ tipView: EasyTipView) {
-        print("Tooltip dismissed")
-    }
-    
-    
+final class IngredientDetailTableViewCell: UITableViewCell {
+        
     var onInfoButtonTapped: (()->())?
     
     static let reuseId = "IngredientDetailTableViewCell"
     
     @objc private func showTooltip() {
-        var preferences = EasyTipView.Preferences()
-        preferences.drawing.backgroundColor = .darkGray
-        preferences.drawing.foregroundColor = .white
-        preferences.drawing.font = UIFont.systemFont(ofSize: 14)
-        preferences.drawing.arrowPosition = EasyTipView.ArrowPosition.right
-        preferences.drawing.textAlignment = .left
-        
-        EasyTipView.show(
-            forView: infoWeightDescriptionButton,
-            withinSuperview: self.contentView,
-            text: """
-                Sweet Chilli shrimp
-                Nutrition facts (per 100 g)
-                Weight                            630 g
-                Calories                   229.2 kcal
-                Protein                                8.7 g
-                Fats                                   7.2 g
-                Carbohydrates                30.9 g
-                May contain: gluten, milk and its products
-                (including lactose), as well as some other
-                allergens: vdo.do/ru_nutrition
-                """,
-            preferences: preferences,
-            delegate: self
-        )
+        onInfoButtonTapped?()
+        // Удаляем предыдущий ToolTipView, если он существует
+//        contentView.subviews.forEach { subview in
+//            if subview is ToolTipView {
+//                subview.removeFromSuperview()
+//            }
+//        }
+//
+//        // Текст для ToolTipView
+//        let toolTipText = """
+//            Sweet Chilli shrimp
+//            Nutrition facts (per 100 g)
+//            Weight                            630 g
+//            Calories                   229.2 kcal
+//            Protein                                8.7 g
+//            Fats                                   7.2 g
+//            Carbohydrates                30.9 g
+//            May contain: gluten, milk and its products
+//            (including lactose), as well as some other
+//            allergens: vdo.do/ru_nutrition
+//        """
+//
+//        // Позиция всплывающей подсказки относительно кнопки
+//        let tooltipPosition: ToolTipPosition = .middle
+//
+//        // Создаем ToolTipView
+//        let tooltipView = ToolTipView(
+//            frame: CGRect(x: 0, y: 0, width: 200, height: 400), // Укажите нужный размер
+//            text: toolTipText,
+//            tipPos: tooltipPosition
+//        )
+//
+//        // Позиционируем ToolTipView
+////        tooltipView.center = CGPoint(x: infoWeightDescriptionButton.frame.minX - tooltipView.bounds.width / 2,
+////                                     y: infoWeightDescriptionButton.frame.midY)
+//        
+//        
+//        tooltipView.center = CGPoint(x: infoWeightDescriptionButton.frame.minX - tooltipView.bounds.width / 1.8,
+//                                     y: infoWeightDescriptionButton.frame.maxY + tooltipView.bounds.height / 9) // Добавлено смещение вниз
+//        
+//        
+//        contentView.addSubview(tooltipView)
+//        
+//        contentView.bringSubviewToFront(tooltipView)
     }
+
     
     lazy var containterDescriptionView: UIView = {
         let view = UIView()
@@ -70,7 +81,7 @@ class IngredientDetailTableViewCell: UITableViewCell, EasyTipViewDelegate {
     }()
     
     lazy var removeIngredientsButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle(" ✎ Remove ingredients ", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
@@ -80,7 +91,7 @@ class IngredientDetailTableViewCell: UITableViewCell, EasyTipViewDelegate {
     }()
     
     lazy var infoWeightDescriptionButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "info.circle"), for: .normal)
         button.tintColor = .black
         button.addTarget(self, action: #selector(showTooltip), for: .touchUpInside)

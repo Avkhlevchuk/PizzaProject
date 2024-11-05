@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ShortBannerCollectionCell: UICollectionViewCell {
+final class ShortBannerCollectionCell: UICollectionViewCell {
     
     static let reuseId = "ShortBannerCollectionCell"
  
@@ -113,6 +113,6 @@ extension ShortBannerCollectionCell {
     func update(_ product: Pizza) {
         imageView.image = UIImage(named: product.image)
         nameLabel.text = product.name
-        priceButton.setTitle("от \(product.price) ₽", for: .normal)
+        priceButton.setTitle("from \(product.price) £", for: .normal)
     }
 }

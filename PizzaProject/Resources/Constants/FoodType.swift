@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FoodType: String {
+enum FoodType: String, Codable {
     case romanPizza = "Roman Pizza"
     case pizza = "Pizza"
     case combo = "Combo"

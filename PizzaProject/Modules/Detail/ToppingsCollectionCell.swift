@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ToppingsCollectionCell: UICollectionViewCell {
+final class ToppingsCollectionCell: UICollectionViewCell {
  
     static let reuseId = "IngredientsCollectionCell"
     

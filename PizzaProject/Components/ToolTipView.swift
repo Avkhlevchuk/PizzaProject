@@ -7,62 +7,117 @@
 
 import UIKit
 
-class ToolTipView: UIView {
+enum ToolTipPosition: Int {
+    case left
+    case right
+    case middle
+}
 
-    private let messageLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
+class ToolTipView: UIView {
+    private let toolTipWidth: CGFloat = 20.0
+    private let toolTipHeight: CGFloat = 20.0
+    private let tipOffset: CGFloat = 20.0
+    private var tipPosition: ToolTipPosition = .middle
+    private var label: UILabel = UILabel()
+
+    private var roundRect: CGRect!
+    private var titleLabel: UILabel = {
+        let title = UILabel()
+        title.font = UIFont.boldSystemFont(ofSize: 16)
+        title.textColor = .white
+        return title
     }()
-    
-    init(message: String) {
-        super.init(frame: .zero)
-        setupView()
-        messageLabel.text = message
-        setNeedsDisplay() // Обновляем отображение для вызова метода draw(_:)
+
+    init(frame: CGRect, text: String, tipPos: ToolTipPosition, titleLabel: UILabel) {
+        super.init(frame: frame)
+        self.titleLabel = titleLabel
+        self.tipPosition = tipPos
+        setupLabel(with: text)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupView() {
-        backgroundColor = .darkGray
-        layer.cornerRadius = 10
-        layer.masksToBounds = false // Отключаем, чтобы треугольник не обрезался
 
-        addSubview(messageLabel)
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupLabel(with text: String) {
+        label.text = text
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        addSubview(label)
+        
+        // Установка ограничений для лейбла
+        label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20) // Оставляем место для треугольника
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -toolTipHeight - 8)
         ])
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+        drawToolTip(rect)
+        self.addSubview(titleLabel)
         
-        // Отступ для треугольника
-        let triangleHeight: CGFloat = 10
-        let triangleWidth: CGFloat = 20
+        titleLabel.snp.makeConstraints { make in
+            make.left.top.equalTo(self).inset(15)
+        }
+    }
+    
 
-        // Создаем путь для треугольника
+    
+    private func createTipPath() -> UIBezierPath {
+        // Определяем положение треугольника для позиции .right
+        let tooltipRect = CGRect(x: roundRect.maxX, // Ставим треугольник справа
+                                 y: roundRect.midY - toolTipHeight / 2, // Центрируем по вертикали
+                                 width: toolTipWidth,
+                                 height: toolTipHeight)
+        
         let trianglePath = UIBezierPath()
-        
-        // Определяем положение треугольника относительно нижней границы view
-        trianglePath.move(to: CGPoint(x: rect.width / 2 - triangleWidth / 2, y: rect.height - triangleHeight))
-        trianglePath.addLine(to: CGPoint(x: rect.width / 2 + triangleWidth / 2, y: rect.height - triangleHeight))
-        trianglePath.addLine(to: CGPoint(x: rect.width / 2, y: rect.height))
-        trianglePath.close()
+        trianglePath.move(to: CGPoint(x: tooltipRect.minX, y: tooltipRect.minY)) // Верхняя левая точка
+        trianglePath.addLine(to: CGPoint(x: tooltipRect.maxX, y: tooltipRect.midY)) // Правая центральная точка
+        trianglePath.addLine(to: CGPoint(x: tooltipRect.minX, y: tooltipRect.maxY)) // Нижняя левая точка
+        trianglePath.close() // Замыкаем путь
 
-        // Задаем цвет заливки
-        UIColor.darkGray.setFill()
-        trianglePath.fill()
+        return trianglePath
     }
 
+
+
+    
+    private func drawToolTip(_ rect: CGRect) {
+        roundRect = CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: rect.height - toolTipHeight)
+        let roundRectPath = UIBezierPath(roundedRect: roundRect, cornerRadius: 5.0)
+        let trianglePath = createTipPath()
+        roundRectPath.append(trianglePath)
+        
+        let shapeLayer = createShapeLayer(with: roundRectPath.cgPath)
+        layer.insertSublayer(shapeLayer, at: 0)
+    }
+
+    private func createShapeLayer(with path: CGPath) -> CAShapeLayer {
+        let shape = CAShapeLayer()
+        shape.path = path
+        shape.fillColor = UIColor.darkGray.cgColor
+        shape.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
+        shape.shadowOffset = CGSize(width: 0, height: 2)
+        shape.shadowRadius = 5.0
+        shape.shadowOpacity = 0.8
+        return shape
+    }
+    
+    private func getXPosition() -> CGFloat {
+        switch tipPosition {
+        case .left:
+            return roundRect.minX + tipOffset
+        case .right:
+            return roundRect.maxX - toolTipWidth - tipOffset
+        case .middle:
+            return roundRect.midX - toolTipWidth / 2
+        }
+    }
 }

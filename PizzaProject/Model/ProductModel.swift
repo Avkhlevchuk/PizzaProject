@@ -11,7 +11,7 @@ class ProductModel {
  
 }
 
-struct Pizza {
+struct Pizza: Codable {
     let id: Int
     let name: String
     let ingredients: String
@@ -20,10 +20,15 @@ struct Pizza {
     let foodType: FoodType
 }
 
-struct Toppings {
+struct Toppings: Codable {
     let name: String
     let price: String
 }
 
+struct Order: Codable {
+    let product: Pizza
+    let count: Int
+    let toppings: [Toppings]
+}
 
 

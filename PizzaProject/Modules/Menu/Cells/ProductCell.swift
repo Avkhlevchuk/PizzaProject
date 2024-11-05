@@ -44,7 +44,7 @@ class ProductCell: UITableViewCell {
         let label = UILabel()
         label.text = "Пеперони"
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         return label
     }()
     
@@ -120,7 +120,7 @@ extension ProductCell {
     func update(_ product: Pizza) {
         nameLabel.text = product.name
         descriptionLabel.text = product.ingredients
-        priceButton.setTitle("от \(product.price) ₽", for: .normal)
+        priceButton.setTitle("from \(product.price) £", for: .normal)
         photoImageView.image = UIImage(named: product.image)
     }
 }
