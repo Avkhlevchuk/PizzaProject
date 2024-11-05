@@ -11,4 +11,4 @@ Language: Swift
 Architecture: MVVM
 UI Components: UIKit, SnapKit for programmatic auto-layout
 
-![ScreenRecording_11-04-2024 11-48-57_1](https://github.com/user-attachments/assets/41901112-abda-4748-9919-68ce1662a64e)
+![ScreenRecording_11-05-2024 11-39-12_1](https://github.com/user-attachments/assets/c5c55ad0-8526-47c0-889e-6f04a6e4ac16)
