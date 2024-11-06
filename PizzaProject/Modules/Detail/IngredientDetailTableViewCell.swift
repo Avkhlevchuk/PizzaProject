@@ -9,55 +9,13 @@ import UIKit
 
 final class IngredientDetailTableViewCell: UITableViewCell {
         
-    var onInfoButtonTapped: (()->())?
+    var onInfoButtonTapped: ((UIButton)->())?
     
     static let reuseId = "IngredientDetailTableViewCell"
     
-    @objc private func showTooltip() {
-        onInfoButtonTapped?()
-        // Удаляем предыдущий ToolTipView, если он существует
-//        contentView.subviews.forEach { subview in
-//            if subview is ToolTipView {
-//                subview.removeFromSuperview()
-//            }
-//        }
-//
-//        // Текст для ToolTipView
-//        let toolTipText = """
-//            Sweet Chilli shrimp
-//            Nutrition facts (per 100 g)
-//            Weight                            630 g
-//            Calories                   229.2 kcal
-//            Protein                                8.7 g
-//            Fats                                   7.2 g
-//            Carbohydrates                30.9 g
-//            May contain: gluten, milk and its products
-//            (including lactose), as well as some other
-//            allergens: vdo.do/ru_nutrition
-//        """
-//
-//        // Позиция всплывающей подсказки относительно кнопки
-//        let tooltipPosition: ToolTipPosition = .middle
-//
-//        // Создаем ToolTipView
-//        let tooltipView = ToolTipView(
-//            frame: CGRect(x: 0, y: 0, width: 200, height: 400), // Укажите нужный размер
-//            text: toolTipText,
-//            tipPos: tooltipPosition
-//        )
-//
-//        // Позиционируем ToolTipView
-////        tooltipView.center = CGPoint(x: infoWeightDescriptionButton.frame.minX - tooltipView.bounds.width / 2,
-////                                     y: infoWeightDescriptionButton.frame.midY)
-//        
-//        
-//        tooltipView.center = CGPoint(x: infoWeightDescriptionButton.frame.minX - tooltipView.bounds.width / 1.8,
-//                                     y: infoWeightDescriptionButton.frame.maxY + tooltipView.bounds.height / 9) // Добавлено смещение вниз
-//        
-//        
-//        contentView.addSubview(tooltipView)
-//        
-//        contentView.bringSubviewToFront(tooltipView)
+    @objc private func showTooltip(_ sender: UIButton) {
+        onInfoButtonTapped?(sender)
+
     }
 
     
@@ -98,10 +56,10 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         return button
     }()
     
-    @objc private func infoWeightDescriptionButtonTapped() {
-        onInfoButtonTapped?()
-        
-    }
+//    @objc private func infoWeightDescriptionButtonTapped() {
+//        onInfoButtonTapped?()
+//        
+//    }
     
     lazy var weightLabel: UILabel = {
         let label = UILabel()

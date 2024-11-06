@@ -22,6 +22,7 @@
 		296B833B2CDA602A003CFFD7 /* AddProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B833A2CDA602A003CFFD7 /* AddProductView.swift */; };
 		296B83402CDA87FA003CFFD7 /* UIViewBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B833F2CDA87FA003CFFD7 /* UIViewBlur.swift */; };
 		296B83422CDA88D1003CFFD7 /* StorageUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */; };
+		296B83442CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */; };
 		29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */; };
 		29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */; };
 		29A37C8E2C96FF0200ADB7D4 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8D2C96FF0200ADB7D4 /* ProductViewController.swift */; };
@@ -55,6 +56,7 @@
 		296B833A2CDA602A003CFFD7 /* AddProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProductView.swift; sourceTree = "<group>"; };
 		296B833F2CDA87FA003CFFD7 /* UIViewBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewBlur.swift; sourceTree = "<group>"; };
 		296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUserDefaults.swift; sourceTree = "<group>"; };
+		296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToppingInfoPopoverViewController.swift; sourceTree = "<group>"; };
 		29A37C862C96FF0200ADB7D4 /* PizzaProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 			children = (
 				29F5799F2CCE3E13006418EA /* ToppingsCollectionCell.swift */,
 				29F5799D2CCE3687006418EA /* ToppingsContainerCell.swift */,
+				296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */,
 				29F579A12CCE458A006418EA /* IngredientDetailTableViewCell.swift */,
 				29F5799B2CCCEBCB006418EA /* DetailProductViewCell.swift */,
 				296B833A2CDA602A003CFFD7 /* AddProductView.swift */,
@@ -307,6 +310,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				296B83442CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift in Sources */,
 				296B83422CDA88D1003CFFD7 /* StorageUserDefaults.swift in Sources */,
 				2901C67D2CBD3234000B493B /* ShortBannerCollectionCell.swift in Sources */,
 				29A37CA52C97069200ADB7D4 /* ProductCell.swift in Sources */,

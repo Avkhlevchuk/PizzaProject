@@ -20,6 +20,18 @@ struct Pizza: Codable {
     let foodType: FoodType
 }
 
+struct NutritionValue {
+    let id: Int
+    let namePizza: String
+    let weight: Int
+    let calories: Int
+    let protein: Int
+    let fats: Int
+    let carbohydrates: Int
+    let mayContain: String
+    let allergens: String
+}
+
 struct Toppings: Codable {
     let name: String
     let price: String
@@ -30,5 +42,7 @@ struct Order: Codable {
     let count: Int
     let toppings: [Toppings]
 }
+
+
 
 

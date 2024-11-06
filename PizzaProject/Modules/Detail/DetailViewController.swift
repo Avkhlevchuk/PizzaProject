@@ -10,6 +10,8 @@ import SnapKit
 
 class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    private lazy var toppingInfoPopoverViewController = ToppingInfoPopoverViewController()
+    
     var titleDetailView = TitleDetailView()
     private let detailProductViewModel: DetailProductViewModel
     var ingredientDetailProductTableView = IngredientDetailTableViewCell()
@@ -73,7 +75,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         titleDetailView.snp.makeConstraints { make in
             make.left.right.equalTo(view)
             make.top.equalTo(view)
-            make.height.equalTo(100)
+            make.height.equalTo(105)
         }
         
         tableView.snp.makeConstraints { make in
@@ -149,62 +151,31 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             guard let cell = tableView.dequeueReusableCell(withIdentifier: IngredientDetailTableViewCell.reuseId, for: indexPath) as? IngredientDetailTableViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
             cell.update(product)
+            let nutritionValueProduct = detailProductViewModel.getNutritionValue(id: product.id)
             
-            cell.onInfoButtonTapped = { [weak self] in
+            cell.onInfoButtonTapped = { [weak self] sender in
                 guard let self = self else { return }
-                self.ingredientDetailProductTableView.onInfoButtonTapped?()
+                self.ingredientDetailProductTableView.onInfoButtonTapped?(sender)
                 //Popover
+                toppingInfoPopoverViewController.update(nutritionValue: nutritionValueProduct)
                 
+                toppingInfoPopoverViewController.preferredContentSize = .init(width: 350, height: 260)
                 
+                toppingInfoPopoverViewController.modalPresentationStyle = .popover
                 
-                //Tooltip
+                let popoverPresentationController = toppingInfoPopoverViewController.popoverPresentationController
                 
-                tableView.subviews.forEach { subview in
-                    if subview is ToolTipView {
-                        subview.removeFromSuperview()
-                    }
-                }
-
-                // Текст для ToolTipView
-                let toolTipText = """
-                    Nutrition facts (per 100 g)
-                    Weight                            630 g
-                    Calories                   229.2 kcal
-                    Protein                                8.7 g
-                    Fats                                   7.2 g
-                    Carbohydrates                30.9 g
-                    May contain: gluten, milk and its products
-                    (including lactose), as well as some other
-                    allergens: vdo.do/ru_nutrition
-                """
-
-                // Позиция всплывающей подсказки относительно кнопки
-                let tooltipPosition: ToolTipPosition = .middle
-
-                // Создаем ToolTipView
+                popoverPresentationController?.permittedArrowDirections = .right
                 
-                var title: UILabel = {
-                    let title = UILabel()
-                    title.text = "Sweet Chilli shrimp"
-                    title.textColor = .white
-                    return title
-                }()
+                popoverPresentationController?.sourceRect = sender.bounds
                 
-                let tooltipView = ToolTipView(
-                    frame: CGRect(x: 0, y: 0, width: 350, height: 250), // Укажите нужный размер
-                    text: toolTipText,
-                    tipPos: tooltipPosition,
-                    titleLabel: title
-                )
+                popoverPresentationController?.sourceView = sender
                 
+                popoverPresentationController?.delegate = self
                 
-//                tooltipView.center = CGPoint(x: ingredientDetailProductTableView.infoWeightDescriptionButton.frame.minX - tooltipView.bounds.width / 500,
-//                                             y: ingredientDetailProductTableView.infoWeightDescriptionButton.frame.maxY + tooltipView.bounds.height) // Добавлено смещение вниз
-                tooltipView.center = CGPoint(x: 190, y: 568) // Добавлено смещение вниз
+//              popoverPresentationController?.canOverlapSourceViewRect = false
                 
-
-                tableView.addSubview(tooltipView)
-//                tableView.bringSubviewToFront(tooltipView)
+                self.present(toppingInfoPopoverViewController, animated: true)
                 
             }
             

@@ -13,7 +13,7 @@ final class TitleDetailView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: .init(18), weight: .bold)
+        label.font = .systemFont(ofSize: .init(19), weight: .bold)
         label.textColor = .black
         label.numberOfLines = 1
         label.text = "Pepperoni Fresh"
@@ -24,7 +24,7 @@ final class TitleDetailView: UIView {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
         button.tintColor = .black
-        button.transform = CGAffineTransform(scaleX: 1.8, y: 1.8)
+        button.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         button.addTarget(nil , action: #selector(closeButtonTaped),for: .touchUpInside)
         return button
     }()
