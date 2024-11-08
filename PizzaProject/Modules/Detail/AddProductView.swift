@@ -31,9 +31,7 @@ final class AddProductView: UIView {
     
     @objc func addButtonTapped() {
         onAddButtonTapped?()
-        
     }
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +40,7 @@ final class AddProductView: UIView {
     }
     
     func setupViews() {
-        self.addBlur(style: .light)
+        self.addBlur(style: .light, alpha: 1)
         self.addSubview(containerView)
         containerView.addSubview(addButton)
     }
@@ -72,7 +70,6 @@ extension AddProductView {
         addButton.setTitle("Add to cart from \(price) £", for: .normal)
     }
 }
-
 
 //MARK: - External
 

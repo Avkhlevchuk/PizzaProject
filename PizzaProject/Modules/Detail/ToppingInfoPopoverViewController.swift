@@ -15,12 +15,16 @@ class ToppingInfoPopoverViewController: UIViewController {
         return container
     }()
     
+    lazy var containerForTitle: UIView = {
+        let container = UIView()
+        return container
+    }()
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Sweet Chilli shrimp"
         label.font = .boldSystemFont(ofSize: 20)
         label.textColor = .white
-        label.backgroundColor = .black
         return label
     }()
     
@@ -172,8 +176,12 @@ class ToppingInfoPopoverViewController: UIViewController {
     func setupViews() {
         view.addSubview(container)
         
-        [titleLabel, subtitleLabel, containerForWeight, containerForCalories, containerForProtein, containerForFats, containerForCarbohydrates, containerForMayContainAndAllergies].forEach {
+        [containerForTitle, containerForWeight, containerForCalories, containerForProtein, containerForFats, containerForCarbohydrates, containerForMayContainAndAllergies].forEach {
             container.addSubview($0)
+        }
+        
+        [titleLabel, subtitleLabel].forEach {
+            containerForTitle.addSubview($0)
         }
         
         [weightLabel, weightValueLabel].forEach {
@@ -198,101 +206,112 @@ class ToppingInfoPopoverViewController: UIViewController {
     }
     
     func setupConstraints() {
+        
+//        container.snp.makeConstraints { make in
+//            make.edges.equalToSuperview().priority(.low)
+//        }
+        
+        containerForTitle.snp.makeConstraints { make in
+            make.left.right.top.equalTo(container)
+            make.height.equalTo(60)
+            
+        }
+        
         titleLabel.snp.makeConstraints { make in
-            make.left.top.equalTo(view).inset(15)
+            make.left.equalTo(containerForTitle).inset(15)
+            make.top.equalTo(containerForTitle).inset(5)
         }
         subtitleLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
             make.top.equalTo(titleLabel.snp.bottom).offset(3)
         }
+        
         containerForWeight.snp.makeConstraints { make in
             make.left.right.equalTo(container)
-            make.top.equalTo(subtitleLabel).inset(20)
-            make.height.equalTo(20)
+            make.top.equalTo(containerForTitle.snp.bottom).offset(10)
+            make.height.equalTo(25)
         }
         weightLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
-            make.top.equalTo(containerForWeight.snp.top).inset(10)
+            make.top.equalTo(containerForWeight.snp.top)
         }
         weightValueLabel.snp.makeConstraints { make in
             make.right.equalTo(containerForWeight.snp.right).inset(30)
-            make.top.equalTo(containerForWeight.snp.top).inset(10)
+            make.top.equalTo(containerForWeight.snp.top)
         }
         
         containerForCalories.snp.makeConstraints { make in
             make.left.right.equalTo(container)
             make.top.equalTo(containerForWeight.snp.bottom).offset(5)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
         }
         caloriesLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
-            make.top.equalTo(containerForCalories.snp.top).inset(10)
+            make.top.equalTo(containerForCalories.snp.top)
         }
         caloriesValueLabel.snp.makeConstraints { make in
             make.right.equalTo(containerForCalories.snp.right).inset(30)
-            make.top.equalTo(containerForCalories.snp.top).inset(10)
+            make.top.equalTo(containerForCalories.snp.top)
         }
         
         containerForProtein.snp.makeConstraints { make in
             make.left.right.equalTo(container)
             make.top.equalTo(containerForCalories.snp.bottom).offset(5)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
         }
         proteinLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
-            make.top.equalTo(containerForProtein.snp.top).inset(10)
+            make.top.equalTo(containerForProtein.snp.top)
         }
         proteinValueLabel.snp.makeConstraints { make in
             make.right.equalTo(containerForProtein.snp.right).inset(30)
-            make.top.equalTo(containerForProtein.snp.top).inset(10)
+            make.top.equalTo(containerForProtein.snp.top)
         }
         
         containerForFats.snp.makeConstraints { make in
             make.left.right.equalTo(container)
             make.top.equalTo(containerForProtein.snp.bottom).offset(5)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
         }
         fatsLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
-            make.top.equalTo(containerForFats.snp.top).inset(10)
+            make.top.equalTo(containerForFats.snp.top)
         }
         fatsValueLabel.snp.makeConstraints { make in
             make.right.equalTo(containerForFats.snp.right).inset(30)
-            make.top.equalTo(containerForFats.snp.top).inset(10)
+            make.top.equalTo(containerForFats.snp.top)
         }
         
         containerForCarbohydrates.snp.makeConstraints { make in
             make.left.right.equalTo(container)
             make.top.equalTo(containerForFats.snp.bottom).offset(5)
-            make.height.equalTo(20)
+            make.height.equalTo(25)
         }
         carbohydratesLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)
-            make.top.equalTo(containerForCarbohydrates.snp.top).inset(10)
+            make.top.equalTo(containerForCarbohydrates.snp.top)
         }
         carbohydratesValueLabel.snp.makeConstraints { make in
             make.right.equalTo(containerForCarbohydrates.snp.right).inset(30)
-            make.top.equalTo(containerForCarbohydrates.snp.top).inset(10)
+            make.top.equalTo(containerForCarbohydrates.snp.top)
         }
         containerForMayContainAndAllergies.snp.makeConstraints { make in
             make.left.equalTo(container)
-            make.right.equalTo(container.snp.right).inset(30)
-            make.top.equalTo(containerForCarbohydrates.snp.bottom).offset(10)
+            make.right.equalTo(container.snp.right)
+            make.top.equalTo(containerForCarbohydrates.snp.bottom).offset(5)
             make.bottom.equalTo(view.snp.bottom)
+//            make.height.equalTo(75)
         }
         
         mayContainLabel.snp.makeConstraints { make in
             make.top.equalTo(containerForMayContainAndAllergies.snp.top).inset(5)
             make.left.equalTo(titleLabel.snp.left)
-            make.right.equalTo(containerForMayContainAndAllergies.snp.right).inset(15)
-            make.bottom.equalTo(allergiesLabel.snp.top).offset(-5)
+            make.right.equalTo(containerForMayContainAndAllergies.snp.right).inset(45)
         }
         
         allergiesLabel.snp.makeConstraints { make in
-            make.top.equalTo(mayContainLabel.snp.bottom).offset(5)
+            make.top.equalTo(mayContainLabel.snp.bottom).offset(2)
             make.left.equalTo(titleLabel.snp.left)
-            make.right.equalTo(containerForMayContainAndAllergies.snp.right).inset(15)
-            make.bottom.equalTo(containerForMayContainAndAllergies.snp.bottom).inset(5)
         }
     }
     

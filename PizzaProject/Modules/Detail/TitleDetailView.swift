@@ -45,7 +45,7 @@ final class TitleDetailView: UIView {
     }
     
     func setupViews() {
-        self.addBlur(style: .light)
+        self.addBlur(style: .light, alpha: 0.5)
         backgroundColor = .clear
         [titleLabel, closeButton].forEach {
             addSubview($0)
@@ -63,7 +63,6 @@ final class TitleDetailView: UIView {
             make.centerX.equalToSuperview()
         }
     }
-    
 }
 //MARK: - Update View
 

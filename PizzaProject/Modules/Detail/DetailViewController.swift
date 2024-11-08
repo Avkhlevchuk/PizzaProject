@@ -11,6 +11,9 @@ import SnapKit
 class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     private lazy var toppingInfoPopoverViewController = ToppingInfoPopoverViewController()
+    private var di: DependencyContainer?
+    
+    var isPopoverPresented = false
     
     var titleDetailView = TitleDetailView()
     private let detailProductViewModel: DetailProductViewModel
@@ -31,24 +34,21 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.register(IngredientDetailTableViewCell.self, forCellReuseIdentifier: IngredientDetailTableViewCell.reuseId)
         tableView.register(ToppingsContainerCell.self, forCellReuseIdentifier: ToppingsContainerCell.reuseId)
 //        tableView.bounces = false
-        
         let footerView = UIView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
         footerView.backgroundColor = .white
         tableView.tableFooterView = footerView
         
-        
         return tableView
     }()
-    
-    
     
     let typeBasePizzaSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()
         return segmentedControl
     }()
     
-    init (detailProductViewModel: DetailProductViewModel) {
+    init (detailProductViewModel: DetailProductViewModel, di: DependencyContainer) {
         self.detailProductViewModel = detailProductViewModel
+        self.di = di
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -103,14 +103,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         detailProductViewModel.onProductUpdate = { [weak self] in
             guard let self = self else { return }
-//            let pizzaProduct = self.detailProductViewModel.getProduct()
             self.titleDetailView.update(product)
         }
         
-        
         addProduct.onAddButtonTapped = { [weak self] in
-            guard let self = self else { return }
-            addProduct.addToCard(product: product)
+            self?.addProduct.addToCard(product: product)
         }
         
         titleDetailView.update(product)
@@ -155,11 +152,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             cell.onInfoButtonTapped = { [weak self] sender in
                 guard let self = self else { return }
+                
+                //Create popover
+                guard !isPopoverPresented else { return }
+                
                 self.ingredientDetailProductTableView.onInfoButtonTapped?(sender)
-                //Popover
                 toppingInfoPopoverViewController.update(nutritionValue: nutritionValueProduct)
                 
-                toppingInfoPopoverViewController.preferredContentSize = .init(width: 350, height: 260)
+                toppingInfoPopoverViewController.preferredContentSize = .init(width: 350, height: 330)
                 
                 toppingInfoPopoverViewController.modalPresentationStyle = .popover
                 
@@ -173,12 +173,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 popoverPresentationController?.delegate = self
                 
-//              popoverPresentationController?.canOverlapSourceViewRect = false
-                
-                self.present(toppingInfoPopoverViewController, animated: true)
-                
+                if let presentedViewController {
+                    presentedViewController.dismiss(animated: true) { [weak self] in
+                        guard let self = self else { return }
+                        self.presentPopover()
+                    }
+                } else {
+                    self.presentPopover()
+                }
             }
-            
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ToppingsContainerCell.reuseId, for: indexPath) as? ToppingsContainerCell else { return UITableViewCell() }
@@ -187,7 +190,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         default:
             return UITableViewCell()
         }
-        
     }
 }
 
@@ -196,5 +198,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 extension DetailViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    private func presentPopover() {
+        self.present(self.toppingInfoPopoverViewController, animated: true) { [weak self] in
+            self?.isPopoverPresented = true
+        }
+    }
+
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        isPopoverPresented = false
     }
 }

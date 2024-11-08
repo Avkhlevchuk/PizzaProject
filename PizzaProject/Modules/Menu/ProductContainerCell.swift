@@ -11,7 +11,7 @@ final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UIC
     
     var foodType: [FoodType] = []
     
-    let productViewModel = ProductViewModel()
+    let productViewModel = ProductViewModel(di: DependencyContainer())
     
     var onFilterButtonTapped: (()->())?
     

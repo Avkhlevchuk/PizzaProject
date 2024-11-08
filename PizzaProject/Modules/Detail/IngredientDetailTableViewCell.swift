@@ -56,11 +56,6 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         return button
     }()
     
-//    @objc private func infoWeightDescriptionButtonTapped() {
-//        onInfoButtonTapped?()
-//        
-//    }
-    
     lazy var weightLabel: UILabel = {
         let label = UILabel()
         label.text = "470g"
@@ -101,7 +96,7 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         
         descriptionLabel.snp.makeConstraints { make in
             make.left.top.equalTo(containterDescriptionView).offset(15)
-            make.right.equalTo(infoWeightDescriptionButton.snp.left).inset(10)
+            make.right.equalTo(infoWeightDescriptionButton).inset(30)
         }
         
         removeIngredientsButton.snp.makeConstraints { make in

@@ -7,7 +7,25 @@
 
 import Foundation
 
-class ProductViewModel {
+protocol IProductViewModel {
+    
+    var di: DependencyContainer? { get set }
+    
+    var onProductUpdate: (() -> ())? { get set }
+    var onFilterFetch: (() -> ())? { get set }
+    
+    var products: [Pizza] { get }
+    var allFilters: [FoodType] { get }
+    
+    func fetchProduct(index: Int) -> Pizza
+    func fetchProducts()
+    func fetchFilters()
+    
+}
+
+class ProductViewModel: IProductViewModel {
+    
+    var di: DependencyContainer?
     
     var onProductUpdate: (()-> ())?
     var onFilterFetch: (()-> ())?
@@ -41,20 +59,24 @@ class ProductViewModel {
         Pizza(id: 26, name: "Vegan", ingredients: "Plant-based ingredients, vegan cheese, tomato sauce", price: 20, image: "vegan", foodType: .pizza)
     ]
 
-
+    init (di: DependencyContainer) {
+        self.di = di
+    }
     
     let allFilters = [FoodType.romanPizza, FoodType.pizza, FoodType.combo, FoodType.snack, FoodType.breakfast, FoodType.milkshake, FoodType.drink, FoodType.coffee]
     
     let allStories = ["stories", "stories1", "stories2", "stories3", "stories", "stories1", "stories2", "stories3"]
     
     let allToppings = [
-        Toppings(name: "cheese", price: "1 £"),
-        Toppings(name: "halapeno", price: "1.2 £"),
-        Toppings(name: "mushrooms", price: "0.8 £"),
-        Toppings(name: "onion", price: "0.5 £"),
-        Toppings(name: "sausage", price: "1.5 £"),
-        Toppings(name: "tomato", price: "0.6 £")
+        Toppings(id: 1, name: "cheese", price: "1 £"),
+        Toppings(id: 2, name: "halapeno", price: "1.2 £"),
+        Toppings(id: 3, name: "mushrooms", price: "0.8 £"),
+        Toppings(id: 4, name: "onion", price: "0.5 £"),
+        Toppings(id: 5, name: "sausage", price: "1.5 £"),
+        Toppings(id: 6, name: "tomato", price: "0.6 £")
     ]
+    
+    var toppingsInOrder = [Toppings]()
     
     func fetchProduct(index: Int) -> Pizza {
         return products[index]

@@ -10,7 +10,7 @@ import SnapKit
 
 class ProductViewController: UIViewController {
     let productContainer = ProductContainerCell()
-    let productViewModel = ProductViewModel()
+    private var productViewModel: IProductViewModel
     let productShortContainer = ShortProductContainerCell()
     
     lazy var tableView: UITableView = {
@@ -27,6 +27,15 @@ class ProductViewController: UIViewController {
         return tableView
     }()
     
+    init(productViewModel: IProductViewModel) {
+        self.productViewModel = productViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -131,10 +140,16 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         print("taped on cell")
         
         let selectedProduct = productViewModel.products[indexPath.row]
-        let detailProductViewModel = DetailProductViewModel(product: selectedProduct)
-        let detailVC = DetailViewController(detailProductViewModel: detailProductViewModel)
-        detailVC.modalPresentationStyle = .fullScreen
-        present(detailVC, animated: true)
+        
+        if let cobainerDI = productViewModel.di {
+            let detailVC = cobainerDI.screenFactory.createDetailProductView(product: selectedProduct)
+            detailVC.modalPresentationStyle = .fullScreen
+            present(detailVC, animated: true)
+        }
+//        let detailProductViewModel = DetailProductViewModel(product: selectedProduct)
+//        let detailVC = DetailViewController(detailProductViewModel: detailProductViewModel)
+//        detailVC.modalPresentationStyle = .fullScreen
+//        present(detailVC, animated: true)
         
     }
 }

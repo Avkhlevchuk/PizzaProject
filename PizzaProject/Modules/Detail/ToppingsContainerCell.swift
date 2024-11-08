@@ -11,7 +11,7 @@ final class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UI
     
     static let reuseId = "IngredientsContainerCell"
     
-    var productViewModel = ProductViewModel()
+    var productViewModel = ProductViewModel(di: DependencyContainer())
     
     lazy var collectionView: UICollectionView = {
         var layout = UICollectionViewFlowLayout()
@@ -64,5 +64,21 @@ extension ToppingsContainerCell {
         let topping = productViewModel.allToppings[indexPath.row]
         cell.update(topping: topping)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let topping = productViewModel.allToppings[indexPath.row]
+        
+//        productViewModel.di?.productViewModel.toppingsInOrder
+        
+        if productViewModel.toppingsInOrder.isEmpty {
+            productViewModel.toppingsInOrder.append(topping)
+        } else if productViewModel.toppingsInOrder.contains(where: { $0.id == topping.id }) {
+            productViewModel.toppingsInOrder.removeAll { $0.id == topping.id }
+        } else {
+            productViewModel.toppingsInOrder.append(topping)
+        }
+        
     }
 }

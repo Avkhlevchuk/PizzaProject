@@ -36,7 +36,6 @@ class ProductCell: UITableViewCell {
         imageView.heightAnchor.constraint(equalToConstant: 0.23 * width).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 0.23 * width).isActive = true
         
-        
         return imageView
     }()
     
@@ -103,7 +102,8 @@ class ProductCell: UITableViewCell {
         
         photoImageView.snp.makeConstraints { make in
             make.left.top.equalTo(containerView).inset(15)
-            make.bottom.equalTo(containerView)
+            make.bottom.lessThanOrEqualTo(containerView).inset(15)
+            make.width.equalTo(photoImageView.snp.height)
         }
         
         verticalStackView.snp.makeConstraints { make in

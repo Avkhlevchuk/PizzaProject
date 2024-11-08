@@ -33,6 +33,7 @@ struct NutritionValue {
 }
 
 struct Toppings: Codable {
+    let id: Int
     let name: String
     let price: String
 }

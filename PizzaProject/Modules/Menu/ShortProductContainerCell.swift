@@ -10,7 +10,7 @@ import SnapKit
 
 final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
    
-    let productViewModel = ProductViewModel()
+    let productViewModel = ProductViewModel(di: DependencyContainer())
     
     static let reuseId = "ShortProductContainerCell"
     
