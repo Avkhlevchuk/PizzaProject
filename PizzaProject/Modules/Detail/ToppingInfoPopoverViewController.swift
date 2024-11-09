@@ -169,11 +169,12 @@ class ToppingInfoPopoverViewController: UIViewController {
         setupConstraints()
     }
     
-    override func viewDidLayoutSubviews() {
-        container.frame = view.bounds
-    }
+//    override func viewDidLayoutSubviews() {
+//        container.frame = view.bounds
+//    }
     
     func setupViews() {
+        view.backgroundColor = .black
         view.addSubview(container)
         
         [containerForTitle, containerForWeight, containerForCalories, containerForProtein, containerForFats, containerForCarbohydrates, containerForMayContainAndAllergies].forEach {
@@ -207,19 +208,18 @@ class ToppingInfoPopoverViewController: UIViewController {
     
     func setupConstraints() {
         
-//        container.snp.makeConstraints { make in
-//            make.edges.equalToSuperview().priority(.low)
-//        }
+        container.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview().priority(.low)
+            make.width.equalTo(ScreenSize.width * 0.8)
+        }
         
         containerForTitle.snp.makeConstraints { make in
             make.left.right.top.equalTo(container)
             make.height.equalTo(60)
-            
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(containerForTitle).inset(15)
-            make.top.equalTo(containerForTitle).inset(5)
+            make.left.top.equalTo(containerForTitle).inset(15)
         }
         subtitleLabel.snp.makeConstraints { make in
             make.left.equalTo(titleLabel.snp.left)

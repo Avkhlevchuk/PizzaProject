@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         
 //        window?.rootViewController = ProductViewController()
-        window?.rootViewController = di.screenFactory.createProductView()
+        window?.rootViewController = di.screenFactory.createProductScreen()
         
         window?.makeKeyAndVisible()
         

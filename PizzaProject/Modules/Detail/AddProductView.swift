@@ -66,8 +66,13 @@ final class AddProductView: UIView {
 
 extension AddProductView {
     
-    func update(_ price: Int) {
-        addButton.setTitle("Add to cart from \(price) £", for: .normal)
+    func update(_ price: Any) {
+        if let priceInt = price as? Int {
+            addButton.setTitle("Add to cart from \(priceInt) £", for: .normal)
+            
+        } else if let priceDouble = price as? Double {
+            addButton.setTitle("Add to cart from \(Double(priceDouble)) £", for: .normal)
+        }
     }
 }
 
@@ -75,9 +80,10 @@ extension AddProductView {
 
 extension AddProductView {
     
-    func addToCard(product: Pizza) {
-        let order = Order(product: product, count: 1, toppings: [])
+    func addToCard(product: Pizza, toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String) {
+        let order = Order(product: product, count: 1, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
 
         recordArchiver.save(order: [order])
     }
+    
 }

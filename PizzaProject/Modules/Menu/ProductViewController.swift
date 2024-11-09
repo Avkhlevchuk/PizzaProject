@@ -111,6 +111,8 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ShortProductContainerCell.reuseId, for: indexPath) as? ShortProductContainerCell else { return UITableViewCell() }
+            let product = productViewModel.products
+            cell.bind(product: product)
             return cell
             
         case 2:
@@ -137,19 +139,12 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("taped on cell")
-        
         let selectedProduct = productViewModel.products[indexPath.row]
         
         if let cobainerDI = productViewModel.di {
-            let detailVC = cobainerDI.screenFactory.createDetailProductView(product: selectedProduct)
+            let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
             detailVC.modalPresentationStyle = .fullScreen
             present(detailVC, animated: true)
-        }
-//        let detailProductViewModel = DetailProductViewModel(product: selectedProduct)
-//        let detailVC = DetailViewController(detailProductViewModel: detailProductViewModel)
-//        detailVC.modalPresentationStyle = .fullScreen
-//        present(detailVC, animated: true)
-        
+        }        
     }
 }

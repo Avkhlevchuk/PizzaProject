@@ -11,6 +11,9 @@ final class DetailProductViewCell: UITableViewCell {
     
     static let reuseId = "DetailProductView"
     
+    var onSegmentControlSizeTapped: ((String)->())?
+    var onSegmentControlBaseTapped: ((String)->())?
+    
     lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = Colors.backGroundBeige
@@ -44,10 +47,41 @@ final class DetailProductViewCell: UITableViewCell {
         
     }()
     
+    @objc func sizePizzaChanged() {
+        let selectedIndex = sizePizzaSegmentedControl.selectedSegmentIndex
+        var namePizzaSize = ""
+        switch selectedIndex {
+        case 0:
+            namePizzaSize = "small"
+        case 1:
+            namePizzaSize = "medium"
+        case 2:
+            namePizzaSize = "large"
+        default:
+            namePizzaSize = "medium"
+        }
+        onSegmentControlSizeTapped?(namePizzaSize)
+        
+        }
+    @objc func baseTypeChanged() {
+            let selectedIndex = baseTypePizzaSegmentedControl.selectedSegmentIndex
+        var namePizzaBaseType = ""
+        switch selectedIndex {
+        case 0:
+            namePizzaBaseType = "traditional"
+        case 1:
+            namePizzaBaseType = "thin"
+        default:
+            namePizzaBaseType = "traditional"
+        }
+        onSegmentControlBaseTapped?(namePizzaBaseType)
+        }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
         setupConstraints()
+        setupSegmentControlActions()
     }
    
     required init?(coder: NSCoder) {
@@ -86,6 +120,11 @@ final class DetailProductViewCell: UITableViewCell {
             make.left.right.equalTo(containerView).inset(10)
         }
     }
+    
+    func setupSegmentControlActions() {
+            sizePizzaSegmentedControl.addTarget(self, action: #selector(sizePizzaChanged), for: .valueChanged)
+            baseTypePizzaSegmentedControl.addTarget(self, action: #selector(baseTypeChanged), for: .valueChanged)
+        }
 }
 
 //MARK: Update View

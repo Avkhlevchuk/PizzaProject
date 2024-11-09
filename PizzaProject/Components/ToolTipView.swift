@@ -39,7 +39,6 @@ class ToolTipView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-
     private func setupLabel(with text: String) {
         label.text = text
         label.font = UIFont.systemFont(ofSize: 14)
@@ -67,9 +66,7 @@ class ToolTipView: UIView {
             make.left.top.equalTo(self).inset(15)
         }
     }
-    
-
-    
+        
     private func createTipPath() -> UIBezierPath {
         // Определяем положение треугольника для позиции .right
         let tooltipRect = CGRect(x: roundRect.maxX, // Ставим треугольник справа
@@ -86,9 +83,6 @@ class ToolTipView: UIView {
         return trianglePath
     }
 
-
-
-    
     private func drawToolTip(_ rect: CGRect) {
         roundRect = CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: rect.height - toolTipHeight)
         let roundRectPath = UIBezierPath(roundedRect: roundRect, cornerRadius: 5.0)

@@ -11,6 +11,21 @@ final class ToppingsCollectionCell: UICollectionViewCell {
  
     static let reuseId = "IngredientsCollectionCell"
     
+    var isSelectedCell: Bool = true {
+        didSet {
+            containerSelectedView.backgroundColor = isSelectedCell ? .white : Colors.backgroundColor
+            selectedToppingButton.isHidden = isSelectedCell ? true : false
+        }
+    }
+    
+    lazy var containerSelectedView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 25
+        view.clipsToBounds = true
+        return view
+    }()
+    
     lazy var imageToppingView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "halapeno")
@@ -40,6 +55,14 @@ final class ToppingsCollectionCell: UICollectionViewCell {
         return label
     }()
     
+    lazy var selectedToppingButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        button.tintColor = .orange
+        button.isHidden = true
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -52,22 +75,34 @@ final class ToppingsCollectionCell: UICollectionViewCell {
     }
     
     func setupViews() {
-        [imageToppingView, nameToppingLabel, priceToppingLabel].forEach {
-            contentView.addSubview($0)
+        
+        contentView.addSubview(containerSelectedView)
+        
+        [imageToppingView, nameToppingLabel, priceToppingLabel, selectedToppingButton].forEach {
+            containerSelectedView.addSubview($0)
         }
     }
     
     func setupConstraints() {
+        
+        containerSelectedView.snp.makeConstraints { make in
+            make.edges.equalTo(contentView).offset(5)
+        }
+        
         imageToppingView.snp.makeConstraints { make in
-            make.left.top.equalTo(contentView).offset(20)
+            make.left.top.equalTo(containerSelectedView).offset(20)
         }
         nameToppingLabel.snp.makeConstraints { make in
             make.top.equalTo(imageToppingView.snp.bottom).offset(5)
-            make.centerX.equalTo(contentView)
+            make.centerX.equalTo(containerSelectedView)
         }
         priceToppingLabel.snp.makeConstraints { make in
             make.top.equalTo(nameToppingLabel.snp.bottom).offset(8)
-            make.centerX.equalTo(contentView)
+            make.centerX.equalTo(containerSelectedView)
+        }
+        selectedToppingButton.snp.makeConstraints { make in
+            make.top.right.equalTo(containerSelectedView).inset(5)
+            make.height.width.equalTo(30).priority(.required)
         }
     }
 }
@@ -76,6 +111,6 @@ extension ToppingsCollectionCell {
     func update(topping: Toppings) {
         imageToppingView.image = UIImage(named: topping.name)
         nameToppingLabel.text = topping.name
-        priceToppingLabel.text = topping.price
+        priceToppingLabel.text = "\(topping.price) £"
     }
 }

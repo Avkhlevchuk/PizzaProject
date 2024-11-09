@@ -18,7 +18,6 @@ final class IngredientDetailTableViewCell: UITableViewCell {
 
     }
 
-    
     lazy var containterDescriptionView: UIView = {
         let view = UIView()
         view.backgroundColor = Colors.backgroundColor

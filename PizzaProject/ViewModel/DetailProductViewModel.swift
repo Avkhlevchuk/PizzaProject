@@ -42,7 +42,24 @@ class DetailProductViewModel {
     
     var order = [Order]()
     
+    var priceForPizza: Double = 0.0
+    
+    var sumToppings: Double = 0.0
+    
+    var typeBasePizza: String = "thin"
+    
+    let allToppings = [
+        Toppings(id: 1, name: "cheese", price: 1.0),
+        Toppings(id: 2, name: "halapeno", price: 1.2),
+        Toppings(id: 3, name: "mushrooms", price: 0.8),
+        Toppings(id: 4, name: "onion", price: 0.5),
+        Toppings(id: 5, name: "sausage", price: 1.5),
+        Toppings(id: 6, name: "tomato", price: 0.6)
+    ]
+    
     var onProductUpdate: (()-> ())?
+    
+    var toppingsInOrder = [Toppings]()
     
     init (product: Pizza) {
         self.product = product
@@ -60,4 +77,25 @@ class DetailProductViewModel {
         self.product = product
         onProductUpdate?()
     }
+    
+    func calculateTotalPrice(topping: Toppings, priceForPizza: Double) -> Double {
+        
+        if toppingsInOrder.isEmpty {
+            toppingsInOrder.append(topping)
+            sumToppings += topping.price
+        } else if toppingsInOrder.contains(where: { $0.id == topping.id }) {
+            toppingsInOrder.removeAll { $0.id == topping.id }
+            sumToppings -= topping.price
+        } else {
+            toppingsInOrder.append(topping)
+            sumToppings += topping.price
+        }
+        
+        let roundedSum = (sumToppings * 10).rounded() / 10
+        
+        let totalPrice = Double(priceForPizza) + roundedSum
+        
+        return totalPrice
+    }
+    
 }

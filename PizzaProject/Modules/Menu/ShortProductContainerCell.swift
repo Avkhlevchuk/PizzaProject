@@ -10,7 +10,9 @@ import SnapKit
 
 final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
    
-    let productViewModel = ProductViewModel(di: DependencyContainer())
+    //let productViewModel = ProductViewModel(di: DependencyContainer())
+    
+    private var products = [Pizza]()
     
     static let reuseId = "ShortProductContainerCell"
     
@@ -84,16 +86,25 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return productViewModel.products.count
+//        return productViewModel.products.count
+        return products.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShortBannerCollectionCell.reuseId, for: indexPath) as? ShortBannerCollectionCell else { return UICollectionViewCell() }
         
-        let product = productViewModel.products[indexPath.row]
+//        let product = productViewModel.products[indexPath.row]
+        let product = products[indexPath.row]
         cell.update(product)
         
         return cell
     }
-    
+}
+
+//MARK: - External func
+
+extension ShortProductContainerCell {
+    func bind(product: [Pizza]) {
+        self.products = product
+    }
 }

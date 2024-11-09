@@ -20,12 +20,12 @@ final class ScreenFactory {
     
     var di: DependencyContainer!
     
-    func createProductView() -> ProductViewController {
+    func createProductScreen() -> ProductViewController {
         let productViewModel = ProductViewModel(di: di)
         return ProductViewController(productViewModel: productViewModel)
     }
     
-    func createDetailProductView(product: Pizza) -> DetailViewController {
+    func createDetailProductScreen(product: Pizza) -> DetailViewController {
         let detailProductViewModel = DetailProductViewModel(product: product)
         return DetailViewController(detailProductViewModel: detailProductViewModel, di: di)
     }

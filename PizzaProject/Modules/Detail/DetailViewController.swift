@@ -33,7 +33,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.register(DetailProductViewCell.self, forCellReuseIdentifier: DetailProductViewCell.reuseId)
         tableView.register(IngredientDetailTableViewCell.self, forCellReuseIdentifier: IngredientDetailTableViewCell.reuseId)
         tableView.register(ToppingsContainerCell.self, forCellReuseIdentifier: ToppingsContainerCell.reuseId)
-//        tableView.bounces = false
+        //        tableView.bounces = false
         let footerView = UIView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
         footerView.backgroundColor = .white
         tableView.tableFooterView = footerView
@@ -89,14 +89,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             make.left.right.equalTo(view)
             make.bottom.equalToSuperview()
             make.height.equalTo(100)
-            
         }
     }
     
     func setupBinding() {
         
         let product = detailProductViewModel.getProduct()
-                
+
+        
         titleDetailView.onCloseButtonTaped = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
@@ -107,7 +107,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         addProduct.onAddButtonTapped = { [weak self] in
-            self?.addProduct.addToCard(product: product)
+            guard let self = self else { return }
+            let toppings = self.detailProductViewModel.toppingsInOrder
+            let sumForToppings = self.detailProductViewModel.sumToppings
+            let priceForPizza = self.detailProductViewModel.priceForPizza
+            let typeBasePizza = self.detailProductViewModel.typeBasePizza
+            
+            self.addProduct.addToCard(product: product, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
         }
         
         titleDetailView.update(product)
@@ -115,7 +121,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         addProduct.update(product.price)
         
     }
-//MARK: - UITableViewDataSource, UITableViewDelegate
+    //MARK: - UITableViewDataSource, UITableViewDelegate
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
@@ -137,12 +143,27 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let product = detailProductViewModel.getProduct()
+        detailProductViewModel.priceForPizza = Double(product.price)
         
         switch indexPath.section {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailProductViewCell.reuseId, for: indexPath) as? DetailProductViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
             cell.update(product)
+            
+            cell.onSegmentControlSizeTapped = { [weak self] namePizzaSize in
+                guard let self = self else { return }
+                
+                detailProductViewModel.priceForPizza = Double(detailProductViewModel.product.prices["\(namePizzaSize)"] ?? detailProductViewModel.product.price)
+                let sum = detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings
+                
+                addProduct.update(sum)
+            }
+            
+            cell.onSegmentControlBaseTapped = { [weak self] namePizzaBase in
+                self?.detailProductViewModel.typeBasePizza = namePizzaBase
+            }
+            
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: IngredientDetailTableViewCell.reuseId, for: indexPath) as? IngredientDetailTableViewCell else { return UITableViewCell() }
@@ -186,6 +207,20 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ToppingsContainerCell.reuseId, for: indexPath) as? ToppingsContainerCell else { return UITableViewCell() }
             cell.selectionStyle = .none
+            
+            let toppings = detailProductViewModel.allToppings
+            
+            cell.bind(toppings: toppings)
+            
+            cell.onToppingTapped = { [weak self] index in
+                guard let self = self else { return }
+                
+                let topping = self.detailProductViewModel.allToppings[index]
+                let priceForPizza = self.detailProductViewModel.priceForPizza
+                let sum = self.detailProductViewModel.calculateTotalPrice(topping: topping, priceForPizza: priceForPizza)
+                
+                addProduct.update(sum)
+            }
             return cell
         default:
             return UITableViewCell()
@@ -205,7 +240,7 @@ extension DetailViewController {
             self?.isPopoverPresented = true
         }
     }
-
+    
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         isPopoverPresented = false
     }
