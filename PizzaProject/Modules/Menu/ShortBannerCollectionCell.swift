@@ -10,8 +10,6 @@ import SnapKit
 
 final class ShortBannerCollectionCell: UICollectionViewCell {
     
-    static let reuseId = "ShortBannerCollectionCell"
- 
     lazy var containerView: UIView = {
        let view = UIView()
         view.backgroundColor = .white

@@ -22,17 +22,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
-        
         tableView.contentInset = .init(top: 30, left: 0, bottom: -35, right: 0)
         tableView.backgroundColor = Colors.backGroundBeige
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        
-        tableView.register(DetailProductViewCell.self, forCellReuseIdentifier: DetailProductViewCell.reuseId)
-        tableView.register(IngredientDetailTableViewCell.self, forCellReuseIdentifier: IngredientDetailTableViewCell.reuseId)
-        tableView.register(ToppingsContainerCell.self, forCellReuseIdentifier: ToppingsContainerCell.reuseId)
+        tableView.registerCell(DetailProductViewCell.self)
+        tableView.registerCell(IngredientDetailTableViewCell.self)
+        tableView.registerCell(ToppingsContainerCell.self)
         //        tableView.bounces = false
         let footerView = UIView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
         footerView.backgroundColor = .white
@@ -96,7 +94,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let product = detailProductViewModel.getProduct()
 
-        
         titleDetailView.onCloseButtonTaped = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
@@ -147,7 +144,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailProductViewCell.reuseId, for: indexPath) as? DetailProductViewCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as DetailProductViewCell
             cell.selectionStyle = .none
             cell.update(product)
             
@@ -166,7 +163,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: IngredientDetailTableViewCell.reuseId, for: indexPath) as? IngredientDetailTableViewCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as IngredientDetailTableViewCell
             cell.selectionStyle = .none
             cell.update(product)
             let nutritionValueProduct = detailProductViewModel.getNutritionValue(id: product.id)
@@ -205,7 +202,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             return cell
         case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ToppingsContainerCell.reuseId, for: indexPath) as? ToppingsContainerCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as ToppingsContainerCell
             cell.selectionStyle = .none
             
             let toppings = detailProductViewModel.allToppings

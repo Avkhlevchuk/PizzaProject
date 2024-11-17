@@ -11,8 +11,6 @@ final class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UI
     
     var onToppingTapped: ((Int)->())?
     
-    static let reuseId = "IngredientsContainerCell"
-        
     var toppings = [Toppings]()
     
     var toppingsInOrder = [Toppings]()
@@ -28,7 +26,7 @@ final class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UI
         collectionView.showsVerticalScrollIndicator = false
         collectionView.isScrollEnabled = true
         collectionView.backgroundColor = .white
-        collectionView.register(ToppingsCollectionCell.self, forCellWithReuseIdentifier: ToppingsCollectionCell.reuseId)
+        collectionView.registerCell(ToppingsCollectionCell.self)
         
         return collectionView
     }()
@@ -69,7 +67,7 @@ extension ToppingsContainerCell {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ToppingsCollectionCell.reuseId, for: indexPath) as? ToppingsCollectionCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as ToppingsCollectionCell
         let topping = toppings[indexPath.row]
         cell.update(topping: topping)
         return cell

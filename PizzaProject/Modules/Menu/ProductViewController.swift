@@ -20,10 +20,11 @@ class ProductViewController: UIViewController {
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        tableView.register(ProductCell.self , forCellReuseIdentifier: ProductCell.reuseId)
-        tableView.register(ProductContainerCell.self , forCellReuseIdentifier: ProductContainerCell.reuseId)
-        tableView.register(ShortProductContainerCell.self , forCellReuseIdentifier: ShortProductContainerCell.reuseId)
-        tableView.register(StoryContainerCell.self, forCellReuseIdentifier: StoryContainerCell.reuseId)
+        tableView.registerCell(ProductCell.self)
+        tableView.registerCell(ProductContainerCell.self)
+        tableView.registerCell(ShortProductContainerCell.self)
+        tableView.registerCell(StoryContainerCell.self)
+        
         return tableView
     }()
     
@@ -75,7 +76,6 @@ class ProductViewController: UIViewController {
             self?.tableView.reloadData()
         }
     }
-    
 }
 
 //MARK: - TableViewDataSource, TableViewDelegate
@@ -107,16 +107,17 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: StoryContainerCell.reuseId, for: indexPath) as? StoryContainerCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as StoryContainerCell
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ShortProductContainerCell.reuseId, for: indexPath) as? ShortProductContainerCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as ShortProductContainerCell
+            
             let product = productViewModel.products
             cell.bind(product: product)
             return cell
             
         case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProductContainerCell.reuseId, for: indexPath) as? ProductContainerCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as ProductContainerCell
             
             cell.onFilterButtonTapped = { [weak self] in
                 guard let self = self else { return }
@@ -127,7 +128,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             cell.update(filter)
             return cell
         case 3:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProductCell.reuseId, for: indexPath) as? ProductCell else { return UITableViewCell() }
+            let cell = tableView.dequeueCell(indexPath) as ProductCell
             let product = productViewModel.products[indexPath.row]
             cell.update(product)
             return cell

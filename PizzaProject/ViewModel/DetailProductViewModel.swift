@@ -97,5 +97,4 @@ class DetailProductViewModel {
         
         return totalPrice
     }
-    
 }

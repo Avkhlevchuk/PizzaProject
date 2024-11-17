@@ -12,8 +12,6 @@ class ProductCell: UITableViewCell {
     
     var productContainerCell = ProductContainerCell()
     
-    static let reuseId = "ProductCell"
-    
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white

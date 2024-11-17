@@ -11,8 +11,6 @@ import SnapKit
 final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     let productViewModel = ProductViewModel(di: DependencyContainer())
     
-    static let reuseId = "StoryContainerCell"
-    
     lazy var containerView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -28,7 +26,7 @@ final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICol
         collectionView.layer.masksToBounds = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .white
-        collectionView.register(StoryCollectionCell.self, forCellWithReuseIdentifier: StoryCollectionCell.reuseId)
+        collectionView.registerCell(StoryCollectionCell.self)
         
         return collectionView
     }()
@@ -61,7 +59,7 @@ final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionCell.reuseId, for: indexPath) as? StoryCollectionCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as StoryCollectionCell
         let story = productViewModel.allStories[indexPath.row]
         cell.update(story)
         return cell

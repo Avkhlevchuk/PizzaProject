@@ -10,11 +10,7 @@ import SnapKit
 
 final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
    
-    //let productViewModel = ProductViewModel(di: DependencyContainer())
-    
     private var products = [Pizza]()
-    
-    static let reuseId = "ShortProductContainerCell"
     
     lazy var containerView: UIView = {
         let view = UIView()
@@ -42,7 +38,7 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .white
-        collectionView.register(ShortBannerCollectionCell.self, forCellWithReuseIdentifier: ShortBannerCollectionCell.reuseId)
+        collectionView.registerCell(ShortBannerCollectionCell.self)
 
         return collectionView
     }()
@@ -91,9 +87,7 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShortBannerCollectionCell.reuseId, for: indexPath) as? ShortBannerCollectionCell else { return UICollectionViewCell() }
-        
-//        let product = productViewModel.products[indexPath.row]
+        let cell = collectionView.dequeueCell(indexPath) as ShortBannerCollectionCell
         let product = products[indexPath.row]
         cell.update(product)
         

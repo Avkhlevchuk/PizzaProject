@@ -11,8 +11,6 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         
     var onInfoButtonTapped: ((UIButton)->())?
     
-    static let reuseId = "IngredientDetailTableViewCell"
-    
     @objc private func showTooltip(_ sender: UIButton) {
         onInfoButtonTapped?(sender)
 

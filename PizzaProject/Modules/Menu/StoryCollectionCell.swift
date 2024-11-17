@@ -9,9 +9,7 @@ import UIKit
 import SnapKit
 
 final class StoryCollectionCell: UICollectionViewCell {
-    
-    static let reuseId = "StoryCollectionCell"
-        
+            
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "stories")

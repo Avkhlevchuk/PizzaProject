@@ -15,8 +15,6 @@ final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UIC
     
     var onFilterButtonTapped: (()->())?
     
-    static let reuseId = "ProductContainerCell"
-    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -26,7 +24,7 @@ final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UIC
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(CategoryCollectionCell.self, forCellWithReuseIdentifier: CategoryCollectionCell.reuseId)
+        collectionView.registerCell(CategoryCollectionCell.self)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .white
         
@@ -71,7 +69,7 @@ final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionCell.reuseId, for: indexPath) as? CategoryCollectionCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueCell(indexPath) as CategoryCollectionCell
 
         cell.update(foodType[indexPath.row])
         

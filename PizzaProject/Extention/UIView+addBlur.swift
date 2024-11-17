@@ -23,17 +23,3 @@ public extension UIView {
         return blurBackground
     }
 }
-
-// MARK: - UIPopoverPresentationControllerDelegate
-
-extension DetailViewController: UIPopoverPresentationControllerDelegate {
-    
-    func adaptivePresentationStyle(
-        for controller: UIPresentationController,
-        traitCollection: UITraitCollection
-    ) -> UIModalPresentationStyle {
-        // Return no adaptive presentation style,
-        // use default presentation behaviour
-        return .none
-    }
-}

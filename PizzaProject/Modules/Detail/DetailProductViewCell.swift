@@ -8,9 +8,7 @@
 import UIKit
 
 final class DetailProductViewCell: UITableViewCell {
-    
-    static let reuseId = "DetailProductView"
-    
+        
     var onSegmentControlSizeTapped: ((String)->())?
     var onSegmentControlBaseTapped: ((String)->())?
     

@@ -10,9 +10,7 @@ import UIKit
 final class CategoryCollectionCell: UICollectionViewCell {
     
     var onButtonTapped: (()->())?
-    
-    static let reuseId = "BannerCollectionCell"
-    
+        
     let typeFoodLabel: UIButton = {
         $0.setTitle("Римские пиццы", for: .normal)
         $0.setTitleColor(.gray, for: .normal)

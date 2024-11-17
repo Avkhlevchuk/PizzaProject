@@ -9,8 +9,6 @@ import UIKit
 
 final class ToppingsCollectionCell: UICollectionViewCell {
  
-    static let reuseId = "IngredientsCollectionCell"
-    
     var isSelectedCell: Bool = true {
         didSet {
             containerSelectedView.backgroundColor = isSelectedCell ? .white : Colors.backgroundColor

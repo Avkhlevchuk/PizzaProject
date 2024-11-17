@@ -21,7 +21,7 @@
 		296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296302C02CD586AF005545C8 /* ToolTipView.swift */; };
 		296B83142CD68692003CFFD7 /* EasyTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 296B83132CD68692003CFFD7 /* EasyTipView */; };
 		296B833B2CDA602A003CFFD7 /* AddProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B833A2CDA602A003CFFD7 /* AddProductView.swift */; };
-		296B83402CDA87FA003CFFD7 /* UIViewBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B833F2CDA87FA003CFFD7 /* UIViewBlur.swift */; };
+		296B83402CDA87FA003CFFD7 /* UIView+addBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B833F2CDA87FA003CFFD7 /* UIView+addBlur.swift */; };
 		296B83422CDA88D1003CFFD7 /* StorageUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */; };
 		296B83442CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */; };
 		298551662CDE238C00A77DC3 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298551652CDE238C00A77DC3 /* DependencyContainer.swift */; };
@@ -33,6 +33,11 @@
 		29A37CA22C9703AD00ADB7D4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 29A37CA12C9703AD00ADB7D4 /* SnapKit */; };
 		29A37CA52C97069200ADB7D4 /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37CA42C97069200ADB7D4 /* ProductCell.swift */; };
 		29AE064A2CCC138C00C746CC /* TitleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AE06492CCC138C00C746CC /* TitleDetailView.swift */; };
+		29D07E6A2CEA5A7800D2A06D /* UIPopoverPresentationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E692CEA5A7800D2A06D /* UIPopoverPresentationControllerDelegate.swift */; };
+		29D07E6C2CEA5AAB00D2A06D /* Extention+ReuseId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E6B2CEA5AAB00D2A06D /* Extention+ReuseId.swift */; };
+		29D07E6E2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E6D2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift */; };
+		29D07E702CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */; };
+		29D07E722CEA5FFD00D2A06D /* UITableView + dequeueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */; };
 		29DCE2232CA700130085FF76 /* ProductContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DCE2222CA700130085FF76 /* ProductContainerCell.swift */; };
 		29DCE2252CA706910085FF76 /* CategoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DCE2242CA706910085FF76 /* CategoryCollectionCell.swift */; };
 		29DCE2282CA7100B0085FF76 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DCE2272CA7100B0085FF76 /* Colors.swift */; };
@@ -56,7 +61,7 @@
 		296302BE2CD56A7C005545C8 /* DetailProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProductViewModel.swift; sourceTree = "<group>"; };
 		296302C02CD586AF005545C8 /* ToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolTipView.swift; sourceTree = "<group>"; };
 		296B833A2CDA602A003CFFD7 /* AddProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProductView.swift; sourceTree = "<group>"; };
-		296B833F2CDA87FA003CFFD7 /* UIViewBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewBlur.swift; sourceTree = "<group>"; };
+		296B833F2CDA87FA003CFFD7 /* UIView+addBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+addBlur.swift"; sourceTree = "<group>"; };
 		296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUserDefaults.swift; sourceTree = "<group>"; };
 		296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToppingInfoPopoverViewController.swift; sourceTree = "<group>"; };
 		298551652CDE238C00A77DC3 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
@@ -69,6 +74,11 @@
 		29A37C972C96FF0500ADB7D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		29A37CA42C97069200ADB7D4 /* ProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
 		29AE06492CCC138C00C746CC /* TitleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleDetailView.swift; sourceTree = "<group>"; };
+		29D07E692CEA5A7800D2A06D /* UIPopoverPresentationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPopoverPresentationControllerDelegate.swift; sourceTree = "<group>"; };
+		29D07E6B2CEA5AAB00D2A06D /* Extention+ReuseId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extention+ReuseId.swift"; sourceTree = "<group>"; };
+		29D07E6D2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell + reuseId.swift"; sourceTree = "<group>"; };
+		29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView + dequeueCell.swift"; sourceTree = "<group>"; };
+		29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView + dequeueCell.swift"; sourceTree = "<group>"; };
 		29DCE2222CA700130085FF76 /* ProductContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductContainerCell.swift; sourceTree = "<group>"; };
 		29DCE2242CA706910085FF76 /* CategoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionCell.swift; sourceTree = "<group>"; };
 		29DCE2272CA7100B0085FF76 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -141,7 +151,12 @@
 		296B833C2CDA8789003CFFD7 /* Extention */ = {
 			isa = PBXGroup;
 			children = (
-				296B833F2CDA87FA003CFFD7 /* UIViewBlur.swift */,
+				296B833F2CDA87FA003CFFD7 /* UIView+addBlur.swift */,
+				29D07E692CEA5A7800D2A06D /* UIPopoverPresentationControllerDelegate.swift */,
+				29D07E6B2CEA5AAB00D2A06D /* Extention+ReuseId.swift */,
+				29D07E6D2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift */,
+				29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */,
+				29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */,
 			);
 			path = Extention;
 			sourceTree = "<group>";
@@ -320,6 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29D07E6E2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift in Sources */,
 				296B83442CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift in Sources */,
 				296B83422CDA88D1003CFFD7 /* StorageUserDefaults.swift in Sources */,
 				2901C67D2CBD3234000B493B /* ShortBannerCollectionCell.swift in Sources */,
@@ -331,7 +347,9 @@
 				2901C6812CBD9BD5000B493B /* StoryCollectionCell.swift in Sources */,
 				2901C67F2CBD95C2000B493B /* StoryContainerCell.swift in Sources */,
 				29DCE2252CA706910085FF76 /* CategoryCollectionCell.swift in Sources */,
+				29D07E722CEA5FFD00D2A06D /* UITableView + dequeueCell.swift in Sources */,
 				29A37C8E2C96FF0200ADB7D4 /* ProductViewController.swift in Sources */,
+				29D07E6C2CEA5AAB00D2A06D /* Extention+ReuseId.swift in Sources */,
 				296302BF2CD56A7C005545C8 /* DetailProductViewModel.swift in Sources */,
 				2901C67B2CBD2EA3000B493B /* ShortProductContainerCell.swift in Sources */,
 				29F579A22CCE458A006418EA /* IngredientDetailTableViewCell.swift in Sources */,
@@ -340,13 +358,15 @@
 				2901C6772CBC6D38000B493B /* FoodType.swift in Sources */,
 				294F56192CC05E1A0015E241 /* CustomeSegmentControl.swift in Sources */,
 				29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */,
-				296B83402CDA87FA003CFFD7 /* UIViewBlur.swift in Sources */,
+				29D07E6A2CEA5A7800D2A06D /* UIPopoverPresentationControllerDelegate.swift in Sources */,
+				296B83402CDA87FA003CFFD7 /* UIView+addBlur.swift in Sources */,
 				29F5799C2CCCEBCB006418EA /* DetailProductViewCell.swift in Sources */,
 				29F579A02CCE3E13006418EA /* ToppingsCollectionCell.swift in Sources */,
 				29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */,
 				296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */,
 				294F56172CC0322C0015E241 /* DetailViewController.swift in Sources */,
 				29AE064A2CCC138C00C746CC /* TitleDetailView.swift in Sources */,
+				29D07E702CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift in Sources */,
 				29DCE2232CA700130085FF76 /* ProductContainerCell.swift in Sources */,
 				29344E952CA615DB005AEDA1 /* ProductViewModel.swift in Sources */,
 			);
