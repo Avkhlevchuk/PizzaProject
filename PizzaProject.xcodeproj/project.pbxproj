@@ -17,6 +17,7 @@
 		29344E982CA61880005AEDA1 /* ProductModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29344E972CA61880005AEDA1 /* ProductModel.swift */; };
 		294F56172CC0322C0015E241 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294F56162CC0322C0015E241 /* DetailViewController.swift */; };
 		294F56192CC05E1A0015E241 /* CustomeSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294F56182CC05E1A0015E241 /* CustomeSegmentControl.swift */; };
+		295CBF3F2CEBD889002D1683 /* Extention + UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295CBF3E2CEBD889002D1683 /* Extention + UILabel.swift */; };
 		296302BF2CD56A7C005545C8 /* DetailProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296302BE2CD56A7C005545C8 /* DetailProductViewModel.swift */; };
 		296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296302C02CD586AF005545C8 /* ToolTipView.swift */; };
 		296B83142CD68692003CFFD7 /* EasyTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 296B83132CD68692003CFFD7 /* EasyTipView */; };
@@ -38,6 +39,9 @@
 		29D07E6E2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E6D2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift */; };
 		29D07E702CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */; };
 		29D07E722CEA5FFD00D2A06D /* UITableView + dequeueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */; };
+		29D07E792CEB7FB900D2A06D /* RemoveIngredientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E782CEB7FB900D2A06D /* RemoveIngredientsViewController.swift */; };
+		29D07E7C2CEB947800D2A06D /* RemoveContainerIngredientsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E7B2CEB947800D2A06D /* RemoveContainerIngredientsCell.swift */; };
+		29D07E7E2CEB99B900D2A06D /* RemoveIngredientsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D07E7D2CEB99B900D2A06D /* RemoveIngredientsCell.swift */; };
 		29DCE2232CA700130085FF76 /* ProductContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DCE2222CA700130085FF76 /* ProductContainerCell.swift */; };
 		29DCE2252CA706910085FF76 /* CategoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DCE2242CA706910085FF76 /* CategoryCollectionCell.swift */; };
 		29DCE2282CA7100B0085FF76 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DCE2272CA7100B0085FF76 /* Colors.swift */; };
@@ -58,6 +62,7 @@
 		29344E972CA61880005AEDA1 /* ProductModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductModel.swift; sourceTree = "<group>"; };
 		294F56162CC0322C0015E241 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		294F56182CC05E1A0015E241 /* CustomeSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeSegmentControl.swift; sourceTree = "<group>"; };
+		295CBF3E2CEBD889002D1683 /* Extention + UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extention + UILabel.swift"; sourceTree = "<group>"; };
 		296302BE2CD56A7C005545C8 /* DetailProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProductViewModel.swift; sourceTree = "<group>"; };
 		296302C02CD586AF005545C8 /* ToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolTipView.swift; sourceTree = "<group>"; };
 		296B833A2CDA602A003CFFD7 /* AddProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProductView.swift; sourceTree = "<group>"; };
@@ -79,6 +84,9 @@
 		29D07E6D2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell + reuseId.swift"; sourceTree = "<group>"; };
 		29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView + dequeueCell.swift"; sourceTree = "<group>"; };
 		29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView + dequeueCell.swift"; sourceTree = "<group>"; };
+		29D07E782CEB7FB900D2A06D /* RemoveIngredientsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveIngredientsViewController.swift; sourceTree = "<group>"; };
+		29D07E7B2CEB947800D2A06D /* RemoveContainerIngredientsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveContainerIngredientsCell.swift; sourceTree = "<group>"; };
+		29D07E7D2CEB99B900D2A06D /* RemoveIngredientsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveIngredientsCell.swift; sourceTree = "<group>"; };
 		29DCE2222CA700130085FF76 /* ProductContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductContainerCell.swift; sourceTree = "<group>"; };
 		29DCE2242CA706910085FF76 /* CategoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionCell.swift; sourceTree = "<group>"; };
 		29DCE2272CA7100B0085FF76 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -157,6 +165,7 @@
 				29D07E6D2CEA5BD800D2A06D /* UICollectionViewCell + reuseId.swift */,
 				29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */,
 				29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */,
+				295CBF3E2CEBD889002D1683 /* Extention + UILabel.swift */,
 			);
 			path = Extention;
 			sourceTree = "<group>";
@@ -223,6 +232,7 @@
 		29A37C9F2C97025D00ADB7D4 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				29D07E772CEB7F8900D2A06D /* RemoveIngredients */,
 				294F56152CC031E00015E241 /* Detail */,
 				294F56142CC031D40015E241 /* Menu */,
 			);
@@ -245,6 +255,16 @@
 				296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		29D07E772CEB7F8900D2A06D /* RemoveIngredients */ = {
+			isa = PBXGroup;
+			children = (
+				29D07E7D2CEB99B900D2A06D /* RemoveIngredientsCell.swift */,
+				29D07E7B2CEB947800D2A06D /* RemoveContainerIngredientsCell.swift */,
+				29D07E782CEB7FB900D2A06D /* RemoveIngredientsViewController.swift */,
+			);
+			path = RemoveIngredients;
 			sourceTree = "<group>";
 		};
 		29DCE2262CA70FF90085FF76 /* Constants */ = {
@@ -360,12 +380,16 @@
 				29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */,
 				29D07E6A2CEA5A7800D2A06D /* UIPopoverPresentationControllerDelegate.swift in Sources */,
 				296B83402CDA87FA003CFFD7 /* UIView+addBlur.swift in Sources */,
+				295CBF3F2CEBD889002D1683 /* Extention + UILabel.swift in Sources */,
+				29D07E792CEB7FB900D2A06D /* RemoveIngredientsViewController.swift in Sources */,
 				29F5799C2CCCEBCB006418EA /* DetailProductViewCell.swift in Sources */,
 				29F579A02CCE3E13006418EA /* ToppingsCollectionCell.swift in Sources */,
+				29D07E7C2CEB947800D2A06D /* RemoveContainerIngredientsCell.swift in Sources */,
 				29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */,
 				296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */,
 				294F56172CC0322C0015E241 /* DetailViewController.swift in Sources */,
 				29AE064A2CCC138C00C746CC /* TitleDetailView.swift in Sources */,
+				29D07E7E2CEB99B900D2A06D /* RemoveIngredientsCell.swift in Sources */,
 				29D07E702CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift in Sources */,
 				29DCE2232CA700130085FF76 /* ProductContainerCell.swift in Sources */,
 				29344E952CA615DB005AEDA1 /* ProductViewModel.swift in Sources */,

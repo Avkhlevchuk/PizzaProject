@@ -16,7 +16,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var isPopoverPresented = false
     
     var titleDetailView = TitleDetailView()
-    private let detailProductViewModel: DetailProductViewModel
+    private var detailProductViewModel: IDetailProductViewModel
     var ingredientDetailProductTableView = IngredientDetailTableViewCell()
     var addProduct = AddProductView()
     
@@ -44,7 +44,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return segmentedControl
     }()
     
-    init (detailProductViewModel: DetailProductViewModel, di: DependencyContainer) {
+    init (detailProductViewModel: IDetailProductViewModel, di: DependencyContainer) {
         self.detailProductViewModel = detailProductViewModel
         self.di = di
         super.init(nibName: nil, bundle: nil)
@@ -199,6 +199,23 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 } else {
                     self.presentPopover()
                 }
+            }
+            
+            cell.onRemoveIngredientsButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                guard let di = self.di else { fatalError("Could not get di") }
+                
+                let removeVC = di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
+                removeVC.modalPresentationStyle = .pageSheet
+                
+                if let sheet = removeVC.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.prefersGrabberVisible = true
+                    sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+                }
+                
+                self.present(removeVC, animated: true)
+                
             }
             return cell
         case 2:

@@ -117,8 +117,19 @@ class ProductCell: UITableViewCell {
 extension ProductCell {
     func update(_ product: Pizza) {
         nameLabel.text = product.name
-        descriptionLabel.text = product.ingredients
+        descriptionLabel.text = product.ingredientsList
         priceButton.setTitle("from \(product.price) £", for: .normal)
         photoImageView.image = UIImage(named: product.image)
     }
+    
+//    func update(_ product: Pizza) {
+//        nameLabel.text = product.name
+//        var listIngredients: String = ""
+//        for ingredient in product.ingredients {
+//            listIngredients += ingredient.name + ", "
+//        }
+//        descriptionLabel.text = listIngredients
+//        priceButton.setTitle("from \(product.price) £", for: .normal)
+//        photoImageView.image = UIImage(named: product.image)
+//    }
 }

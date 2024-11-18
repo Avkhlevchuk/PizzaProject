@@ -7,19 +7,23 @@
 
 import Foundation
 
-class ProductModel {
- 
-}
-
-struct Pizza: Codable {
+struct Ingredient: Codable, Hashable {
     let id: Int
     let name: String
-    let ingredients: String
+    let removable: Bool
+}
+
+struct Pizza: Codable, Hashable {
+    let id: Int
+    let name: String
+    let ingredients: [Ingredient]
+    let ingredientsList: String
     let price: Int
     let prices: [String: Int]
     let image: String
     let foodType: FoodType
 }
+
 
 struct NutritionValue {
     let id: Int

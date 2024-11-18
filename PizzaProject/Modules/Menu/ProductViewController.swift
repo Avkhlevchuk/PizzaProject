@@ -45,7 +45,6 @@ class ProductViewController: UIViewController {
         setupBinding()
         
         productViewModel.fetchProducts()
-        
     }
     
     @objc private func dismissVC() {
@@ -145,6 +144,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         if let cobainerDI = productViewModel.di {
             let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
             detailVC.modalPresentationStyle = .fullScreen
+            
             present(detailVC, animated: true)
         }        
     }

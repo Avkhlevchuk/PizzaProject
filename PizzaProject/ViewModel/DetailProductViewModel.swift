@@ -7,7 +7,34 @@
 
 import Foundation
 
-class DetailProductViewModel {
+protocol IDetailProductViewModel {
+    
+    var product: Pizza { get set }
+    var nutrition: [NutritionValue] { get set }
+    var order: [Order] { get set }
+    var priceForPizza: Double { get set }
+    
+    var sumToppings: Double  { get set }
+    
+    var typeBasePizza: String { get set }
+    
+    var allToppings: [Toppings] { get set }
+    
+    var onProductUpdate: (()-> ())? { get set }
+    
+    var toppingsInOrder: [Toppings] { get set }
+    
+    func getProduct() -> Pizza
+    
+    func getNutritionValue(id: Int) -> NutritionValue
+    
+    func updateProduct(_ product: Pizza)
+    
+    func calculateTotalPrice(topping: Toppings, priceForPizza: Double) -> Double
+    
+}
+
+class DetailProductViewModel: IDetailProductViewModel {
     
     var product: Pizza
     
@@ -48,7 +75,7 @@ class DetailProductViewModel {
     
     var typeBasePizza: String = "thin"
     
-    let allToppings = [
+    var allToppings = [
         Toppings(id: 1, name: "cheese", price: 1.0),
         Toppings(id: 2, name: "halapeno", price: 1.2),
         Toppings(id: 3, name: "mushrooms", price: 0.8),

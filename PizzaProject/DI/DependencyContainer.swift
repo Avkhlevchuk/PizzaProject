@@ -29,4 +29,8 @@ final class ScreenFactory {
         let detailProductViewModel = DetailProductViewModel(product: product)
         return DetailViewController(detailProductViewModel: detailProductViewModel, di: di)
     }
+    
+    func createRemoveIngredientsScreen(detailProductViewModel: IDetailProductViewModel ) -> RemoveIngredientsViewController {
+        return RemoveIngredientsViewController(detailProductViewModel: detailProductViewModel)
+    }
 }

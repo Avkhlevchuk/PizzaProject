@@ -11,10 +11,7 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         
     var onInfoButtonTapped: ((UIButton)->())?
     
-    @objc private func showTooltip(_ sender: UIButton) {
-        onInfoButtonTapped?(sender)
-
-    }
+    var onRemoveIngredientsButtonTapped: (()->())?
 
     lazy var containterDescriptionView: UIView = {
         let view = UIView()
@@ -42,16 +39,26 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.backgroundColor = .white
         button.layer.cornerRadius = 15
+        button.addTarget(nil, action: #selector(removeIngredientsTapped), for: .touchUpInside)
         return button
     }()
+    
+    @objc private func removeIngredientsTapped() {
+        onRemoveIngredientsButtonTapped?()
+    }
     
     lazy var infoWeightDescriptionButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "info.circle"), for: .normal)
         button.tintColor = .black
-        button.addTarget(self, action: #selector(showTooltip), for: .touchUpInside)
+        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    @objc private func infoButtonTapped(_ sender: UIButton) {
+        onInfoButtonTapped?(sender)
+
+    }
     
     lazy var weightLabel: UILabel = {
         let label = UILabel()
@@ -117,7 +124,7 @@ final class IngredientDetailTableViewCell: UITableViewCell {
 //MARK: - Update View
 extension IngredientDetailTableViewCell {
     func update(_ product: Pizza) {
-        descriptionLabel.text = product.ingredients
+        descriptionLabel.text = product.ingredientsList
     }
 }
 
