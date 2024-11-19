@@ -109,8 +109,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let sumForToppings = self.detailProductViewModel.sumToppings
             let priceForPizza = self.detailProductViewModel.priceForPizza
             let typeBasePizza = self.detailProductViewModel.typeBasePizza
-            
-            self.addProduct.addToCard(product: product, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
+            let removedIngredients = self.detailProductViewModel.ingretientStatesInOrder
+                        
+            self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
         }
         
         titleDetailView.update(product)

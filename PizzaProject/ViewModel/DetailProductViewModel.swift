@@ -20,6 +20,8 @@ protocol IDetailProductViewModel {
     
     var allToppings: [Toppings] { get set }
     
+    var ingretientStatesInOrder: [IngredientStates] { get set }
+    
     var onProductUpdate: (()-> ())? { get set }
     
     var toppingsInOrder: [Toppings] { get set }
@@ -31,6 +33,8 @@ protocol IDetailProductViewModel {
     func updateProduct(_ product: Pizza)
     
     func calculateTotalPrice(topping: Toppings, priceForPizza: Double) -> Double
+    
+    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String)
     
 }
 
@@ -84,9 +88,13 @@ class DetailProductViewModel: IDetailProductViewModel {
         Toppings(id: 6, name: "tomato", price: 0.6)
     ]
     
+    var ingretientStatesInOrder: [IngredientStates] = []
+    
     var onProductUpdate: (()-> ())?
     
     var toppingsInOrder = [Toppings]()
+    
+    let recordArchiver = RecordArchiver.shared
     
     init (product: Pizza) {
         self.product = product
@@ -123,5 +131,11 @@ class DetailProductViewModel: IDetailProductViewModel {
         let totalPrice = Double(priceForPizza) + roundedSum
         
         return totalPrice
+    }
+    
+    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String) {
+        let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
+
+        recordArchiver.save(order: [order])
     }
 }

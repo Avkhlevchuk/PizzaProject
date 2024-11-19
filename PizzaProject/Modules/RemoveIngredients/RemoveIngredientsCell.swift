@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class RemoveIngredientsCell: UICollectionViewCell {
     
@@ -68,9 +69,9 @@ class RemoveIngredientsCell: UICollectionViewCell {
 //MARK: - Event Hanbler
 
 extension RemoveIngredientsCell {
-    func bind(ingredients: Ingredient) {
+    func bind(ingredients: IngredientStates) {
       
-        if ingredients.removable {
+        if ingredients.ingredient.isRemovable {
             iconCross.tintColor = Colors.orange
             ingredientLabel.textColor = Colors.orange
             contentView.layer.borderColor = Colors.orange.cgColor
@@ -79,7 +80,7 @@ extension RemoveIngredientsCell {
             ingredientLabel.textColor = .gray
             contentView.layer.borderColor = UIColor.lightGray.cgColor
         }
-        ingredientLabel.text = ingredients.name
+        ingredientLabel.text = ingredients.ingredient.name
     }
     
     func removeIngredient() {
@@ -87,16 +88,38 @@ extension RemoveIngredientsCell {
         UIView.animate(withDuration: 0.3, delay: 0.2, options: .curveEaseInOut, animations: { [weak self] in
             guard let self = self else { return }
             
-            self.iconCross.removeFromSuperview()
+            self.iconCross.isHidden = true
             
             self.ingredientLabel.applyStrikethrought()
             
-            self.ingredientLabel.snp.makeConstraints { make in
+            self.ingredientLabel.snp.remakeConstraints { make in
                 make.left.equalTo(self.contentView).inset(7)
                 make.top.bottom.equalTo(self.contentView).inset(7)
                 make.right.equalTo(self.contentView).inset(7)
             }
         })
+        
+        onRemoveButtonTapped?()
+    }
+    
+    func addRemovedIngredient() {
+        
+            iconCross.isHidden = false
+        
+            ingredientLabel.removeStrikeThrought()
+                
+            iconCross.snp.remakeConstraints { make in
+                make.left.equalTo(contentView).inset(10)
+                make.top.bottom.equalTo(contentView).inset(10)
+                make.height.width.equalTo(10)
+            }
+            ingredientLabel.snp.remakeConstraints { make in
+                make.left.equalTo(iconCross.snp.right).offset(2)
+                make.top.bottom.equalTo(contentView).inset(7)
+                make.right.equalTo(contentView).inset(7)
+            }
+            
+            self.contentView.layoutIfNeeded()
         
         onRemoveButtonTapped?()
     }

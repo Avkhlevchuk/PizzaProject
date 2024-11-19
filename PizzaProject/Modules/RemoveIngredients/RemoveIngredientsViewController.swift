@@ -10,7 +10,7 @@ import SnapKit
 
 class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
         
-    private let detailProductViewModel: IDetailProductViewModel
+    private var detailProductViewModel: IDetailProductViewModel
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -57,9 +57,8 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
         let cell = tableView.dequeueCell(indexPath) as RemoveContainerIngredientsCell
         cell.bind(ingredients: detailProductViewModel.product.ingredients)
         
-        cell.onSelectItemTapped = { [weak self] in
-            //FIXME: - add remove ingredients in order
-            print("hi1")
+        cell.onSelectItemTapped = { [weak self] ingredientStates in
+            self?.detailProductViewModel.ingretientStatesInOrder = ingredientStates
         }
         return cell
     }

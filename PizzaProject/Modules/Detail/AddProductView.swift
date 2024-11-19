@@ -9,8 +9,6 @@ import UIKit
 
 final class AddProductView: UIView {
     
-    let recordArchiver = RecordArchiver.shared
-    
     var onAddButtonTapped: (()->())?
     
     let containerView: UIView = {
@@ -74,16 +72,4 @@ extension AddProductView {
             addButton.setTitle("Add to cart from \(Double(priceDouble)) £", for: .normal)
         }
     }
-}
-
-//MARK: - External
-
-extension AddProductView {
-    
-    func addToCard(product: Pizza, toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String) {
-        let order = Order(product: product, count: 1, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
-
-        recordArchiver.save(order: [order])
-    }
-    
 }

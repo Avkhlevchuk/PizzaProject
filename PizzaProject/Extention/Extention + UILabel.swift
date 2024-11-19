@@ -19,5 +19,13 @@ extension UILabel {
             ])
         self.attributedText = attibutedString
     }
+    
+    func removeStrikeThrought() {
+        guard let attributedText = self.attributedText else { return }
+        
+        let plainText = attributedText.string
+        self.attributedText = nil
+        self.text = plainText
+    }
 }
 

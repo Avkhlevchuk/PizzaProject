@@ -9,9 +9,9 @@ import UIKit
 
 class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    var ingredients = [Ingredient]()
+    var ingredientStates = [IngredientStates]()
     
-    var onSelectItemTapped: (()->())?
+    var onSelectItemTapped: (([IngredientStates])->())?
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -54,17 +54,17 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ingredients.count
+        return ingredientStates.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueCell(indexPath) as RemoveIngredientsCell
-        cell.bind(ingredients: ingredients[indexPath.row])
+        cell.bind(ingredients: ingredientStates[indexPath.row])
         
         cell.onRemoveButtonTapped = { [weak self] in
             guard let self = self else { return }
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.onSelectItemTapped?()
+            self.collectionView.performBatchUpdates(nil)
+            self.onSelectItemTapped?(ingredientStates)
         }
         
         return cell
@@ -74,8 +74,13 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as?
             RemoveIngredientsCell {
-            if ingredients[indexPath.row].removable {
+            
+            if ingredientStates[indexPath.row].ingredient.isRemovable && !ingredientStates[indexPath.row].isRemoved {
                 cell.removeIngredient()
+                ingredientStates[indexPath.row].isRemoved = true
+            } else {
+                cell.addRemovedIngredient()
+                ingredientStates[indexPath.row].isRemoved = false
             }
         }
     }
@@ -85,7 +90,9 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
 
 extension RemoveContainerIngredientsCell {
     func bind(ingredients: [Ingredient]) {
-        self.ingredients = ingredients
+        
+        ingredients.forEach { ingredientStates.append(IngredientStates(ingredient: $0, isRemoved: false)) }
+       
         collectionView.reloadData()
     }
 }
