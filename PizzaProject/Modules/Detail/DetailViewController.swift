@@ -166,7 +166,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         case 1:
             let cell = tableView.dequeueCell(indexPath) as IngredientDetailTableViewCell
             cell.selectionStyle = .none
-            cell.update(product)
+            
+            cell.update(product: product, listRemovedIngredients: detailProductViewModel.listRemovedIngredients)
+
             let nutritionValueProduct = detailProductViewModel.getNutritionValue(id: product.id)
             
             cell.onInfoButtonTapped = { [weak self] sender in
@@ -208,6 +210,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 let removeVC = di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
                 removeVC.modalPresentationStyle = .pageSheet
+                
+                removeVC.onDismissTapped = { [weak self] in
+                    guard let self = self else { return }
+                    self.tableView.reloadData()
+                }
                 
                 if let sheet = removeVC.sheetPresentationController {
                     sheet.detents = [.medium(), .large()]

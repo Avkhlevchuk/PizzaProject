@@ -118,21 +118,24 @@ extension RemoveIngredientsCell {
     
     func addRemovedIngredient() {
         
-        iconCross.isHidden = false
-        
-        iconCross.snp.remakeConstraints { make in
-            make.left.equalTo(contentView).inset(10)
-            make.centerY.equalTo(contentView)
-            make.height.width.equalTo(10)
-        }
-        ingredientLabel.snp.remakeConstraints { make in
-            make.left.equalTo(iconCross.snp.right).offset(2)
-            make.top.bottom.equalTo(contentView).inset(7)
-            make.right.equalTo(contentView).inset(7)
-        }
-        
-        self.contentView.layoutIfNeeded()
-        
+        UIView.animate(withDuration: 0.3, delay: 0.2, options: .curveEaseInOut, animations: { [weak self] in
+            guard let self = self else { return }
+            
+            iconCross.isHidden = false
+            
+            iconCross.snp.remakeConstraints { make in
+                make.left.equalTo(self.contentView).inset(10)
+                make.centerY.equalTo(self.contentView)
+                make.height.width.equalTo(10)
+            }
+            ingredientLabel.snp.remakeConstraints { make in
+                make.left.equalTo(self.iconCross.snp.right).offset(2)
+                make.top.bottom.equalTo(self.contentView).inset(7)
+                make.right.equalTo(self.contentView).inset(7)
+            }
+            
+            self.contentView.layoutIfNeeded()
+        })
     }
     
 }

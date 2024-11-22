@@ -10,8 +10,11 @@ import Foundation
 protocol IDetailProductViewModel {
     
     var product: Pizza { get set }
+    
     var nutrition: [NutritionValue] { get set }
+    
     var order: [Order] { get set }
+    
     var priceForPizza: Double { get set }
     
     var sumToppings: Double  { get set }
@@ -37,6 +40,18 @@ protocol IDetailProductViewModel {
     func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String)
     
     func resetRemovedIngredientStates()
+    
+    var saveRemovedIngredients: Bool { get set }
+    
+    var listSavedRemovedIngredients: [IngredientStates] { get set }
+    
+    func savedRemovedIngredients()
+    
+    func clearUnsavedIngredients()
+    
+    func createLineWithRemovedIngredients()
+    
+    var listRemovedIngredients: NSAttributedString? { get set }
     
 }
 
@@ -92,11 +107,17 @@ class DetailProductViewModel: IDetailProductViewModel {
     
     var ingretientStatesInOrder: [IngredientStates] = []
     
+    var saveRemovedIngredients: Bool = false
+    
+    var listSavedRemovedIngredients: [IngredientStates] = []
+    
     var onProductUpdate: (()-> ())?
     
     var toppingsInOrder = [Toppings]()
     
     let recordArchiver = RecordArchiver.shared
+    
+    var listRemovedIngredients: NSAttributedString?
     
     init (product: Pizza) {
         self.product = product
@@ -144,6 +165,52 @@ class DetailProductViewModel: IDetailProductViewModel {
     func resetRemovedIngredientStates() {        
         for index in ingretientStatesInOrder.indices {
             ingretientStatesInOrder[index].isRemoved = false
+        }
+    }
+    
+    func savedRemovedIngredients() {
+        listSavedRemovedIngredients = ingretientStatesInOrder
+    }
+    
+    func clearUnsavedIngredients() {
+        ingretientStatesInOrder = listSavedRemovedIngredients
+    }
+    
+    func createLineWithRemovedIngredients() {
+        
+        let listIngredients = NSMutableAttributedString()
+        
+        var index = 0
+        
+        while index < ingretientStatesInOrder.count {
+            let current = ingretientStatesInOrder[index]
+            var newIngredient: String = ingretientStatesInOrder[index].ingredient.name
+            let comma = ","
+            
+            switch index {
+                case 0:
+                newIngredient += comma
+                case ingretientStatesInOrder.count - 1:
+                newIngredient = newIngredient.lowercased()
+            default:
+                newIngredient = newIngredient.lowercased()
+                newIngredient += comma
+            }
+          
+            let attributedIngredient: NSAttributedString
+            if current.isRemoved {
+                attributedIngredient = newIngredient.withStrikethrough(style: .single, color: .black)
+                listIngredients.append(attributedIngredient)
+            } else {
+                attributedIngredient = NSAttributedString(string: newIngredient)
+                listIngredients.append(attributedIngredient)
+            }
+            
+            listIngredients.append(NSAttributedString(string: " "))
+            
+            index += 1
+            
+            listRemovedIngredients = listIngredients
         }
     }
 }

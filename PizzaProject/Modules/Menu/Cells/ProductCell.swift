@@ -118,7 +118,7 @@ extension ProductCell {
     func update(_ product: Pizza) {
         nameLabel.text = product.name
         descriptionLabel.text = product.ingredientsList
-        priceButton.setTitle("from \(product.price) £", for: .normal)
+        priceButton.setTitle("from \(product.prices["small"] ?? 10) £", for: .normal)
         photoImageView.image = UIImage(named: product.image)
     }
     

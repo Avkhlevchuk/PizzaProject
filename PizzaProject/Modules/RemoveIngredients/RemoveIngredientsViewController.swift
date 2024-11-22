@@ -14,6 +14,8 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
     
     var saveAndBackView = SaveAndBackView()
     
+    var onDismissTapped: (()->())?
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
@@ -41,6 +43,21 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
         setupBinding()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if !detailProductViewModel.saveRemovedIngredients {
+            detailProductViewModel.ingretientStatesInOrder = []
+            detailProductViewModel.listRemovedIngredients = nil
+        } else {
+            detailProductViewModel.clearUnsavedIngredients()
+        }
+        
+        if self.isMovingToParent || self.isBeingDismissed {
+            onDismissTapped?()
+        }
+    }
+    
     func setupViews() {
         [saveAndBackView, tableView].forEach {
             view.addSubview($0)
@@ -62,14 +79,26 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
     
     func setupBinding() {
         saveAndBackView.onCloseButtonTapped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            guard let self = self else { return }
+            
+            self.detailProductViewModel.resetRemovedIngredientStates()
+            self.dismiss(animated: true, completion: nil)
         }
         saveAndBackView.onSaveButtonTapped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            guard let self = self else { return }
+            
+            self.detailProductViewModel.saveRemovedIngredients = true
+            self.detailProductViewModel.savedRemovedIngredients()
+            self.detailProductViewModel.createLineWithRemovedIngredients()
+            self.dismiss(animated: true, completion: nil)
         }
         saveAndBackView.onResetButtonTapped = { [weak self] in
             guard let self = self else { return }
+            
             self.detailProductViewModel.resetRemovedIngredientStates()
+            self.detailProductViewModel.saveRemovedIngredients = false
+            self.detailProductViewModel.clearUnsavedIngredients()
+            self.detailProductViewModel.listRemovedIngredients = nil
             self.saveAndBackView.showCloseButton()
             self.tableView.reloadData()
         }
@@ -81,19 +110,20 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(indexPath) as RemoveContainerIngredientsCell
-        cell.bind(ingredients: detailProductViewModel.product.ingredients)
         
+        cell.bind(ingredients: detailProductViewModel.product.ingredients, ingredientStates: detailProductViewModel.ingretientStatesInOrder, saved: detailProductViewModel.saveRemovedIngredients)
         
         cell.onSelectItemTapped = { [weak self] ingredientStates in
             guard let self = self else { return }
+           
             let countRemovedIngredients = ingredientStates.filter { $0.isRemoved }.count
+           
             if countRemovedIngredients == 0 {
                 self.saveAndBackView.showCloseButton()
             } else if countRemovedIngredients > 0 {
                 self.saveAndBackView.showSaveAndResetButton()
             }
             self.detailProductViewModel.ingretientStatesInOrder = ingredientStates
-            
         }
         return cell
     }

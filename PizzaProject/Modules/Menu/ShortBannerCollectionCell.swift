@@ -111,6 +111,6 @@ extension ShortBannerCollectionCell {
     func update(_ product: Pizza) {
         imageView.image = UIImage(named: product.image)
         nameLabel.text = product.name
-        priceButton.setTitle("from \(product.price) £", for: .normal)
+        priceButton.setTitle("from \(product.prices["small"] ?? 10) £", for: .normal)
     }
 }

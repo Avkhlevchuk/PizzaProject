@@ -25,6 +25,7 @@
 		296B83402CDA87FA003CFFD7 /* UIView+addBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B833F2CDA87FA003CFFD7 /* UIView+addBlur.swift */; };
 		296B83422CDA88D1003CFFD7 /* StorageUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */; };
 		296B83442CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */; };
+		297B7F232CF0C2A70046191B /* Extention + String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297B7F222CF0C2A70046191B /* Extention + String.swift */; };
 		298551662CDE238C00A77DC3 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298551652CDE238C00A77DC3 /* DependencyContainer.swift */; };
 		29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */; };
 		29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */; };
@@ -70,6 +71,7 @@
 		296B833F2CDA87FA003CFFD7 /* UIView+addBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+addBlur.swift"; sourceTree = "<group>"; };
 		296B83412CDA88D1003CFFD7 /* StorageUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUserDefaults.swift; sourceTree = "<group>"; };
 		296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToppingInfoPopoverViewController.swift; sourceTree = "<group>"; };
+		297B7F222CF0C2A70046191B /* Extention + String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extention + String.swift"; sourceTree = "<group>"; };
 		298551652CDE238C00A77DC3 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		29A37C862C96FF0200ADB7D4 /* PizzaProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				29D07E6F2CEA5D8A00D2A06D /* UICollectionView + dequeueCell.swift */,
 				29D07E712CEA5FFD00D2A06D /* UITableView + dequeueCell.swift */,
 				295CBF3E2CEBD889002D1683 /* Extention + UILabel.swift */,
+				297B7F222CF0C2A70046191B /* Extention + String.swift */,
 			);
 			path = Extention;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				2901C67B2CBD2EA3000B493B /* ShortProductContainerCell.swift in Sources */,
 				29F579A22CCE458A006418EA /* IngredientDetailTableViewCell.swift in Sources */,
 				298551662CDE238C00A77DC3 /* DependencyContainer.swift in Sources */,
+				297B7F232CF0C2A70046191B /* Extention + String.swift in Sources */,
 				296B833B2CDA602A003CFFD7 /* AddProductView.swift in Sources */,
 				2901C6772CBC6D38000B493B /* FoodType.swift in Sources */,
 				294F56192CC05E1A0015E241 /* CustomeSegmentControl.swift in Sources */,

@@ -168,11 +168,7 @@ class ToppingInfoPopoverViewController: UIViewController {
         setupViews()
         setupConstraints()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        container.frame = view.bounds
-//    }
-    
+        
     func setupViews() {
         view.backgroundColor = .black
         view.addSubview(container)

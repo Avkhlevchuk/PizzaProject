@@ -64,5 +64,4 @@ final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICol
         cell.update(story)
         return cell
     }
-    
 }

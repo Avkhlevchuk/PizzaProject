@@ -70,7 +70,7 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
         if ingredientStates[indexPath.row].ingredient.isRemovable {
             ingredientStates[indexPath.row].isRemoved.toggle()
         }
-        collectionView.reloadData()
+            collectionView.reloadData()
         
         onSelectItemTapped?(ingredientStates)
     }
@@ -79,10 +79,15 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
 //MARK: - Event Handler
 
 extension RemoveContainerIngredientsCell {
-    func bind(ingredients: [Ingredient]) {
-        ingredientStates = []
-        ingredients.forEach { ingredientStates.append(IngredientStates(ingredient: $0, isRemoved: false)) }
-
+    func bind(ingredients: [Ingredient], ingredientStates: [IngredientStates], saved: Bool) {
+        
+        if !ingredientStates.isEmpty && saved {
+            self.ingredientStates = ingredientStates
+        } else {
+            self.ingredientStates = []
+            ingredients.forEach { self.ingredientStates.append(IngredientStates(ingredient: $0, isRemoved: false)) }
+        }
+        
         collectionView.reloadData()
     }
 }

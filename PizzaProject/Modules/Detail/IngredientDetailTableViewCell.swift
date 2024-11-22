@@ -123,8 +123,14 @@ final class IngredientDetailTableViewCell: UITableViewCell {
 
 //MARK: - Update View
 extension IngredientDetailTableViewCell {
-    func update(_ product: Pizza) {
-        descriptionLabel.text = product.ingredientsList
+    func update(product: Pizza, listRemovedIngredients: NSAttributedString?) {
+       
+        if let listRemovedIngredients = listRemovedIngredients {
+            descriptionLabel.attributedText = listRemovedIngredients
+        } else {
+            descriptionLabel.text = product.ingredientsList
+        }
+        
     }
 }
 
