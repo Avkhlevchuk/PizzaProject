@@ -36,6 +36,8 @@ protocol IDetailProductViewModel {
     
     func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String)
     
+    func resetRemovedIngredientStates()
+    
 }
 
 class DetailProductViewModel: IDetailProductViewModel {
@@ -137,5 +139,11 @@ class DetailProductViewModel: IDetailProductViewModel {
         let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
 
         recordArchiver.save(order: [order])
+    }
+    
+    func resetRemovedIngredientStates() {        
+        for index in ingretientStatesInOrder.indices {
+            ingretientStatesInOrder[index].isRemoved = false
+        }
     }
 }

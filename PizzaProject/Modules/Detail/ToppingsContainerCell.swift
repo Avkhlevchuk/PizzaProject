@@ -18,7 +18,8 @@ final class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UI
     lazy var collectionView: UICollectionView = {
         var layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 130 , height: 180)
+        layout.itemSize = CGSize(width: 125 , height: 180)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 15)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.delegate = self
@@ -49,7 +50,7 @@ final class ToppingsContainerCell: UITableViewCell, UICollectionViewDelegate, UI
     func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.top.bottom.equalTo(contentView)
-            make.left.right.equalTo(contentView).inset(10)
+            make.left.right.equalTo(contentView)
             make.height.equalTo(400)
         }
     }

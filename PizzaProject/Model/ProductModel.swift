@@ -21,7 +21,7 @@ struct IngredientStates: Codable, Hashable {
 struct Pizza: Codable, Hashable {
     let id: Int
     let name: String
-    let ingredients: [Ingredient]
+    var ingredients: [Ingredient]
     let ingredientsList: String
     let price: Int
     let prices: [String: Int]

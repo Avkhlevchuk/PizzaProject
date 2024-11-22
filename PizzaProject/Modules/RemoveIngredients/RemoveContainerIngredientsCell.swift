@@ -4,12 +4,12 @@
 //
 //  Created by Artem Khlevchuk on 18.11.2024.
 //
-
+//
 import UIKit
 
 class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    var ingredientStates = [IngredientStates]()
+    var ingredientStates: [IngredientStates] = []
     
     var onSelectItemTapped: (([IngredientStates])->())?
     
@@ -17,7 +17,7 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20)
         layout.minimumLineSpacing = 7
         layout.minimumInteritemSpacing = 7
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -59,30 +59,20 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueCell(indexPath) as RemoveIngredientsCell
-        cell.bind(ingredients: ingredientStates[indexPath.row])
-        
-        cell.onRemoveButtonTapped = { [weak self] in
-            guard let self = self else { return }
-            self.collectionView.performBatchUpdates(nil)
-            self.onSelectItemTapped?(ingredientStates)
-        }
-        
-        return cell
-        
-    }
+        let ingredientState = ingredientStates[indexPath.row]
+        cell.bind(ingredients: ingredientState)
     
+        return cell
+    }
+        
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as?
-            RemoveIngredientsCell {
-            
-            if ingredientStates[indexPath.row].ingredient.isRemovable && !ingredientStates[indexPath.row].isRemoved {
-                cell.removeIngredient()
-                ingredientStates[indexPath.row].isRemoved = true
-            } else {
-                cell.addRemovedIngredient()
-                ingredientStates[indexPath.row].isRemoved = false
-            }
+                
+        if ingredientStates[indexPath.row].ingredient.isRemovable {
+            ingredientStates[indexPath.row].isRemoved.toggle()
         }
+        collectionView.reloadData()
+        
+        onSelectItemTapped?(ingredientStates)
     }
 }
 
@@ -90,9 +80,9 @@ class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate,
 
 extension RemoveContainerIngredientsCell {
     func bind(ingredients: [Ingredient]) {
-        
+        ingredientStates = []
         ingredients.forEach { ingredientStates.append(IngredientStates(ingredient: $0, isRemoved: false)) }
-       
+
         collectionView.reloadData()
     }
 }

@@ -9,8 +9,10 @@ import UIKit
 import SnapKit
 
 class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
-        
+    
     private var detailProductViewModel: IDetailProductViewModel
+    
+    var saveAndBackView = SaveAndBackView()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -36,19 +38,43 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-    
+        setupBinding()
     }
     
     func setupViews() {
-        view.addSubview(tableView)
+        [saveAndBackView, tableView].forEach {
+            view.addSubview($0)
+        }
         view.backgroundColor = .white
     }
     
     func setupConstraints() {
+        
+        saveAndBackView.snp.makeConstraints { make in
+            make.left.right.top.equalTo(view)
+            make.height.greaterThanOrEqualTo(50)
+        }
         tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
+            make.top.equalTo(saveAndBackView.snp.bottom)
+            make.left.right.bottom.equalTo(view)
         }
     }
+    
+    func setupBinding() {
+        saveAndBackView.onCloseButtonTapped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        saveAndBackView.onSaveButtonTapped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        saveAndBackView.onResetButtonTapped = { [weak self] in
+            guard let self = self else { return }
+            self.detailProductViewModel.resetRemovedIngredientStates()
+            self.saveAndBackView.showCloseButton()
+            self.tableView.reloadData()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -57,8 +83,17 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
         let cell = tableView.dequeueCell(indexPath) as RemoveContainerIngredientsCell
         cell.bind(ingredients: detailProductViewModel.product.ingredients)
         
+        
         cell.onSelectItemTapped = { [weak self] ingredientStates in
-            self?.detailProductViewModel.ingretientStatesInOrder = ingredientStates
+            guard let self = self else { return }
+            let countRemovedIngredients = ingredientStates.filter { $0.isRemoved }.count
+            if countRemovedIngredients == 0 {
+                self.saveAndBackView.showCloseButton()
+            } else if countRemovedIngredients > 0 {
+                self.saveAndBackView.showSaveAndResetButton()
+            }
+            self.detailProductViewModel.ingretientStatesInOrder = ingredientStates
+            
         }
         return cell
     }
