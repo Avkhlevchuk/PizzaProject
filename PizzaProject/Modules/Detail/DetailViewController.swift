@@ -110,8 +110,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let priceForPizza = self.detailProductViewModel.priceForPizza
             let typeBasePizza = self.detailProductViewModel.typeBasePizza
             let removedIngredients = self.detailProductViewModel.ingretientStatesInOrder
+            let sizePizza = detailProductViewModel.sizePizza
                         
-            self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
+            self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+            
+            self.dismiss(animated: true, completion: nil)
         }
         
         titleDetailView.update(product)
@@ -153,6 +156,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 guard let self = self else { return }
                 
                 detailProductViewModel.priceForPizza = Double(detailProductViewModel.product.prices["\(namePizzaSize)"] ?? detailProductViewModel.product.price)
+                
+                detailProductViewModel.updateSizeOfPizza(namePizzaSize: namePizzaSize)
+                
                 let sum = detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings
                 
                 addProduct.update(sum)

@@ -88,7 +88,6 @@ final class IngredientDetailTableViewCell: UITableViewCell {
         [descriptionLabel, removeIngredientsButton, infoWeightDescriptionButton, weightLabel].forEach {
             containterDescriptionView.addSubview($0)
         }
-        
     }
     
     func setupContaints() {
@@ -130,7 +129,6 @@ extension IngredientDetailTableViewCell {
         } else {
             descriptionLabel.text = product.ingredientsList
         }
-        
     }
 }
 

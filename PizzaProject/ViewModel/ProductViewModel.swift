@@ -21,15 +21,25 @@ protocol IProductViewModel {
     func fetchProducts()
     func fetchFilters()
     
+    //Cart
+    
+    var onCartUpdate: ((Double)->())? { get set }
+    
+    func getCartTotal()
+    
 }
 
 class ProductViewModel: IProductViewModel {
     
     var di: DependencyContainer?
     
+    let recordArchiver = RecordArchiver.shared
+    
     var onProductUpdate: (()-> ())?
     var onFilterFetch: (()-> ())?
-
+    
+    var onCartUpdate: ((Double)->())?
+    
     let products: [Pizza] = [
         Pizza(
                id: 1,
@@ -436,4 +446,20 @@ class ProductViewModel: IProductViewModel {
     func fetchFilters() {
         onFilterFetch?()
     }
+    //MARK: - Cart func
+    func getCartTotal() {
+        let cart = recordArchiver.load()
+        
+        if !cart.isEmpty {
+            let totalPrice = cart[cart.count-1].sumForToppings + cart[cart.count-1].priceForPizza
+            onCartUpdate?(totalPrice)
+        }
+
+    }
 }
+
+
+    
+   
+    
+    

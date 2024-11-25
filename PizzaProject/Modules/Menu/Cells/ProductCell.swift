@@ -121,15 +121,4 @@ extension ProductCell {
         priceButton.setTitle("from \(product.prices["small"] ?? 10) £", for: .normal)
         photoImageView.image = UIImage(named: product.image)
     }
-    
-//    func update(_ product: Pizza) {
-//        nameLabel.text = product.name
-//        var listIngredients: String = ""
-//        for ingredient in product.ingredients {
-//            listIngredients += ingredient.name + ", "
-//        }
-//        descriptionLabel.text = listIngredients
-//        priceButton.setTitle("from \(product.price) £", for: .normal)
-//        photoImageView.image = UIImage(named: product.image)
-//    }
 }

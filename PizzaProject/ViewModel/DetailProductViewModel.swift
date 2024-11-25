@@ -17,6 +17,8 @@ protocol IDetailProductViewModel {
     
     var priceForPizza: Double { get set }
     
+    var sizePizza: String { get set }
+    
     var sumToppings: Double  { get set }
     
     var typeBasePizza: String { get set }
@@ -37,7 +39,7 @@ protocol IDetailProductViewModel {
     
     func calculateTotalPrice(topping: Toppings, priceForPizza: Double) -> Double
     
-    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String)
+    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String)
     
     func resetRemovedIngredientStates()
     
@@ -52,6 +54,8 @@ protocol IDetailProductViewModel {
     func createLineWithRemovedIngredients()
     
     var listRemovedIngredients: NSAttributedString? { get set }
+    
+    func updateSizeOfPizza(namePizzaSize: String)
     
 }
 
@@ -91,6 +95,8 @@ class DetailProductViewModel: IDetailProductViewModel {
     var order = [Order]()
     
     var priceForPizza: Double = 0.0
+    
+    var sizePizza: String = "medium"
     
     var sumToppings: Double = 0.0
     
@@ -136,6 +142,10 @@ class DetailProductViewModel: IDetailProductViewModel {
         onProductUpdate?()
     }
     
+    func updateSizeOfPizza(namePizzaSize: String) {
+        sizePizza = namePizzaSize
+    }
+    
     func calculateTotalPrice(topping: Toppings, priceForPizza: Double) -> Double {
         
         if toppingsInOrder.isEmpty {
@@ -156,10 +166,10 @@ class DetailProductViewModel: IDetailProductViewModel {
         return totalPrice
     }
     
-    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, typeBasePizza: String) {
-        let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, typeBasePizza: typeBasePizza)
-
+    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String) {
+        let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
         recordArchiver.save(order: [order])
+        print(order)
     }
     
     func resetRemovedIngredientStates() {        

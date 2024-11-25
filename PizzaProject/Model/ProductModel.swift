@@ -54,9 +54,6 @@ struct Order: Codable {
     let toppings: [Toppings]
     let sumForToppings: Double
     let priceForPizza: Double
+    let sizePizza: String
     let typeBasePizza: String
 }
-
-
-
-

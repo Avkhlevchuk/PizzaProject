@@ -33,4 +33,8 @@ final class ScreenFactory {
     func createRemoveIngredientsScreen(detailProductViewModel: IDetailProductViewModel ) -> RemoveIngredientsViewController {
         return RemoveIngredientsViewController(detailProductViewModel: detailProductViewModel)
     }
+    
+    func createCartScreen(cartViewModel: ICartViewModel) -> CartViewController {
+        return CartViewController(cartViewModel: cartViewModel)
+    }
 }

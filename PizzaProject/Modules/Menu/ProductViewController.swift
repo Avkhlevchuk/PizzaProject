@@ -12,6 +12,7 @@ class ProductViewController: UIViewController {
     let productContainer = ProductContainerCell()
     private var productViewModel: IProductViewModel
     let productShortContainer = ShortProductContainerCell()
+    let cartView = CartView()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -45,6 +46,14 @@ class ProductViewController: UIViewController {
         setupBinding()
         
         productViewModel.fetchProducts()
+        productViewModel.getCartTotal()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        productViewModel.getCartTotal()
+        tableView.reloadData()
     }
     
     @objc private func dismissVC() {
@@ -53,16 +62,24 @@ class ProductViewController: UIViewController {
     
     func setupViews() {
         view.backgroundColor = Colors.backgroundColor
-        view.addSubview(tableView)
+        [tableView, cartView].forEach {
+            view.addSubview($0)
+        }
     }
     
     func setupConstraints() {
         
+        cartView.snp.makeConstraints { make in
+            make.right.equalTo(view.snp.right).inset(20)
+            make.bottom.equalTo(view.snp.bottom).inset(40)
+            make.height.equalTo(60)
+            make.width.greaterThanOrEqualTo(100)
+        }
+        
         tableView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.equalToSuperview()
-            
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -72,7 +89,22 @@ class ProductViewController: UIViewController {
         }
         
         productViewModel.onProductUpdate = { [weak self] in
-            self?.tableView.reloadData()
+        
+        }
+        
+        productViewModel.onCartUpdate = { [weak self] totalPrice in
+            guard let self = self else { return }
+            self.cartView.bind(totalPrice: totalPrice)
+        }
+        
+        cartView.onCartButtonTapped = { [weak self] in
+            
+            if let comtainerDI = self?.productViewModel.di {
+                let cardViewModel = CartViewModel()
+                let vc = comtainerDI.screenFactory.createCartScreen(cartViewModel: cardViewModel)
+                
+                self?.present(vc, animated: true)
+            }
         }
     }
 }
@@ -147,5 +179,9 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             
             present(detailVC, animated: true)
         }        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }
