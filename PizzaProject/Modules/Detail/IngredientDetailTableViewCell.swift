@@ -34,12 +34,20 @@ final class IngredientDetailTableViewCell: UITableViewCell {
     
     lazy var removeIngredientsButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(" ✎ Remove ingredients ", for: .normal)
+        button.setTitle("Remove ingredients ", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.backgroundColor = .white
         button.layer.cornerRadius = 15
         button.addTarget(nil, action: #selector(removeIngredientsTapped), for: .touchUpInside)
+        
+        let icon = UIImage(systemName: "eraser.line.dashed.fill")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(icon, for: .normal)
+        
+        button.imageEdgeInsets = UIEdgeInsets(top: 3, left: 0, bottom: 3, right: 0)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tintColor = .black
+        
         return button
     }()
     

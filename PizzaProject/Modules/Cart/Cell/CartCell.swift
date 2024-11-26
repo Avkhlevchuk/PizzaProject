@@ -169,18 +169,15 @@ class CartCell: UITableViewCell {
         
         photoImageView.snp.makeConstraints { make in
             make.left.top.equalTo(containerView).inset(15)
-            //            make.bottom.lessThanOrEqualTo(containerView).inset(15)
-            make.bottom.equalTo(containerPriceAndChangeView.snp.top)
+            make.bottom.lessThanOrEqualTo(containerPriceAndChangeView.snp.top).offset(-10).priority(.medium)
             make.width.equalTo(photoImageView.snp.height)
+            make.height.lessThanOrEqualTo(100) // Максимальная высота
         }
         
         verticalStackView.snp.makeConstraints { make in
             make.left.equalTo(photoImageView.snp.right).offset(20)
             make.top.equalTo(contentView).inset(15)
             make.right.equalTo(containerView).inset(15)
-//            make.bottom.equalTo(containerPriceAndChangeView.snp.top)
-//            make.bottom.lessThanOrEqualTo(containerPriceAndChangeView.snp.bottom)
-            
         }
         
         nameLabel.snp.makeConstraints { make in
@@ -189,17 +186,17 @@ class CartCell: UITableViewCell {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-               make.top.equalTo(nameLabel.snp.bottom)
-               make.left.right.equalTo(verticalStackView)
-               make.bottom.lessThanOrEqualTo(verticalStackView.snp.bottom)
+            make.top.equalTo(nameLabel.snp.bottom)
+            make.left.right.equalTo(verticalStackView)
+            make.bottom.lessThanOrEqualTo(verticalStackView.snp.bottom)
             
         }
         
         containerPriceAndChangeView.snp.makeConstraints { make in
             make.left.right.equalTo(containerView)
-            make.height.equalTo(40)
-            make.top.equalTo(photoImageView.snp.bottom)
+            make.top.equalTo(photoImageView.snp.bottom).offset(10)
             make.bottom.equalTo(containerView.snp.bottom)
+            make.height.greaterThanOrEqualTo(40).priority(.medium)
         }
         
         priceForPizzaLabel.snp.makeConstraints { make in
@@ -229,8 +226,9 @@ extension CartCell {
         var addIngredientsDescription: String = ""
         var removedIngredientsDescription: String = ""
         
-        let sum = (order.priceForPizza + order.sumForToppings) * Double(order.count)
-        priceForPizzaLabel.text = "\(sum) £"
+        let priceForPossition = (order.priceForPizza + order.sumForToppings) * Double(order.count)
+        
+        priceForPizzaLabel.text = "\(priceForPossition) £"
         
         nameLabel.text = order.product.name
         photoImageView.image = UIImage(named: order.product.image)
@@ -271,7 +269,6 @@ extension CartCell {
                     removedIngredientsDescription += "\(removedIngredientsLowercased), "
                 }
             }
-            
         }
         
         var titleDescription: String = ""

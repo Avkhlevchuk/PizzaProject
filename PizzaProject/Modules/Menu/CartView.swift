@@ -57,7 +57,11 @@ class CartView: UIView {
     }
     
     func bind(totalPrice: Double) {
-        cartButton.setTitle("\(totalPrice) £", for: .normal)
-        cartButton.isHidden = false
+        if totalPrice == 0.0 {
+            cartButton.isHidden = true
+        } else {
+            cartButton.setTitle("\(totalPrice) £", for: .normal)
+            cartButton.isHidden = false
+        }
     }
 }

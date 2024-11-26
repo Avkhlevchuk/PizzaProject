@@ -49,7 +49,7 @@ struct Toppings: Codable {
 
 struct Order: Codable {
     let product: Pizza
-    let count: Int
+    var count: Int
     let removedIngredients: [IngredientStates]
     let toppings: [Toppings]
     let sumForToppings: Double

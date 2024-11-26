@@ -40,4 +40,39 @@ final class RecordArchiver {
             return []
         }
     }
+    
+    func addPosition(order: Order) {
+        var currentOrder = load()
+        
+        currentOrder.append(order)
+        
+        save(order: currentOrder)
+    }
+    
+    func removePosition(index: Int) {
+        var currentOrder = load()
+        
+        currentOrder.remove(at: index)
+        
+        currentOrder.isEmpty ? save(order: []) : save(order: currentOrder)
+    }
+    
+    func addCountPosition(index: Int) {
+        var currentOrder = load()
+        
+        currentOrder[index].count += 1
+        
+        save(order: currentOrder)
+    }
+    
+    func removeCountPosition(index: Int) {
+        var currentOrder = load()
+        
+        currentOrder[index].count -= 1
+        
+        currentOrder[index].count == 0 ? removePosition(index: index) : save(order: currentOrder)
+    }
+    
+    
+    
 }

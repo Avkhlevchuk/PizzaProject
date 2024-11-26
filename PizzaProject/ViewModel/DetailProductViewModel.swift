@@ -130,6 +130,26 @@ class DetailProductViewModel: IDetailProductViewModel {
     }
     
     func getProduct() -> Pizza {
+        
+//FIXME: - add data from userDefault in vc detail
+//        let order = recordArchiver.load()
+        
+//        let position = order.filter({ $0.product.id == product.id })
+//        
+//        if !position.isEmpty {
+//            self.product = position[0].product
+//            
+//            toppingsInOrder = position[0].toppings
+//            listSavedRemovedIngredients = position[0].removedIngredients
+//            ingretientStatesInOrder = position[0].removedIngredients
+//            saveRemovedIngredients = true
+//            typeBasePizza = position[0].typeBasePizza
+//            sumToppings = position[0].sumForToppings
+//            sizePizza = position[0].sizePizza
+//            priceForPizza = position[0].priceForPizza
+//
+//        }
+        
         return product
     }
     
@@ -168,8 +188,11 @@ class DetailProductViewModel: IDetailProductViewModel {
     
     func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String) {
         let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
-        recordArchiver.save(order: [order])
-        print(order)
+        
+        let currentOrder = recordArchiver.load()
+                
+        currentOrder.isEmpty ? recordArchiver.save(order: [order]) : recordArchiver.addPosition(order: order)
+        
     }
     
     func resetRemovedIngredientStates() {        

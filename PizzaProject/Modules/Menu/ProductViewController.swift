@@ -79,7 +79,7 @@ class ProductViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view)
         }
     }
     
@@ -100,10 +100,16 @@ class ProductViewController: UIViewController {
         cartView.onCartButtonTapped = { [weak self] in
             
             if let comtainerDI = self?.productViewModel.di {
-                let cardViewModel = CartViewModel()
+                let cardViewModel = CartViewModel(di: self?.productViewModel.di)
                 let vc = comtainerDI.screenFactory.createCartScreen(cartViewModel: cardViewModel)
                 
+                vc.onDismissTapped = { [weak self] in
+                    self?.productViewModel.getCartTotal()
+                    self?.tableView.reloadData()
+                }
+                
                 self?.present(vc, animated: true)
+                
             }
         }
     }

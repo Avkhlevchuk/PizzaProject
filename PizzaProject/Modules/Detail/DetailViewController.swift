@@ -117,9 +117,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.dismiss(animated: true, completion: nil)
         }
         
+        
         titleDetailView.update(product)
         
         addProduct.update(product.price)
+        
+    }
+    
+    func reloadData() {
         
     }
     //MARK: - UITableViewDataSource, UITableViewDelegate

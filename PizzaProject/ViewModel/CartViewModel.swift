@@ -8,7 +8,12 @@
 import UIKit
 
 protocol ICartViewModel {
+    
+    var di: DependencyContainer? { get }
+    
     var order: [Order] { get }
+    
+    var recordArchiver: RecordArchiver { get set }
     
     var totalPrice: Double { get }
     
@@ -19,11 +24,17 @@ protocol ICartViewModel {
 
 class CartViewModel: ICartViewModel {
     
+    var di: DependencyContainer?
+    
     var recordArchiver = RecordArchiver.shared
     
     var order: [Order] = []
     
     var totalPrice: Double = 0.0
+    
+    init (di: DependencyContainer?) {
+        self.di = di
+    }
     
     func getOrder() {
         self.order = recordArchiver.load()   
@@ -37,7 +48,8 @@ class CartViewModel: ICartViewModel {
             totalPrice += totalPriceForPosition
         
         }
+        let roundedTotalPrice = Double(String(format: "%.1f", totalPrice)) ?? 0.0
         
-        self.totalPrice = totalPrice
+        self.totalPrice = roundedTotalPrice
     }
 }

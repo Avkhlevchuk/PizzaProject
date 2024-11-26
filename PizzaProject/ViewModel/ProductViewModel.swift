@@ -449,12 +449,16 @@ class ProductViewModel: IProductViewModel {
     //MARK: - Cart func
     func getCartTotal() {
         let cart = recordArchiver.load()
-        
-        if !cart.isEmpty {
-            let totalPrice = cart[cart.count-1].sumForToppings + cart[cart.count-1].priceForPizza
-            onCartUpdate?(totalPrice)
-        }
 
+        if !cart.isEmpty {
+            let totalPrice = cart.reduce(0.0) { $0 + ($1.priceForPizza + $1.sumForToppings) * Double($1.count) }
+            
+            let roundedTotalPrice = Double(String(format: "%.1f", totalPrice)) ?? 0.0
+            
+            onCartUpdate?(roundedTotalPrice)
+        } else {
+            onCartUpdate?(0.0)
+        }
     }
 }
 
