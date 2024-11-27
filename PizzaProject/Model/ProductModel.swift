@@ -13,7 +13,7 @@ struct Ingredient: Codable, Hashable {
     let isRemovable: Bool
 }
 
-struct IngredientStates: Codable, Hashable {
+struct IngredientStates: Codable, Hashable, Equatable {
     let ingredient: Ingredient
     var isRemoved: Bool
 }
@@ -41,10 +41,16 @@ struct NutritionValue {
     let allergens: String
 }
 
-struct Toppings: Codable {
+struct Toppings: Codable, Equatable {
     let id: Int
     let name: String
     let price: Double
+}
+
+extension Toppings: Comparable {
+    static func < (lhs: Toppings, rhs: Toppings) -> Bool {
+        lhs.id < rhs.id
+    }
 }
 
 struct Order: Codable {
@@ -56,4 +62,14 @@ struct Order: Codable {
     let priceForPizza: Double
     let sizePizza: String
     let typeBasePizza: String
+}
+
+extension Order: Equatable {
+    static func == (lhs: Order, rhs: Order) -> Bool {
+        lhs.product.id == rhs.product.id &&
+        lhs.toppings == rhs.toppings &&
+        lhs.removedIngredients == rhs.removedIngredients &&
+        lhs.sizePizza == rhs.sizePizza &&
+        lhs.typeBasePizza == rhs.typeBasePizza
+    }
 }

@@ -179,6 +179,8 @@ class DetailProductViewModel: IDetailProductViewModel {
             sumToppings += topping.price
         }
         
+        toppingsInOrder = toppingsInOrder.sorted(by: <)
+        
         let roundedSum = (sumToppings * 10).rounded() / 10
         
         let totalPrice = Double(priceForPizza) + roundedSum
@@ -187,12 +189,26 @@ class DetailProductViewModel: IDetailProductViewModel {
     }
     
     func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String) {
+        
         let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
         
-        let currentOrder = recordArchiver.load()
-                
-        currentOrder.isEmpty ? recordArchiver.save(order: [order]) : recordArchiver.addPosition(order: order)
+        var currentOrder = recordArchiver.load()
         
+        if currentOrder.isEmpty {
+            recordArchiver.save(order: [order])
+        }else {
+            
+            for (index, item) in currentOrder.enumerated() {
+                
+                if order == item {
+                    currentOrder[index].count += 1
+                    recordArchiver.addCountPosition(index: index)
+                    return
+                }
+            }
+            recordArchiver.addPosition(order: order)
+        
+        }
     }
     
     func resetRemovedIngredientStates() {        
