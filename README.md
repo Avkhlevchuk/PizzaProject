@@ -1,4 +1,4 @@
-# PizzaProject
+# PizzaProject 🍕
 
 ## Overview
 The Pizza Project is an iOS application that offers a pizza ordering experience,
@@ -7,8 +7,9 @@ showcases advanced UI features, MVVM architecture, and interactive design, built
 
 ## Tech Stack
 
-Language: Swift
-Architecture: MVVM
-UI Components: UIKit, SnapKit for programmatic auto-layout
+Language: Swift /n
+Architecture: MVVM, SOLID, Dependency Injection  /n
+UI Components: UIKit, SnapKit for programmatic auto-layout /n
 
-![ScreenRecording_11-05-2024 11-39-12_1](https://github.com/user-attachments/assets/c5c55ad0-8526-47c0-889e-6f04a6e4ac16)
+
+![ScreenRecording_11-28-202414-54-23_1-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/ca44b9a1-92d1-49b4-b4f2-fdef3d8f6d07)
