@@ -9,11 +9,11 @@ import UIKit
 
 protocol ICartViewModel {
     
-    var di: DependencyContainer? { get }
+    var di: DependencyContainer { get }
     
     var order: [Order] { get }
     
-    var recordArchiver: RecordArchiver { get set }
+    var recordArchiver: OrderArchiver { get set }
     
     var totalPrice: Double { get }
     
@@ -24,16 +24,17 @@ protocol ICartViewModel {
 
 class CartViewModel: ICartViewModel {
     
-    var di: DependencyContainer?
+    var di: DependencyContainer
     
-    var recordArchiver = RecordArchiver.shared
+    var recordArchiver: OrderArchiver
     
     var order: [Order] = []
     
     var totalPrice: Double = 0.0
     
-    init (di: DependencyContainer?) {
+    init (di: DependencyContainer) {
         self.di = di
+        recordArchiver = di.orderArchiver
     }
     
     func getOrder() {

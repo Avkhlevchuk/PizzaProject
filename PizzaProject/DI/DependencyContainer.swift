@@ -9,9 +9,17 @@ import UIKit
 
 final class DependencyContainer {
     let screenFactory: ScreenFactory
+    let orderArchiver: OrderArchiver
+    private let encoder: JSONEncoder
+    private let decoder: JSONDecoder
+    let productLoader: ProductLoader
     
     init() {
         screenFactory = ScreenFactory()
+        encoder = JSONEncoder()
+        decoder = JSONDecoder()
+        orderArchiver = OrderArchiver(encoder: encoder, decoder: decoder)
+        productLoader = ProductLoader()
         screenFactory.di = self
     }
 }
@@ -26,15 +34,16 @@ final class ScreenFactory {
     }
     
     func createDetailProductScreen(product: Pizza) -> DetailViewController {
-        let detailProductViewModel = DetailProductViewModel(product: product)
-        return DetailViewController(detailProductViewModel: detailProductViewModel, di: di)
+        let detailProductViewModel = DetailProductViewModel(product: product, di: di)
+        return DetailViewController(detailProductViewModel: detailProductViewModel)
     }
     
     func createRemoveIngredientsScreen(detailProductViewModel: IDetailProductViewModel ) -> RemoveIngredientsViewController {
         return RemoveIngredientsViewController(detailProductViewModel: detailProductViewModel)
     }
     
-    func createCartScreen(cartViewModel: ICartViewModel) -> CartViewController {
-        return CartViewController(cartViewModel: cartViewModel)
+    func createCartScreen() -> CartViewController {
+        let cartScreenViewModel = CartViewModel(di: di)
+        return CartViewController(cartViewModel: cartScreenViewModel)
     }
 }

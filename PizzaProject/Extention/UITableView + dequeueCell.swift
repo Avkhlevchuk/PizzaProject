@@ -18,3 +18,14 @@ extension UITableView {
     }
     
 }
+
+protocol Reusable {}
+
+extension UITableViewCell: Reusable {}
+
+extension Reusable where Self: UITableViewCell {
+    
+    static var reuseId: String {
+        return String.init(describing: self)
+    }
+}

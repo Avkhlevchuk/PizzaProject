@@ -135,9 +135,7 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let product = cartViewModel.order[indexPath.row].product
-        guard let vc = (cartViewModel.di?.screenFactory.createDetailProductScreen(product: product)) else {
-            return print("Error: Can't create detail product screen")
-        }
+        let vc = (cartViewModel.di.screenFactory.createDetailProductScreen(product: product))
         vc.modalPresentationStyle = .fullScreen
         
         self.present(vc, animated: true)

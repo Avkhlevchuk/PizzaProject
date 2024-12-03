@@ -37,16 +37,19 @@ class ProductViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         setupViews()
         setupConstraints()
         setupBinding()
         
+        productViewModel.getProducts()
         productViewModel.fetchProducts()
         productViewModel.getCartTotal()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,8 +60,8 @@ class ProductViewController: UIViewController {
     }
     
     @objc private func dismissVC() {
-           dismiss(animated: true)
-       }
+        dismiss(animated: true)
+    }
     
     func setupViews() {
         view.backgroundColor = Colors.backgroundColor
@@ -89,7 +92,9 @@ class ProductViewController: UIViewController {
         }
         
         productViewModel.onProductUpdate = { [weak self] in
-        
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
         }
         
         productViewModel.onCartUpdate = { [weak self] totalPrice in
@@ -98,20 +103,18 @@ class ProductViewController: UIViewController {
         }
         
         cartView.onCartButtonTapped = { [weak self] in
+            guard let self = self else { return }
+            let vc = self.productViewModel.di.screenFactory.createCartScreen()
             
-            if let comtainerDI = self?.productViewModel.di {
-                let cardViewModel = CartViewModel(di: self?.productViewModel.di)
-                let vc = comtainerDI.screenFactory.createCartScreen(cartViewModel: cardViewModel)
-                
-                vc.onDismissTapped = { [weak self] in
-                    self?.productViewModel.getCartTotal()
-                    self?.tableView.reloadData()
-                }
-                
-                self?.present(vc, animated: true)
-                
+            vc.onDismissTapped = { [weak self] in
+                self?.productViewModel.getCartTotal()
+                self?.tableView.reloadData()
             }
+            
+            self.present(vc, animated: true)
+            
         }
+        
     }
 }
 
@@ -148,7 +151,6 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 1:
             let cell = tableView.dequeueCell(indexPath) as ShortProductContainerCell
-            
             let product = productViewModel.products
             cell.bind(product: product)
             return cell
@@ -179,12 +181,12 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedProduct = productViewModel.products[indexPath.row]
         
-        if let cobainerDI = productViewModel.di {
-            let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
-            detailVC.modalPresentationStyle = .fullScreen
-            
-            present(detailVC, animated: true)
-        }        
+        let cobainerDI = productViewModel.di
+        let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
+        detailVC.modalPresentationStyle = .fullScreen
+        
+        present(detailVC, animated: true)
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

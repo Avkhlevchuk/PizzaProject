@@ -11,6 +11,12 @@ struct Ingredient: Codable, Hashable {
     let id: Int
     let name: String
     let isRemovable: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case isRemovable = "is_removable"
+    }
 }
 
 struct IngredientStates: Codable, Hashable, Equatable {
@@ -18,7 +24,7 @@ struct IngredientStates: Codable, Hashable, Equatable {
     var isRemoved: Bool
 }
 
-struct Pizza: Codable, Hashable {
+struct Pizza: Codable {
     let id: Int
     let name: String
     var ingredients: [Ingredient]
@@ -27,6 +33,17 @@ struct Pizza: Codable, Hashable {
     let prices: [String: Int]
     let image: String
     let foodType: FoodType
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case ingredients
+        case ingredientsList = "ingredients_list"
+        case price
+        case prices
+        case image
+        case foodType = "food_type"
+    }
 }
 
 struct NutritionValue {
@@ -72,4 +89,8 @@ extension Order: Equatable {
         lhs.sizePizza == rhs.sizePizza &&
         lhs.typeBasePizza == rhs.typeBasePizza
     }
+}
+
+struct PizzaData: Codable {
+    let pizza: [Pizza]
 }

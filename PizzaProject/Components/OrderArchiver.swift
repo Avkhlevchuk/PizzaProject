@@ -7,15 +7,13 @@
 
 import UIKit
 
-final class RecordArchiver {
+final class OrderArchiver {
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
     
-    private let key = "records"
-    
-    static let shared = RecordArchiver(encoder: JSONEncoder(), decoder: JSONDecoder())
-    
-    private init(encoder: JSONEncoder, decoder: JSONDecoder) {
+    private let key = "order"
+
+    init(encoder: JSONEncoder, decoder: JSONDecoder) {
         self.encoder = encoder
         self.decoder = decoder
     }

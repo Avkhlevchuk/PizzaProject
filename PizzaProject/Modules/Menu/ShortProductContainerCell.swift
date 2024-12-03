@@ -100,5 +100,6 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
 extension ShortProductContainerCell {
     func bind(product: [Pizza]) {
         self.products = product
+        self.collectionView.reloadData()
     }
 }

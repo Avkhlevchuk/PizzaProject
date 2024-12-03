@@ -9,6 +9,8 @@ import Foundation
 
 protocol IDetailProductViewModel {
     
+    var di: DependencyContainer { get set }
+    
     var product: Pizza { get set }
     
     var nutrition: [NutritionValue] { get set }
@@ -121,12 +123,16 @@ class DetailProductViewModel: IDetailProductViewModel {
     
     var toppingsInOrder = [Toppings]()
     
-    let recordArchiver = RecordArchiver.shared
+    let orderArchiver: OrderArchiver
     
     var listRemovedIngredients: NSAttributedString?
     
-    init (product: Pizza) {
+    var di: DependencyContainer
+    
+    init (product: Pizza, di: DependencyContainer) {
+        self.di = di
         self.product = product
+        orderArchiver = di.orderArchiver
     }
     
     func getProduct() -> Pizza {
@@ -192,21 +198,21 @@ class DetailProductViewModel: IDetailProductViewModel {
         
         let order = Order(product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
         
-        var currentOrder = recordArchiver.load()
+        var currentOrder = di.orderArchiver.load()
         
         if currentOrder.isEmpty {
-            recordArchiver.save(order: [order])
+            di.orderArchiver.save(order: [order])
         }else {
             
             for (index, item) in currentOrder.enumerated() {
                 
                 if order == item {
                     currentOrder[index].count += 1
-                    recordArchiver.addCountPosition(index: index)
+                    di.orderArchiver.addCountPosition(index: index)
                     return
                 }
             }
-            recordArchiver.addPosition(order: order)
+            di.orderArchiver.addPosition(order: order)
         
         }
     }

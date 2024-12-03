@@ -11,7 +11,6 @@ import SnapKit
 class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     private lazy var toppingInfoPopoverViewController = ToppingInfoPopoverViewController()
-    private var di: DependencyContainer?
     
     var isPopoverPresented = false
     
@@ -44,9 +43,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return segmentedControl
     }()
     
-    init (detailProductViewModel: IDetailProductViewModel, di: DependencyContainer) {
+    init (detailProductViewModel: IDetailProductViewModel) {
         self.detailProductViewModel = detailProductViewModel
-        self.di = di
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,7 +114,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             self.dismiss(animated: true, completion: nil)
         }
-        
         
         titleDetailView.update(product)
         
@@ -217,9 +214,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             cell.onRemoveIngredientsButtonTapped = { [weak self] in
                 guard let self = self else { return }
-                guard let di = self.di else { fatalError("Could not get di") }
+//                guard let di = self.di else { fatalError("Could not get di") }
                 
-                let removeVC = di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
+                let removeVC = detailProductViewModel.di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
                 removeVC.modalPresentationStyle = .pageSheet
                 
                 removeVC.onDismissTapped = { [weak self] in

@@ -7,6 +7,15 @@
 
 import UIKit
 
+extension UICollectionViewCell: Reusable{}
+
+extension Reusable where Self: UICollectionViewCell {
+  
+  static var reuseId: String {
+    String(describing: self)
+  }
+}
+
 extension UICollectionView {
     
     func registerCell<Cell: UICollectionViewCell>(_ cellClass: Cell.Type) {
@@ -18,3 +27,4 @@ extension UICollectionView {
         return cell
     }
 }
+

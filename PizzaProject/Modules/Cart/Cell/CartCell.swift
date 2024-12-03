@@ -293,11 +293,18 @@ extension CartCell {
             break
         }
         
-        let totalDescription = titleDescription + "\n" + addIngredientsDescription + "\n" + removedIngredientsDescription
+        var totalDescription = ""
+        
+        if !addIngredientsDescription.isEmpty && !removedIngredientsDescription.isEmpty {
+             totalDescription = titleDescription + "\n" + addIngredientsDescription + "\n" + removedIngredientsDescription
+        } else if addIngredientsDescription.isEmpty {
+            totalDescription = titleDescription + "\n" + removedIngredientsDescription
+        } else if removedIngredientsDescription.isEmpty {
+            totalDescription = titleDescription + "\n" + addIngredientsDescription
+        }
         
         descriptionLabel.text = totalDescription
         
         countPizzaLabel.text = "\(order.count)"
-        
     }
 }
