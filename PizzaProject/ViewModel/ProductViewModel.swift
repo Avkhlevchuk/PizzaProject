@@ -15,7 +15,7 @@ protocol IProductViewModel {
     var onFilterFetch: (() -> ())? { get set }
     
     var products: [Pizza] { get }
-    var allFilters: [FoodType] { get }
+    var allFilters: [String] { get }
     
     func fetchProduct(index: Int) -> Pizza
     func fetchProducts()
@@ -48,7 +48,7 @@ class ProductViewModel: IProductViewModel {
         orderArchiver = di.orderArchiver
     }
     
-    let allFilters = [FoodType.romanPizza, FoodType.pizza, FoodType.combo, FoodType.snack, FoodType.breakfast, FoodType.milkshake, FoodType.drink, FoodType.coffee]
+    let allFilters = ["Roman Pizza", "Pizza", "Combo", "Snack", "Breakfast", "Milkshakes", "Coffee", "Drink"]
     
     let allStories = ["stories", "stories1", "stories2", "stories3", "stories", "stories1", "stories2", "stories3"]
     

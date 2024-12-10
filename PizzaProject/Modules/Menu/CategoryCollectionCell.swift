@@ -48,7 +48,15 @@ final class CategoryCollectionCell: UICollectionViewCell {
 
 //MARK: - Update View
 extension CategoryCollectionCell {
-    func update(_ filter: FoodType) {
-        typeFoodLabel.setTitle("\(filter.rawValue)", for: .normal)
+    func update(_ filter: String) {
+        typeFoodLabel.setTitle("\(filter)", for: .normal)
+    }
+    
+    func setSelected(_ isSelected: Bool) {
+        if isSelected {
+            typeFoodLabel.setTitleColor(.black, for: .normal)
+        } else {
+            typeFoodLabel.setTitleColor(.gray, for: .normal)
+        }
     }
 }

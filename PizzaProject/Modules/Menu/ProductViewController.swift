@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class ProductViewController: UIViewController {
-    let productContainer = ProductContainerCell()
+    let productContainer = ProductContainerHeader()
     private var productViewModel: IProductViewModel
     let productShortContainer = ShortProductContainerCell()
     let cartView = CartView()
@@ -22,9 +22,15 @@ class ProductViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.registerCell(ProductCell.self)
-        tableView.registerCell(ProductContainerCell.self)
+//        tableView.registerCell(ProductContainerCell.self)
         tableView.registerCell(ShortProductContainerCell.self)
+        tableView.register(ProductContainerHeader.self, forHeaderFooterViewReuseIdentifier: ProductContainerHeader.reuseId)
         tableView.registerCell(StoryContainerCell.self)
+        tableView.estimatedSectionHeaderHeight = 40
+        
+        if #available(iOS 15.0, *) {
+          tableView.sectionHeaderTopPadding = 0.0
+        }
         
         return tableView
     }()
@@ -87,9 +93,6 @@ class ProductViewController: UIViewController {
     }
     
     func setupBinding() {
-        productContainer.onFilterButtonTapped = {
-            print("taped button in collection")
-        }
         
         productViewModel.onProductUpdate = { [weak self] in
             DispatchQueue.main.async {
@@ -134,8 +137,6 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         case 1:
             return 1
         case 2:
-            return 1
-        case 3:
             return productViewModel.products.count
         default :
             return 0
@@ -156,17 +157,6 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
             
         case 2:
-            let cell = tableView.dequeueCell(indexPath) as ProductContainerCell
-            
-            cell.onFilterButtonTapped = { [weak self] in
-                guard let self = self else { return }
-                self.productContainer.onFilterButtonTapped?()
-            }
-            
-            let filter = productViewModel.allFilters
-            cell.update(filter)
-            return cell
-        case 3:
             let cell = tableView.dequeueCell(indexPath) as ProductCell
             let product = productViewModel.products[indexPath.row]
             cell.update(product)
@@ -189,7 +179,46 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return section == 2 ? UITableView.automaticDimension : 0
+        
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        switch section {
+        case 2:
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: ProductContainerHeader.reuseId) as? ProductContainerHeader else { return UIView() }
+            
+            
+            header.onFilterButtonTapped = { [weak self] selectedFoodType in
+                guard let self = self else { return }
+//                self.productContainer.onFilterButtonTapped?()
+                if let index = self.productViewModel.products.firstIndex(where: {$0.foodType == selectedFoodType}) {
+                    let indexPath = IndexPath(row: index, section: 2)
+                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                }
+            }
+            
+            let filter = productViewModel.allFilters
+            header.update(filter)
+            return header
+        default :
+            return UIView()
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let visibleRows = tableView.indexPathsForVisibleRows ?? []
+        
+        guard let firstVisibleRow = visibleRows.first else { return }
+        let product = productViewModel.products[firstVisibleRow.row]
+        
+        let foodType = product.foodType
+        
+        if let header = tableView.headerView(forSection: 2) as? ProductContainerHeader {
+            header.selectedFilter(foodType: foodType)
+        }
     }
 }

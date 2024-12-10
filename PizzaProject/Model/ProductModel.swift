@@ -32,7 +32,7 @@ struct Pizza: Codable {
     let price: Int
     let prices: [String: Int]
     let image: String
-    let foodType: FoodType
+    let foodType: String
     
     enum CodingKeys: String, CodingKey {
         case id

@@ -70,4 +70,8 @@ extension TitleDetailView {
     func update(_ product: Pizza) {
         titleLabel.text = product.name
     }
+    
+    func changeAlpha(alha: CGFloat) {
+        self.addBlur(style: .light, alpha: alha)
+    }
 }

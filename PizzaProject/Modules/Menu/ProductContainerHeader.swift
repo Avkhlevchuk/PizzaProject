@@ -9,13 +9,15 @@ import UIKit
 
 final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    static let reuseId = "ProductContainerCell"
+    static let reuseId = "ProductContainerHeader"
     
-    var foodType: [FoodType] = []
+    var foodType: [String] = []
     
     let productViewModel = ProductViewModel(di: DependencyContainer())
     
-    var onFilterButtonTapped: (()->())?
+    var onFilterButtonTapped: ((String)->())?
+    
+    var selectedFoodType: String?
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -29,13 +31,18 @@ final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionVie
         collectionView.registerCell(CategoryCollectionCell.self)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .white
+        collectionView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         return collectionView
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+//        super.init(style: style, reuseIdentifier: reuseIdentifier)
+//        
+//    }
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         setupView()
         setupConstraints()
         setupBinding()
@@ -56,7 +63,7 @@ final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionVie
         collectionView.snp.makeConstraints { make in
             make.left.right.equalTo(contentView)
             make.top.bottom.equalTo(contentView)
-            make.height.equalTo(50)
+//            make.height.equalTo(50)
         }
     }
     
@@ -72,12 +79,21 @@ final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueCell(indexPath) as CategoryCollectionCell
-
-        cell.update(foodType[indexPath.row])
+        
+        let foodTypeItem = foodType[indexPath.row]
+        cell.update(foodTypeItem)
+        
+        if foodTypeItem == selectedFoodType {
+            cell.setSelected(true)
+        } else {
+            cell.setSelected(false)
+        }
         
         cell.onButtonTapped = { [weak self] in
             guard let self = self else { return }
-            self.onFilterButtonTapped?()
+            selectedFoodType = foodTypeItem
+            collectionView.reloadData()
+            self.onFilterButtonTapped?(foodTypeItem)
         }
         
         return cell
@@ -85,7 +101,17 @@ final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionVie
 }
 
 extension ProductContainerHeader {
-    func update (_ foodType: [FoodType]) {
+    func update (_ foodType: [String]) {
         self.foodType = foodType
+    }
+    
+    func selectedFilter(foodType: String) {
+        guard let index = self.foodType.firstIndex(of: foodType) else { return }
+        let indexPath = IndexPath(item: index, section: 0)
+        
+        selectedFoodType = self.foodType[index]
+
+        collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
+        collectionView.reloadData()
     }
 }
