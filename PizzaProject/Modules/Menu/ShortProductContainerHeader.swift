@@ -8,8 +8,10 @@
 import UIKit
 import SnapKit
 
-final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ShortProductContainerHeader: UITableViewHeaderFooterView, UICollectionViewDelegate, UICollectionViewDataSource {
    
+    static let reuseId: String = "ShortProductContainerCell"
+    
     private var products = [Pizza]()
     
     lazy var containerView: UIView = {
@@ -43,12 +45,16 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
         return collectionView
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+//        super.init(style: style, reuseIdentifier: reuseIdentifier)
+//        
+//        
+//    }
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         setupView()
         setupConstraints()
-        
     }
         
     required init?(coder: NSCoder) {
@@ -97,7 +103,7 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
 
 //MARK: - External func
 
-extension ShortProductContainerCell {
+extension ShortProductContainerHeader {
     func bind(product: [Pizza]) {
         self.products = product
         self.collectionView.reloadData()

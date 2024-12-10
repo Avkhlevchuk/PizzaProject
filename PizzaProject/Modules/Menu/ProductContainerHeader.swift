@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    static let reuseId = "ProductContainerCell"
     
     var foodType: [FoodType] = []
     
@@ -82,7 +84,7 @@ final class ProductContainerCell: UITableViewCell, UICollectionViewDelegate, UIC
     }
 }
 
-extension ProductContainerCell {
+extension ProductContainerHeader {
     func update (_ foodType: [FoodType]) {
         self.foodType = foodType
     }
