@@ -22,10 +22,10 @@ class ProductViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.registerCell(ProductCell.self)
-//        tableView.registerCell(ProductContainerCell.self)
         tableView.registerCell(ShortProductContainerCell.self)
-        tableView.register(ProductContainerHeader.self, forHeaderFooterViewReuseIdentifier: ProductContainerHeader.reuseId)
+        tableView.registerHeaderFooterView(ProductContainerHeader.self)
         tableView.registerCell(StoryContainerCell.self)
+        tableView.registerCell(PromoCell.self)
         tableView.estimatedSectionHeaderHeight = 40
         
         if #available(iOS 15.0, *) {
@@ -123,48 +123,60 @@ class ProductViewController: UIViewController {
 
 //MARK: - TableViewDataSource, TableViewDelegate
 
+enum MenuSection: Int, CaseIterable {
+    case stories
+    case shortProducts
+    case products
+}
+
 extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return MenuSection.allCases.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        switch section {
-        case 0:
+        guard let menuSection = MenuSection(rawValue: section) else { return 0 }
+        
+        switch menuSection {
+        case .stories:
             return 1
-        case 1:
+        case .shortProducts:
             return 1
-        case 2:
+        case .products:
             return productViewModel.products.count
-        default :
-            return 0
-            
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        switch indexPath.section {
-        case 0:
+        guard let menuSection = MenuSection(rawValue: indexPath.section) else { return UITableViewCell() }
+        
+        switch menuSection {
+        case .stories:
             let cell = tableView.dequeueCell(indexPath) as StoryContainerCell
             return cell
-        case 1:
+        case .shortProducts:
             let cell = tableView.dequeueCell(indexPath) as ShortProductContainerCell
             let product = productViewModel.products
             cell.bind(product: product)
             return cell
-            
-        case 2:
-            let cell = tableView.dequeueCell(indexPath) as ProductCell
+        case .products:
+           
             let product = productViewModel.products[indexPath.row]
-            cell.update(product)
-            return cell
             
-        default:
-            return UITableViewCell()
-            
+            if product.isPromo {
+                let cell = tableView.dequeueCell(indexPath) as PromoCell
+                cell.selectionStyle = .none
+                cell.bind(product)
+                return cell
+            } else {
+                let cell = tableView.dequeueCell(indexPath) as ProductCell
+                cell.selectionStyle = .none
+                cell.bind(product)
+                return cell
+            }
         }
     }
     
@@ -176,25 +188,28 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         detailVC.modalPresentationStyle = .fullScreen
         
         present(detailVC, animated: true)
-        
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return section == 2 ? UITableView.automaticDimension : 0
+        guard let menuSection = MenuSection(rawValue: section) else { return 0 }
+        
+        return menuSection.rawValue == 2 ? UITableView.automaticDimension : 0
         
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        switch section {
-        case 2:
-            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: ProductContainerHeader.reuseId) as? ProductContainerHeader else { return UIView() }
-            
+        guard let menuSection = MenuSection(rawValue: section) else { return UIView() }
+       
+        switch menuSection {
+        case .products:
+            let header = tableView.dequeueHeader() as ProductContainerHeader
             
             header.onFilterButtonTapped = { [weak self] selectedFoodType in
                 guard let self = self else { return }
 //                self.productContainer.onFilterButtonTapped?()
+                //TODO: - fix add in ViewModel
                 if let index = self.productViewModel.products.firstIndex(where: {$0.foodType == selectedFoodType}) {
                     let indexPath = IndexPath(row: index, section: 2)
                     self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)

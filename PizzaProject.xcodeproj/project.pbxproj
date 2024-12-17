@@ -31,6 +31,8 @@
 		296B83442CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */; };
 		297B7F232CF0C2A70046191B /* Extention + String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297B7F222CF0C2A70046191B /* Extention + String.swift */; };
 		298551662CDE238C00A77DC3 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298551652CDE238C00A77DC3 /* DependencyContainer.swift */; };
+		29A1302F2D11961D0075156B /* UITableViewHeaderFooterView + dequeueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A1302E2D11961D0075156B /* UITableViewHeaderFooterView + dequeueCell.swift */; };
+		29A130312D11A6060075156B /* PromoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A130302D11A6060075156B /* PromoCell.swift */; };
 		29A37C8A2C96FF0200ADB7D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */; };
 		29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */; };
 		29A37C8E2C96FF0200ADB7D4 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A37C8D2C96FF0200ADB7D4 /* ProductViewController.swift */; };
@@ -80,6 +82,8 @@
 		296B83432CDBF2E0003CFFD7 /* ToppingInfoPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToppingInfoPopoverViewController.swift; sourceTree = "<group>"; };
 		297B7F222CF0C2A70046191B /* Extention + String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extention + String.swift"; sourceTree = "<group>"; };
 		298551652CDE238C00A77DC3 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		29A1302E2D11961D0075156B /* UITableViewHeaderFooterView + dequeueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewHeaderFooterView + dequeueCell.swift"; sourceTree = "<group>"; };
+		29A130302D11A6060075156B /* PromoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCell.swift; sourceTree = "<group>"; };
 		29A37C862C96FF0200ADB7D4 /* PizzaProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A37C892C96FF0200ADB7D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29A37C8B2C96FF0200ADB7D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -220,6 +224,7 @@
 				295CBF3E2CEBD889002D1683 /* Extention + UILabel.swift */,
 				297B7F222CF0C2A70046191B /* Extention + String.swift */,
 				296769532CFF405500E1F7FB /* Collection + isNotEmpty.swift */,
+				29A1302E2D11961D0075156B /* UITableViewHeaderFooterView + dequeueCell.swift */,
 			);
 			path = Extention;
 			sourceTree = "<group>";
@@ -298,6 +303,7 @@
 		29A37CA32C97067F00ADB7D4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				29A130302D11A6060075156B /* PromoCell.swift */,
 				29A37CA42C97069200ADB7D4 /* ProductCell.swift */,
 			);
 			path = Cells;
@@ -424,6 +430,7 @@
 				29CA6CF22CF11F09008F8256 /* CartView.swift in Sources */,
 				291658902CDF717D005A71A5 /* Constants.swift in Sources */,
 				29F5799E2CCE3687006418EA /* ToppingsContainerCell.swift in Sources */,
+				29A130312D11A6060075156B /* PromoCell.swift in Sources */,
 				29344E982CA61880005AEDA1 /* ProductModel.swift in Sources */,
 				2901C6812CBD9BD5000B493B /* StoryCollectionCell.swift in Sources */,
 				2901C67F2CBD95C2000B493B /* StoryContainerCell.swift in Sources */,
@@ -449,6 +456,7 @@
 				296769542CFF405500E1F7FB /* Collection + isNotEmpty.swift in Sources */,
 				2920A55F2CF4BD8100BC1198 /* CartViewModel.swift in Sources */,
 				29F579A02CCE3E13006418EA /* ToppingsCollectionCell.swift in Sources */,
+				29A1302F2D11961D0075156B /* UITableViewHeaderFooterView + dequeueCell.swift in Sources */,
 				29D07E7C2CEB947800D2A06D /* RemoveContainerIngredientsCell.swift in Sources */,
 				29A37C8C2C96FF0200ADB7D4 /* SceneDelegate.swift in Sources */,
 				296302C12CD586AF005545C8 /* ToolTipView.swift in Sources */,

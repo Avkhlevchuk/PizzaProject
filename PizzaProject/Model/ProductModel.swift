@@ -27,6 +27,7 @@ struct IngredientStates: Codable, Hashable, Equatable {
 struct Pizza: Codable {
     let id: Int
     let name: String
+    let isPromo: Bool
     var ingredients: [Ingredient]
     let ingredientsList: String
     let price: Int
@@ -37,6 +38,7 @@ struct Pizza: Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
+        case isPromo = "is_promo"
         case ingredients
         case ingredientsList = "ingredients_list"
         case price

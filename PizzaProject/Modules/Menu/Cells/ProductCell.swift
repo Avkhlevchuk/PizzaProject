@@ -12,7 +12,7 @@ class ProductCell: UITableViewCell {
     
     var productContainerCell = ProductContainerHeader()
     
-    private let containerView: UIView = {
+    private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
@@ -109,13 +109,14 @@ class ProductCell: UITableViewCell {
             make.top.equalTo(contentView).inset(15)
             make.right.equalTo(containerView).inset(15) // Установка правого отступа
             make.bottom.lessThanOrEqualTo(containerView).inset(15)
+            
         }
     }
     
 }
 
 extension ProductCell {
-    func update(_ product: Pizza) {
+    func bind(_ product: Pizza) {
         nameLabel.text = product.name
         descriptionLabel.text = product.ingredientsList
         priceButton.setTitle("from \(product.prices["small"] ?? 10) £", for: .normal)

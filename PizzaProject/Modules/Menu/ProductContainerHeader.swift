@@ -8,9 +8,7 @@
 import UIKit
 
 final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    static let reuseId = "ProductContainerHeader"
-    
+        
     var foodType: [String] = []
     
     let productViewModel = ProductViewModel(di: DependencyContainer())

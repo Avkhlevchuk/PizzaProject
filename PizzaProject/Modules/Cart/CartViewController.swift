@@ -12,7 +12,6 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     private var cartViewModel: ICartViewModel
     var closeAndTitleView = CloseAndTitleView()
     
-    
     var onDismissTapped: (()->())?
     
     let headerLabel: UILabel = {
