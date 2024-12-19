@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    var onShortProductTapped: ((Int)->())?
    
     private var products = [Pizza]()
     
@@ -81,6 +83,10 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
         }
     }
     
+    func shortProductTapped(index: Int) {
+        onShortProductTapped?(index)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return productViewModel.products.count
         return products.count
@@ -92,6 +98,15 @@ final class ShortProductContainerCell: UITableViewCell, UICollectionViewDelegate
         cell.update(product)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? ToppingsCollectionCell {
+            cell.isSelectedCell.toggle()
+        }
+        
+        shortProductTapped(index: indexPath.row)
     }
 }
 

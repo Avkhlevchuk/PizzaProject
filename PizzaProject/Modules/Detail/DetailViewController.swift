@@ -18,6 +18,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     private var detailProductViewModel: IDetailProductViewModel
     var ingredientDetailProductTableView = IngredientDetailTableViewCell()
     var addProduct = AddProductView()
+    var editProduct = EditProductView()
+    
+    var onEditButtonTapped: (()->())?
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -55,14 +58,33 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchOrder()
         setupViews()
         setupConstraints()
         setupBinding()
     }
     
+    func fetchOrder() {
+        switch detailProductViewModel.detailProductState {
+        case .createOrder:
+            tableView.reloadData()
+        case .editOrder:
+            detailProductViewModel.syncOrderAndEditProduct()
+            tableView.reloadData()
+        }
+    }
+    
     func setupViews() {
-        [tableView, titleDetailView, addProduct].forEach {
+        [tableView, titleDetailView].forEach {
             view.addSubview($0)
+        }
+        
+        switch detailProductViewModel.detailProductState  {
+        case .createOrder:
+            view.addSubview(addProduct)
+        case .editOrder:
+            view.addSubview(editProduct)
+            
         }
     }
     
@@ -81,11 +103,22 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
         }
         
-        addProduct.snp.makeConstraints { make in
-            make.left.right.equalTo(view)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(100)
+        
+        switch detailProductViewModel.detailProductState  {
+        case .createOrder:
+            addProduct.snp.makeConstraints { make in
+                make.left.right.equalTo(view)
+                make.bottom.equalToSuperview()
+                make.height.equalTo(100)
+            }
+        case .editOrder:
+            editProduct.snp.makeConstraints { make in
+                make.left.right.equalTo(view)
+                make.bottom.equalToSuperview()
+                make.height.equalTo(100)
+            }
         }
+        
     }
     
     func setupBinding() {
@@ -101,23 +134,51 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.titleDetailView.update(product)
         }
         
-        addProduct.onAddButtonTapped = { [weak self] in
-            guard let self = self else { return }
-            let toppings = self.detailProductViewModel.toppingsInOrder
-            let sumForToppings = self.detailProductViewModel.sumToppings
-            let priceForPizza = self.detailProductViewModel.priceForPizza
-            let typeBasePizza = self.detailProductViewModel.typeBasePizza
-            let removedIngredients = self.detailProductViewModel.ingretientStatesInOrder
-            let sizePizza = detailProductViewModel.sizePizza
-                        
-            self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+        switch detailProductViewModel.detailProductState  {
+        case .createOrder:
             
-            self.dismiss(animated: true, completion: nil)
+            addProduct.onAddButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                let toppings = self.detailProductViewModel.toppingsInOrder
+                let sumForToppings = self.detailProductViewModel.sumToppings
+                let priceForPizza = self.detailProductViewModel.priceForPizza
+                let typeBasePizza = self.detailProductViewModel.typeBasePizza
+                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
+                let sizePizza = detailProductViewModel.sizePizza
+                            
+                self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+                
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+        case .editOrder:
+            
+            editProduct.onEditButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                let toppings = self.detailProductViewModel.toppingsInOrder
+                let sumForToppings = self.detailProductViewModel.sumToppings
+                let priceForPizza = self.detailProductViewModel.priceForPizza
+                let typeBasePizza = self.detailProductViewModel.typeBasePizza
+                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
+                let sizePizza = detailProductViewModel.sizePizza
+                let orderId = detailProductViewModel.order?[0].orderId
+                let count = detailProductViewModel.order?[0].count
+                            
+                self.detailProductViewModel.editPosition(orderId: orderId ?? 0, count: count ?? 1, product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+                
+                onEditButtonTapped?()
+                self.dismiss(animated: true, completion: nil)
+            }
         }
         
         titleDetailView.update(product)
         
-        addProduct.update(product.price)
+        switch detailProductViewModel.detailProductState {
+        case .createOrder:
+            addProduct.update(product.price)
+        case .editOrder:
+            editProduct.update(detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings)
+        }
         
     }
     
@@ -153,6 +214,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let cell = tableView.dequeueCell(indexPath) as DetailProductViewCell
             cell.selectionStyle = .none
             cell.update(product)
+            
+            switch detailProductViewModel.detailProductState {
+            case .createOrder:
+                break
+            case .editOrder:
+                let selectedSize = detailProductViewModel.sizePizza
+                let typeBasePizza = detailProductViewModel.typeBasePizza
+                cell.updateSelectedSegmentControll(selectedSize: selectedSize, selectedTypeBasePizza: typeBasePizza)
+            }
             
             cell.onSegmentControlSizeTapped = { [weak self] namePizzaSize in
                 guard let self = self else { return }
@@ -214,9 +284,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             cell.onRemoveIngredientsButtonTapped = { [weak self] in
                 guard let self = self else { return }
-//                guard let di = self.di else { fatalError("Could not get di") }
                 
                 let removeVC = detailProductViewModel.di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
+                
                 removeVC.modalPresentationStyle = .pageSheet
                 
                 removeVC.onDismissTapped = { [weak self] in
@@ -240,7 +310,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             let toppings = detailProductViewModel.allToppings
             
-            cell.bind(toppings: toppings)
+            let toppingsInOrder = detailProductViewModel.toppingsInOrder
+            
+            cell.bind(toppings: toppings, toppingsInOrder: toppingsInOrder)
             
             cell.onToppingTapped = { [weak self] index in
                 guard let self = self else { return }

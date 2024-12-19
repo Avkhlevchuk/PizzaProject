@@ -73,6 +73,7 @@ extension Toppings: Comparable {
 }
 
 struct Order: Codable {
+    let orderId: Int
     let product: Pizza
     var count: Int
     let removedIngredients: [IngredientStates]

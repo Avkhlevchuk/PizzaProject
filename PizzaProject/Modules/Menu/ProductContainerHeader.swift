@@ -61,7 +61,6 @@ final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionVie
         collectionView.snp.makeConstraints { make in
             make.left.right.equalTo(contentView)
             make.top.bottom.equalTo(contentView)
-//            make.height.equalTo(50)
         }
     }
     

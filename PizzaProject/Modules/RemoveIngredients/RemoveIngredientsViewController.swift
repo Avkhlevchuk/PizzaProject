@@ -47,7 +47,7 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
         super.viewWillDisappear(animated)
         
         if !detailProductViewModel.saveRemovedIngredients {
-            detailProductViewModel.ingretientStatesInOrder = []
+            detailProductViewModel.ingredientStatesInOrder = []
             detailProductViewModel.listRemovedIngredients = nil
         } else {
             detailProductViewModel.clearUnsavedIngredients()
@@ -111,7 +111,7 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(indexPath) as RemoveContainerIngredientsCell
         
-        cell.bind(ingredients: detailProductViewModel.product.ingredients, ingredientStates: detailProductViewModel.ingretientStatesInOrder, saved: detailProductViewModel.saveRemovedIngredients)
+        cell.bind(ingredients: detailProductViewModel.product.ingredients, ingredientStates: detailProductViewModel.ingredientStatesInOrder, saved: detailProductViewModel.saveRemovedIngredients)
         
         cell.onSelectItemTapped = { [weak self] ingredientStates in
             guard let self = self else { return }
@@ -123,7 +123,7 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
             } else if countRemovedIngredients > 0 {
                 self.saveAndBackView.showSaveAndResetButton()
             }
-            self.detailProductViewModel.ingretientStatesInOrder = ingredientStates
+            self.detailProductViewModel.ingredientStatesInOrder = ingredientStates
         }
         return cell
     }

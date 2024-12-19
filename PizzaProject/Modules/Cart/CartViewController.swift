@@ -43,7 +43,7 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
         
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        
         reloadData()
         setupViews()
         setupConstraints()
@@ -60,6 +60,7 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func setupViews() {
+        view.backgroundColor = .white
         tableview.tableHeaderView = headerLabel
         
         [tableview, closeAndTitleView].forEach {
@@ -88,6 +89,7 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
         closeAndTitleView.onCloseButtonTapped = { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
+        
     }
     
     func reloadData() {
@@ -134,8 +136,13 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let product = cartViewModel.order[indexPath.row].product
-        let vc = (cartViewModel.di.screenFactory.createDetailProductScreen(product: product))
+        let order = cartViewModel.order[indexPath.row]
+        let vc = (cartViewModel.di.screenFactory.editOrderDetailProductScreen(product: product, order: [order]))
         vc.modalPresentationStyle = .fullScreen
+        
+        vc.onEditButtonTapped = { [weak self] in
+            self?.reloadData()
+        }
         
         self.present(vc, animated: true)
     }

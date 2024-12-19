@@ -128,6 +128,30 @@ final class DetailProductViewCell: UITableViewCell {
 //MARK: Update View
 extension DetailProductViewCell {
     func update(_ product: Pizza) {
-        detailProductImageView.image = UIImage(named: product.image)        
+        detailProductImageView.image = UIImage(named: product.image)
+    }
+    
+    func updateSelectedSegmentControll(selectedSize: String, selectedTypeBasePizza: String) {
+        
+        switch selectedSize {
+        case "small":
+            sizePizzaSegmentedControl.selectedSegmentIndex = 0
+        case "medium":
+            sizePizzaSegmentedControl.selectedSegmentIndex = 1
+        case "large":
+            sizePizzaSegmentedControl.selectedSegmentIndex = 2
+        default:
+            sizePizzaSegmentedControl.selectedSegmentIndex = 1
+        }
+        
+        switch selectedTypeBasePizza {
+        case "traditional":
+            baseTypePizzaSegmentedControl.selectedSegmentIndex = 0
+        case "thin":
+            baseTypePizzaSegmentedControl.selectedSegmentIndex = 1
+        default:
+            baseTypePizzaSegmentedControl.selectedSegmentIndex = 0
+            
+        }
     }
 }

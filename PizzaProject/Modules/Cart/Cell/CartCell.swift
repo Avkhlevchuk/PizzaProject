@@ -275,11 +275,11 @@ extension CartCell {
         
         switch order.sizePizza {
         case "small":
-            titleDescription = "Small 20 cm"
+            titleDescription = "Small 25 cm"
         case "medium":
-            titleDescription = "Medium 25 cm"
+            titleDescription = "Medium 30 cm"
         case "large":
-            titleDescription = "Large 30 cm"
+            titleDescription = "Large 35 cm"
         default:
             break
         }

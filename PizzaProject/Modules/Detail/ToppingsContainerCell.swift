@@ -71,6 +71,10 @@ extension ToppingsContainerCell {
         let cell = collectionView.dequeueCell(indexPath) as ToppingsCollectionCell
         let topping = toppings[indexPath.row]
         cell.update(topping: topping)
+        
+        if !toppingsInOrder.isEmpty && toppingsInOrder.contains(where: { $0.id == topping.id }) {
+            cell.isSelectedCell.toggle()
+        }
         return cell
     }
     
@@ -88,7 +92,8 @@ extension ToppingsContainerCell {
 
 extension ToppingsContainerCell {
     
-    func bind(toppings: [Toppings]) {
+    func bind(toppings: [Toppings], toppingsInOrder: [Toppings]) {
         self.toppings = toppings
+        self.toppingsInOrder = toppingsInOrder
     }
 }

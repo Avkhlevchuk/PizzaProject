@@ -161,6 +161,20 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueCell(indexPath) as ShortProductContainerCell
             let product = productViewModel.products
             cell.bind(product: product)
+            
+            cell.onShortProductTapped = { [weak self] index in
+                
+                guard let self = self else { return }
+                
+                let selectedProduct = productViewModel.products[index]
+                
+                let cobainerDI = productViewModel.di
+                let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
+                detailVC.modalPresentationStyle = .fullScreen
+                
+                present(detailVC, animated: true)
+            }
+            
             return cell
         case .products:
            

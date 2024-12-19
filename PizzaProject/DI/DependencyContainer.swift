@@ -34,7 +34,12 @@ final class ScreenFactory {
     }
     
     func createDetailProductScreen(product: Pizza) -> DetailViewController {
-        let detailProductViewModel = DetailProductViewModel(product: product, di: di)
+        let detailProductViewModel = DetailProductViewModel(product: product, di: di, detailProductState: .createOrder, order: [])
+        return DetailViewController(detailProductViewModel: detailProductViewModel)
+    }
+    
+    func editOrderDetailProductScreen(product: Pizza, order: [Order]) -> DetailViewController {
+        let detailProductViewModel = DetailProductViewModel(product: product, di: di, detailProductState: .editOrder, order: order)
         return DetailViewController(detailProductViewModel: detailProductViewModel)
     }
     
