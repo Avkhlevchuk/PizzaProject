@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DetailViewController: UIViewController {
     
     private lazy var toppingInfoPopoverViewController = ToppingInfoPopoverViewController()
     
@@ -33,7 +33,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.registerCell(DetailProductViewCell.self)
         tableView.registerCell(IngredientDetailTableViewCell.self)
         tableView.registerCell(ToppingsContainerCell.self)
-        //        tableView.bounces = false
         let footerView = UIView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
         footerView.backgroundColor = .white
         tableView.tableFooterView = footerView
@@ -64,15 +63,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         setupBinding()
     }
     
-    func fetchOrder() {
-        switch detailProductViewModel.detailProductState {
-        case .createOrder:
-            tableView.reloadData()
-        case .editOrder:
-            detailProductViewModel.syncOrderAndEditProduct()
-            tableView.reloadData()
-        }
-    }
+    
+//MARK: - Setup
     
     func setupViews() {
         [tableView, titleDetailView].forEach {
@@ -84,7 +76,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             view.addSubview(addProduct)
         case .editOrder:
             view.addSubview(editProduct)
-            
         }
     }
     
@@ -100,9 +91,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             make.top.equalToSuperview()
             make.left.right.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalToSuperview()
-            
         }
-        
         
         switch detailProductViewModel.detailProductState  {
         case .createOrder:
@@ -118,99 +107,46 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 make.height.equalTo(100)
             }
         }
-        
     }
-    
-    func setupBinding() {
-        
-        let product = detailProductViewModel.getProduct()
+}
 
-        titleDetailView.onCloseButtonTaped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
-        }
-        
-        detailProductViewModel.onProductUpdate = { [weak self] in
-            guard let self = self else { return }
-            self.titleDetailView.update(product)
-        }
-        
-        switch detailProductViewModel.detailProductState  {
-        case .createOrder:
-            
-            addProduct.onAddButtonTapped = { [weak self] in
-                guard let self = self else { return }
-                let toppings = self.detailProductViewModel.toppingsInOrder
-                let sumForToppings = self.detailProductViewModel.sumToppings
-                let priceForPizza = self.detailProductViewModel.priceForPizza
-                let typeBasePizza = self.detailProductViewModel.typeBasePizza
-                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
-                let sizePizza = detailProductViewModel.sizePizza
-                            
-                self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
-                
-                self.dismiss(animated: true, completion: nil)
-            }
-            
-        case .editOrder:
-            
-            editProduct.onEditButtonTapped = { [weak self] in
-                guard let self = self else { return }
-                let toppings = self.detailProductViewModel.toppingsInOrder
-                let sumForToppings = self.detailProductViewModel.sumToppings
-                let priceForPizza = self.detailProductViewModel.priceForPizza
-                let typeBasePizza = self.detailProductViewModel.typeBasePizza
-                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
-                let sizePizza = detailProductViewModel.sizePizza
-                let orderId = detailProductViewModel.order?[0].orderId
-                let count = detailProductViewModel.order?[0].count
-                            
-                self.detailProductViewModel.editPosition(orderId: orderId ?? 0, count: count ?? 1, product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
-                
-                onEditButtonTapped?()
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
-        
-        titleDetailView.update(product)
-        
-        switch detailProductViewModel.detailProductState {
-        case .createOrder:
-            addProduct.update(product.price)
-        case .editOrder:
-            editProduct.update(detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings)
-        }
-        
-    }
-    
-    func reloadData() {
-        
-    }
-    //MARK: - UITableViewDataSource, UITableViewDelegate
+//MARK: - UITableViewDataSource, UITableViewDelegate
+
+enum DetailSection: Int, CaseIterable {
+    case detailProduct
+    case ingredients
+    case toppings
+}
+
+extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return DetailSection.allCases.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+        
+        guard let detailSection = DetailSection(rawValue: section) else { return 0 }
+        
+        switch detailSection {
+        case .detailProduct:
             return 1
-        case 1:
+        case .ingredients:
             return 1
-        case 2:
-            return 1
-        default:
+        case .toppings:
             return 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        guard let detailSection = DetailSection(rawValue: indexPath.section) else { return UITableViewCell() }
+        
         let product = detailProductViewModel.getProduct()
         detailProductViewModel.priceForPizza = Double(product.price)
         
-        switch indexPath.section {
-        case 0:
+        switch detailSection {
+        case .detailProduct:
             let cell = tableView.dequeueCell(indexPath) as DetailProductViewCell
             cell.selectionStyle = .none
             cell.update(product)
@@ -233,7 +169,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 let sum = detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings
                 
-                addProduct.update(sum)
+                switch detailProductViewModel.detailProductState {
+                case .createOrder:
+                    addProduct.update(sum)
+                case .editOrder:
+                    editProduct.update(sum)
+                }
             }
             
             cell.onSegmentControlBaseTapped = { [weak self] namePizzaBase in
@@ -241,45 +182,20 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
             return cell
-        case 1:
+            
+        case .ingredients:
             let cell = tableView.dequeueCell(indexPath) as IngredientDetailTableViewCell
             cell.selectionStyle = .none
             
             cell.update(product: product, listRemovedIngredients: detailProductViewModel.listRemovedIngredients)
-
+            
             let nutritionValueProduct = detailProductViewModel.getNutritionValue(id: product.id)
             
             cell.onInfoButtonTapped = { [weak self] sender in
                 guard let self = self else { return }
                 
-                //Create popover
-                guard !isPopoverPresented else { return }
+                self.createPopover(sender: sender, nutritionValueProduct: nutritionValueProduct)
                 
-                self.ingredientDetailProductTableView.onInfoButtonTapped?(sender)
-                toppingInfoPopoverViewController.update(nutritionValue: nutritionValueProduct)
-                
-                toppingInfoPopoverViewController.preferredContentSize = .init(width: 350, height: 330)
-                
-                toppingInfoPopoverViewController.modalPresentationStyle = .popover
-                
-                let popoverPresentationController = toppingInfoPopoverViewController.popoverPresentationController
-                
-                popoverPresentationController?.permittedArrowDirections = .right
-                
-                popoverPresentationController?.sourceRect = sender.bounds
-                
-                popoverPresentationController?.sourceView = sender
-                
-                popoverPresentationController?.delegate = self
-                
-                if let presentedViewController {
-                    presentedViewController.dismiss(animated: true) { [weak self] in
-                        guard let self = self else { return }
-                        self.presentPopover()
-                    }
-                } else {
-                    self.presentPopover()
-                }
             }
             
             cell.onRemoveIngredientsButtonTapped = { [weak self] in
@@ -304,7 +220,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
             }
             return cell
-        case 2:
+        
+        case .toppings:
             let cell = tableView.dequeueCell(indexPath) as ToppingsContainerCell
             cell.selectionStyle = .none
             
@@ -321,20 +238,84 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let priceForPizza = self.detailProductViewModel.priceForPizza
                 let sum = self.detailProductViewModel.calculateTotalPrice(topping: topping, priceForPizza: priceForPizza)
                 
-                addProduct.update(sum)
+                switch detailProductViewModel.detailProductState {
+                case .createOrder:
+                    addProduct.update(sum)
+                case .editOrder:
+                    editProduct.update(sum)
+                }
             }
             return cell
-        default:
-            return UITableViewCell()
         }
     }
-}
-
-//MARK: - Events Handler
-
-extension DetailViewController {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+}
+//MARK: - Event Handler
+
+extension DetailViewController {
+    
+    func setupBinding() {
+        
+        let product = detailProductViewModel.getProduct()
+        
+        titleDetailView.onCloseButtonTaped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        
+        detailProductViewModel.onProductUpdate = { [weak self] in
+            guard let self = self else { return }
+            self.titleDetailView.update(product)
+        }
+        
+        switch detailProductViewModel.detailProductState  {
+        case .createOrder:
+            
+            addProduct.onAddButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                let toppings = self.detailProductViewModel.toppingsInOrder
+                let sumForToppings = self.detailProductViewModel.sumToppings
+                let priceForPizza = self.detailProductViewModel.priceForPizza
+                let typeBasePizza = self.detailProductViewModel.typeBasePizza
+                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
+                let sizePizza = detailProductViewModel.sizePizza
+                
+                self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+                
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+        case .editOrder:
+            
+            editProduct.onEditButtonTapped = { [weak self] in
+                guard let self = self else { return }
+                let toppings = self.detailProductViewModel.toppingsInOrder
+                let sumForToppings = self.detailProductViewModel.sumToppings
+                let priceForPizza = self.detailProductViewModel.priceForPizza
+                let typeBasePizza = self.detailProductViewModel.typeBasePizza
+                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
+                let sizePizza = detailProductViewModel.sizePizza
+                let orderId = detailProductViewModel.order?[0].orderId
+                let count = detailProductViewModel.order?[0].count
+                
+                self.detailProductViewModel.editPosition(orderId: orderId ?? 0, count: count ?? 1, product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+                
+                onEditButtonTapped?()
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+        
+        titleDetailView.update(product)
+        
+        switch detailProductViewModel.detailProductState {
+        case .createOrder:
+            addProduct.update(product.price)
+        case .editOrder:
+            editProduct.update(detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings)
+        }
     }
     
     private func presentPopover() {
@@ -345,5 +326,55 @@ extension DetailViewController {
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         isPopoverPresented = false
+    }
+}
+
+//MARK: - Data fetching from DetailProductViewModel
+
+extension DetailViewController {
+    
+    func fetchOrder() {
+        switch detailProductViewModel.detailProductState {
+        case .createOrder:
+            break
+        case .editOrder:
+            detailProductViewModel.syncOrderAndEditProduct()
+            tableView.reloadData()
+        }
+    }
+}
+
+//MARK: - Update View
+
+extension DetailViewController {
+    
+    func createPopover(sender: UIButton, nutritionValueProduct: NutritionValue) {
+        guard !isPopoverPresented else { return }
+        
+        self.ingredientDetailProductTableView.onInfoButtonTapped?(sender)
+        toppingInfoPopoverViewController.update(nutritionValue: nutritionValueProduct)
+        
+        toppingInfoPopoverViewController.preferredContentSize = .init(width: 350, height: 330)
+        
+        toppingInfoPopoverViewController.modalPresentationStyle = .popover
+        
+        let popoverPresentationController = toppingInfoPopoverViewController.popoverPresentationController
+        
+        popoverPresentationController?.permittedArrowDirections = .right
+        
+        popoverPresentationController?.sourceRect = sender.bounds
+        
+        popoverPresentationController?.sourceView = sender
+        
+        popoverPresentationController?.delegate = self
+        
+        if let presentedViewController {
+            presentedViewController.dismiss(animated: true) { [weak self] in
+                guard let self = self else { return }
+                self.presentPopover()
+            }
+        } else {
+            self.presentPopover()
+        }
     }
 }

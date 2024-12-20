@@ -10,7 +10,7 @@ import SnapKit
 
 class ProductCell: UITableViewCell {
     
-    var productContainerCell = ProductContainerHeader()
+    var productContainerCell = CategoryContainerHeader()
     
     private lazy var containerView: UIView = {
         let view = UIView()

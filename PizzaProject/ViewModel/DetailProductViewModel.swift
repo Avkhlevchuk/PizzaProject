@@ -63,7 +63,7 @@ protocol IDetailProductViewModel {
     
     func updateSizeOfPizza(namePizzaSize: String)
     
-//MARK: - Setting for EditProductView
+    //MARK: - Setting for EditProductView
     func syncOrderAndEditProduct()
     
 }
@@ -120,7 +120,7 @@ class DetailProductViewModel: IDetailProductViewModel {
         Toppings(id: 6, name: "tomato", price: 0.6)
     ]
     
-//MARK: - RemoveIngredient block
+    //MARK: - RemoveIngredient block
     
     var ingredientStatesInOrder: [IngredientStates] = []
     
@@ -194,7 +194,7 @@ class DetailProductViewModel: IDetailProductViewModel {
     }
     
     func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String) {
-       
+        
         var currentOrder = di.orderArchiver.load()
         
         var orderId = 0
@@ -219,7 +219,7 @@ class DetailProductViewModel: IDetailProductViewModel {
                 }
             }
             di.orderArchiver.addPosition(order: order)
-        
+            
         }
     }
     
@@ -240,7 +240,7 @@ class DetailProductViewModel: IDetailProductViewModel {
         
     }
     
-    func resetRemovedIngredientStates() {        
+    func resetRemovedIngredientStates() {
         for index in ingredientStatesInOrder.indices {
             ingredientStatesInOrder[index].isRemoved = false
         }
@@ -266,15 +266,15 @@ class DetailProductViewModel: IDetailProductViewModel {
             let comma = ","
             
             switch index {
-                case 0:
+            case 0:
                 newIngredient += comma
-                case ingredientStatesInOrder.count - 1:
+            case ingredientStatesInOrder.count - 1:
                 newIngredient = newIngredient.lowercased()
             default:
                 newIngredient = newIngredient.lowercased()
                 newIngredient += comma
             }
-          
+            
             let attributedIngredient: NSAttributedString
             if current.isRemoved {
                 attributedIngredient = newIngredient.withStrikethrough(style: .single, color: .black)
@@ -298,16 +298,16 @@ extension DetailProductViewModel {
     func syncOrderAndEditProduct() {
         
         guard let selectedOrder = order?[0] else { return }
-//MARK: - SelectedSegmentControl
+        //SelectedSegmentControl
         sizePizza = selectedOrder.sizePizza
         typeBasePizza = selectedOrder.typeBasePizza
-
-//MARK: - sync for remove ingredients block
+        
+        //Sync for remove ingredients block
         ingredientStatesInOrder = selectedOrder.removedIngredients
         listSavedRemovedIngredients = selectedOrder.removedIngredients
         createLineWithRemovedIngredients()
         saveRemovedIngredients = true
-//MARK: - sync for toppings
+        //Sync for toppings
         toppingsInOrder =  selectedOrder.toppings
         sumToppings = selectedOrder.sumForToppings
         priceForPizza = selectedOrder.priceForPizza

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class ProductViewController: UIViewController {
-    let productContainer = ProductContainerHeader()
+    let productContainer = CategoryContainerHeader()
     private var productViewModel: IProductViewModel
     let productShortContainer = ShortProductContainerCell()
     let cartView = CartView()
@@ -23,7 +23,7 @@ class ProductViewController: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.registerCell(ProductCell.self)
         tableView.registerCell(ShortProductContainerCell.self)
-        tableView.registerHeaderFooterView(ProductContainerHeader.self)
+        tableView.registerHeaderFooterView(CategoryContainerHeader.self)
         tableView.registerCell(StoryContainerCell.self)
         tableView.registerCell(PromoCell.self)
         tableView.estimatedSectionHeaderHeight = 40
@@ -115,9 +115,7 @@ class ProductViewController: UIViewController {
             }
             
             self.present(vc, animated: true)
-            
         }
-        
     }
 }
 
@@ -218,7 +216,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
        
         switch menuSection {
         case .products:
-            let header = tableView.dequeueHeader() as ProductContainerHeader
+            let header = tableView.dequeueHeader() as CategoryContainerHeader
             
             header.onFilterButtonTapped = { [weak self] selectedFoodType in
                 guard let self = self else { return }
@@ -246,7 +244,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         
         let foodType = product.foodType
         
-        if let header = tableView.headerView(forSection: 2) as? ProductContainerHeader {
+        if let header = tableView.headerView(forSection: 2) as? CategoryContainerHeader {
             header.selectedFilter(foodType: foodType)
         }
     }

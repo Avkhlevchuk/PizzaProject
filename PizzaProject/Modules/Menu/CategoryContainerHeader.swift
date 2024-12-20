@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionViewDelegate, UICollectionViewDataSource {
+final class CategoryContainerHeader: UITableViewHeaderFooterView, UICollectionViewDelegate, UICollectionViewDataSource {
         
     var foodType: [String] = []
     
@@ -97,7 +97,7 @@ final class ProductContainerHeader: UITableViewHeaderFooterView, UICollectionVie
     }
 }
 
-extension ProductContainerHeader {
+extension CategoryContainerHeader {
     func update (_ foodType: [String]) {
         self.foodType = foodType
     }
