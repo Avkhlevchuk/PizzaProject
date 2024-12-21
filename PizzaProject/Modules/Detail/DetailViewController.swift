@@ -61,22 +61,15 @@ class DetailViewController: UIViewController {
         setupViews()
         setupConstraints()
         setupBinding()
+        updateTitleDetailView()
     }
     
     
-//MARK: - Setup
+    //MARK: - Setup
     
     func setupViews() {
-        [tableView, titleDetailView].forEach {
-            view.addSubview($0)
-        }
-        
-        switch detailProductViewModel.detailProductState  {
-        case .createOrder:
-            view.addSubview(addProduct)
-        case .editOrder:
-            view.addSubview(editProduct)
-        }
+        [tableView, titleDetailView].forEach { view.addSubview($0) }
+        setupStateView()
     }
     
     func setupConstraints() {
@@ -93,6 +86,19 @@ class DetailViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         
+        setupStateConstraints()
+    }
+    
+    private func setupStateView() {
+        switch detailProductViewModel.detailProductState  {
+        case .createOrder:
+            view.addSubview(addProduct)
+        case .editOrder:
+            view.addSubview(editProduct)
+        }
+    }
+    
+    private func setupStateConstraints() {
         switch detailProductViewModel.detailProductState  {
         case .createOrder:
             addProduct.snp.makeConstraints { make in
@@ -113,9 +119,7 @@ class DetailViewController: UIViewController {
 //MARK: - UITableViewDataSource, UITableViewDelegate
 
 enum DetailSection: Int, CaseIterable {
-    case detailProduct
-    case ingredients
-    case toppings
+    case detailProduct, ingredients, toppings
 }
 
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
@@ -125,128 +129,69 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        guard let detailSection = DetailSection(rawValue: section) else { return 0 }
-        
-        switch detailSection {
-        case .detailProduct:
-            return 1
-        case .ingredients:
-            return 1
-        case .toppings:
-            return 1
-        }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let detailSection = DetailSection(rawValue: indexPath.section) else { return UITableViewCell() }
         
-        let product = detailProductViewModel.getProduct()
-        detailProductViewModel.priceForPizza = Double(product.price)
-        
         switch detailSection {
+            
         case .detailProduct:
-            let cell = tableView.dequeueCell(indexPath) as DetailProductViewCell
-            cell.selectionStyle = .none
-            cell.update(product)
-            
-            switch detailProductViewModel.detailProductState {
-            case .createOrder:
-                break
-            case .editOrder:
-                let selectedSize = detailProductViewModel.sizePizza
-                let typeBasePizza = detailProductViewModel.typeBasePizza
-                cell.updateSelectedSegmentControll(selectedSize: selectedSize, selectedTypeBasePizza: typeBasePizza)
-            }
-            
-            cell.onSegmentControlSizeTapped = { [weak self] namePizzaSize in
-                guard let self = self else { return }
-                
-                detailProductViewModel.priceForPizza = Double(detailProductViewModel.product.prices["\(namePizzaSize)"] ?? detailProductViewModel.product.price)
-                
-                detailProductViewModel.updateSizeOfPizza(namePizzaSize: namePizzaSize)
-                
-                let sum = detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings
-                
-                switch detailProductViewModel.detailProductState {
-                case .createOrder:
-                    addProduct.update(sum)
-                case .editOrder:
-                    editProduct.update(sum)
-                }
-            }
-            
-            cell.onSegmentControlBaseTapped = { [weak self] namePizzaBase in
-                self?.detailProductViewModel.typeBasePizza = namePizzaBase
-            }
-            
-            return cell
-            
+            return configureDatailProductCell(for: indexPath)
         case .ingredients:
-            let cell = tableView.dequeueCell(indexPath) as IngredientDetailTableViewCell
-            cell.selectionStyle = .none
-            
-            cell.update(product: product, listRemovedIngredients: detailProductViewModel.listRemovedIngredients)
-            
-            let nutritionValueProduct = detailProductViewModel.getNutritionValue(id: product.id)
-            
-            cell.onInfoButtonTapped = { [weak self] sender in
-                guard let self = self else { return }
-                
-                self.createPopover(sender: sender, nutritionValueProduct: nutritionValueProduct)
-                
-            }
-            
-            cell.onRemoveIngredientsButtonTapped = { [weak self] in
-                guard let self = self else { return }
-                
-                let removeVC = detailProductViewModel.di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
-                
-                removeVC.modalPresentationStyle = .pageSheet
-                
-                removeVC.onDismissTapped = { [weak self] in
-                    guard let self = self else { return }
-                    self.tableView.reloadData()
-                }
-                
-                if let sheet = removeVC.sheetPresentationController {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.prefersGrabberVisible = true
-                    sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-                }
-                
-                self.present(removeVC, animated: true)
-                
-            }
-            return cell
-        
+            return configureIngredientsCell(for: indexPath)
         case .toppings:
-            let cell = tableView.dequeueCell(indexPath) as ToppingsContainerCell
-            cell.selectionStyle = .none
-            
-            let toppings = detailProductViewModel.allToppings
-            
-            let toppingsInOrder = detailProductViewModel.toppingsInOrder
-            
-            cell.bind(toppings: toppings, toppingsInOrder: toppingsInOrder)
-            
-            cell.onToppingTapped = { [weak self] index in
-                guard let self = self else { return }
-                
-                let topping = self.detailProductViewModel.allToppings[index]
-                let priceForPizza = self.detailProductViewModel.priceForPizza
-                let sum = self.detailProductViewModel.calculateTotalPrice(topping: topping, priceForPizza: priceForPizza)
-                
-                switch detailProductViewModel.detailProductState {
-                case .createOrder:
-                    addProduct.update(sum)
-                case .editOrder:
-                    editProduct.update(sum)
-                }
-            }
-            return cell
+            return configureToppingsCell(for: indexPath)
         }
+    }
+    
+    private func configureDatailProductCell(for indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(indexPath) as DetailProductViewCell
+        cell.selectionStyle = .none
+        cell.update(detailProductViewModel.product)
+        
+        switch detailProductViewModel.detailProductState {
+        case .createOrder:
+            break
+        case .editOrder:
+            let selectedSize = detailProductViewModel.sizePizza
+            let typeBasePizza = detailProductViewModel.typeBasePizza
+            cell.updateSelectedSegmentControll(selectedSize: selectedSize, selectedTypeBasePizza: typeBasePizza)
+        }
+        
+        setupDetailProductCellBinding(cell)
+                
+        return cell
+    }
+    
+    private func configureIngredientsCell(for indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(indexPath) as IngredientDetailTableViewCell
+        cell.selectionStyle = .none
+        
+        let product = detailProductViewModel.product
+        
+        cell.update(product: product, listRemovedIngredients: detailProductViewModel.listRemovedIngredients)
+       
+        setupIngredientsCellBinding(cell, product: product)
+        
+        return cell
+    }
+    
+    private func configureToppingsCell(for indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(indexPath) as ToppingsContainerCell
+        cell.selectionStyle = .none
+        
+        let toppings = detailProductViewModel.allToppings
+        
+        let toppingsInOrder = detailProductViewModel.toppingsInOrder
+        
+        cell.bind(toppings: toppings, toppingsInOrder: toppingsInOrder)
+        
+        setupToppingsCellBinding(cell)
+    
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -254,7 +199,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
-//MARK: - Event Handler
+//MARK: - Binding
 
 extension DetailViewController {
     
@@ -267,55 +212,122 @@ extension DetailViewController {
         }
         
         detailProductViewModel.onProductUpdate = { [weak self] in
-            guard let self = self else { return }
-            self.titleDetailView.update(product)
+            self?.titleDetailView.update(product)
         }
         
         switch detailProductViewModel.detailProductState  {
         case .createOrder:
             
+            addProduct.update(product.price)
+            
             addProduct.onAddButtonTapped = { [weak self] in
-                guard let self = self else { return }
-                let toppings = self.detailProductViewModel.toppingsInOrder
-                let sumForToppings = self.detailProductViewModel.sumToppings
-                let priceForPizza = self.detailProductViewModel.priceForPizza
-                let typeBasePizza = self.detailProductViewModel.typeBasePizza
-                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
-                let sizePizza = detailProductViewModel.sizePizza
                 
-                self.detailProductViewModel.addToCard(product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
-                
-                self.dismiss(animated: true, completion: nil)
+                self?.detailProductViewModel.addToCard()
+                self?.dismiss(animated: true, completion: nil)
             }
             
         case .editOrder:
+            editProduct.update(detailProductViewModel.getTotalPrice())
             
             editProduct.onEditButtonTapped = { [weak self] in
-                guard let self = self else { return }
-                let toppings = self.detailProductViewModel.toppingsInOrder
-                let sumForToppings = self.detailProductViewModel.sumToppings
-                let priceForPizza = self.detailProductViewModel.priceForPizza
-                let typeBasePizza = self.detailProductViewModel.typeBasePizza
-                let removedIngredients = self.detailProductViewModel.ingredientStatesInOrder
-                let sizePizza = detailProductViewModel.sizePizza
-                let orderId = detailProductViewModel.order?[0].orderId
-                let count = detailProductViewModel.order?[0].count
                 
-                self.detailProductViewModel.editPosition(orderId: orderId ?? 0, count: count ?? 1, product: product, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
-                
-                onEditButtonTapped?()
-                self.dismiss(animated: true, completion: nil)
+                self?.detailProductViewModel.editPosition()
+                self?.onEditButtonTapped?()
+                self?.dismiss(animated: true, completion: nil)
             }
         }
+    }
+//MARK: - Cell Binding
+    private func setupDetailProductCellBinding(_ cell: DetailProductViewCell) {
         
-        titleDetailView.update(product)
+        cell.onSegmentControlSizeTapped = { [weak self] namePizzaSize in
+            self?.handlerSizeSelection(namePizzaSize)
+        }
+        
+        cell.onSegmentControlBaseTapped = { [weak self] namePizzaBase in
+            self?.detailProductViewModel.typeBasePizza = namePizzaBase
+        }
+    }
+    
+    private func setupIngredientsCellBinding(_ cell: IngredientDetailTableViewCell, product: Pizza) {
+        
+        cell.onInfoButtonTapped = { [weak self] sender in
+            guard let self = self else { return }
+            let nutritionValueProduct = self.detailProductViewModel.getNutritionValue(id: product.id)
+            self.createPopover(sender: sender, nutritionValueProduct: nutritionValueProduct)
+        }
+        
+        cell.onRemoveIngredientsButtonTapped = { [weak self] in
+            self?.presentRemoveIngredientsScreen()
+            
+        }
+    }
+    
+    private func setupToppingsCellBinding(_ cell: ToppingsContainerCell) {
+        
+        cell.onToppingTapped = { [weak self] index in
+            guard let self = self else { return }
+            
+            let topping = self.detailProductViewModel.allToppings[index]
+            let priceForPizza = self.detailProductViewModel.priceForPizza
+            let sum = self.detailProductViewModel.calculateTotalPrice(topping: topping, priceForPizza: priceForPizza)
+            
+            updatePrice(sum: sum)
+        }
+    }
+}
+
+//MARK: - Event handler
+
+extension DetailViewController {
+    
+    private func handlerSizeSelection(_ namePizzaSize: String) {
+        detailProductViewModel.priceForPizza = Double(detailProductViewModel.product.prices["\(namePizzaSize)"] ?? detailProductViewModel.product.price)
+        
+        detailProductViewModel.updateSizeOfPizza(namePizzaSize: namePizzaSize)
+        
+        let totalPrice = detailProductViewModel.getTotalPrice()
         
         switch detailProductViewModel.detailProductState {
         case .createOrder:
-            addProduct.update(product.price)
+            addProduct.update(totalPrice)
         case .editOrder:
-            editProduct.update(detailProductViewModel.priceForPizza + detailProductViewModel.sumToppings)
+            editProduct.update(totalPrice)
         }
+    }
+    
+    private func updatePrice(sum: Double) {
+        switch detailProductViewModel.detailProductState {
+        case .createOrder:
+            addProduct.update(sum)
+        case .editOrder:
+            editProduct.update(sum)
+        }
+    }
+    
+    private func presentRemoveIngredientsScreen() {
+        
+        let removeVC = detailProductViewModel.di.screenFactory.createRemoveIngredientsScreen(detailProductViewModel: detailProductViewModel)
+        
+        removeVC.modalPresentationStyle = .pageSheet
+        
+        removeVC.onDismissTapped = { [weak self] in
+            guard let self = self else { return }
+            self.tableView.reloadData()
+        }
+        
+        if let sheet = removeVC.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+        
+        self.present(removeVC, animated: true)
+    }
+    
+    func updateTitleDetailView() {
+        let product = detailProductViewModel.getProduct()
+        titleDetailView.update(product)
     }
     
     private func presentPopover() {
@@ -344,7 +356,7 @@ extension DetailViewController {
     }
 }
 
-//MARK: - Update View
+//MARK: - Popover
 
 extension DetailViewController {
     

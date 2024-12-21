@@ -43,9 +43,11 @@ protocol IDetailProductViewModel {
     
     func calculateTotalPrice(topping: Toppings, priceForPizza: Double) -> Double
     
-    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String)
+    func getTotalPrice() -> Double
     
-    func editPosition(orderId: Int, count: Int, product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String)
+    func addToCard()
+    
+    func editPosition()
     
     func resetRemovedIngredientStates()
     
@@ -70,7 +72,7 @@ protocol IDetailProductViewModel {
 
 class DetailProductViewModel: IDetailProductViewModel {
     
-    var product: Pizza
+    var product: Pizza 
     
     var nutrition: [NutritionValue] = [
         NutritionValue(id: 1, namePizza: "Arriva", weight: 580, calories: 300, protein: 14, fats: 13, carbohydrates: 28, mayContain: "gluten, milk and its products (including lactose)", allergens: "vdo.do/ru_nutrition"),
@@ -103,7 +105,7 @@ class DetailProductViewModel: IDetailProductViewModel {
     
     var order: [Order]?
     
-    var priceForPizza: Double = 0.0
+    lazy var priceForPizza: Double = Double(product.price)
     
     var sizePizza: String = "medium"
     
@@ -193,7 +195,11 @@ class DetailProductViewModel: IDetailProductViewModel {
         return totalPrice
     }
     
-    func addToCard(product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String) {
+    func getTotalPrice() -> Double {
+        return priceForPizza + sumToppings
+    }
+    
+    func addToCard() {
         
         var currentOrder = di.orderArchiver.load()
         
@@ -203,7 +209,7 @@ class DetailProductViewModel: IDetailProductViewModel {
             orderId = currentOrder.count + 1
         }
         
-        let order = Order(orderId: orderId, product: product, count: 1, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+        let order = Order(orderId: orderId, product: product, count: 1, removedIngredients: ingredientStatesInOrder, toppings: toppingsInOrder, sumForToppings: sumToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
         
         
         if currentOrder.isEmpty {
@@ -223,11 +229,13 @@ class DetailProductViewModel: IDetailProductViewModel {
         }
     }
     
-    func editPosition(orderId: Int, count: Int, product: Pizza,removedIngredients: [IngredientStates], toppings: [Toppings], sumForToppings: Double, priceForPizza: Double, sizePizza: String, typeBasePizza: String) {
+    func editPosition() {
+        let orderId = order?[0].orderId ?? 1
+        let countItem = order?[0].count ?? 1
         
         var currentOrder = di.orderArchiver.load()
         
-        let updatedOrder = Order(orderId: orderId, product: product, count: count, removedIngredients: removedIngredients, toppings: toppings, sumForToppings: sumForToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
+        let updatedOrder = Order(orderId: orderId, product: product, count: countItem, removedIngredients: ingredientStatesInOrder, toppings: toppingsInOrder, sumForToppings: sumToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
         
         guard let index = currentOrder.firstIndex(where: { $0.orderId == orderId }) else {
             print("Order with id \(orderId) not found")
@@ -237,7 +245,6 @@ class DetailProductViewModel: IDetailProductViewModel {
         currentOrder[index] = updatedOrder
         
         di.orderArchiver.save(order: currentOrder)
-        
     }
     
     func resetRemovedIngredientStates() {
