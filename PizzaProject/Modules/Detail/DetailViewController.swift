@@ -8,21 +8,22 @@
 import UIKit
 import SnapKit
 
-class DetailViewController: UIViewController {
+final class DetailViewController: UIViewController {
+    
+    ///subscription on onEditButtonTapped in EditProductView
+    var onEditButtonTapped: (()->())?
     
     private lazy var toppingInfoPopoverViewController = ToppingInfoPopoverViewController()
     
-    var isPopoverPresented = false
+    private var isPopoverPresented = false
     
-    var titleDetailView = TitleDetailView()
+    private var titleDetailView = TitleDetailView()
     private var detailProductViewModel: IDetailProductViewModel
-    var ingredientDetailProductTableView = IngredientDetailTableViewCell()
-    var addProduct = AddProductView()
-    var editProduct = EditProductView()
+    private var ingredientDetailProductTableView = IngredientDetailTableViewCell()
+    private var addProduct = AddProductView()
+    private var editProduct = EditProductView()
     
-    var onEditButtonTapped: (()->())?
-    
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.contentInset = .init(top: 30, left: 0, bottom: -35, right: 0)
         tableView.backgroundColor = Colors.backGroundBeige
@@ -38,11 +39,6 @@ class DetailViewController: UIViewController {
         tableView.tableFooterView = footerView
         
         return tableView
-    }()
-    
-    let typeBasePizzaSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl()
-        return segmentedControl
     }()
     
     init (detailProductViewModel: IDetailProductViewModel) {
@@ -67,12 +63,12 @@ class DetailViewController: UIViewController {
     
     //MARK: - Setup
     
-    func setupViews() {
+    private func setupViews() {
         [tableView, titleDetailView].forEach { view.addSubview($0) }
         setupStateView()
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         
         titleDetailView.snp.makeConstraints { make in
             make.left.right.equalTo(view)
@@ -129,7 +125,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        guard let detailSection = DetailSection(rawValue: section) else { return 0 }
+        
+        switch detailSection {
+        case .detailProduct, .ingredients, .toppings:
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -162,7 +163,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         setupDetailProductCellBinding(cell)
-                
+        
         return cell
     }
     
@@ -173,7 +174,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         let product = detailProductViewModel.product
         
         cell.update(product: product, listRemovedIngredients: detailProductViewModel.listRemovedIngredients)
-       
+        
         setupIngredientsCellBinding(cell, product: product)
         
         return cell
@@ -190,7 +191,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         cell.bind(toppings: toppings, toppingsInOrder: toppingsInOrder)
         
         setupToppingsCellBinding(cell)
-    
+        
         return cell
     }
     
@@ -203,13 +204,11 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension DetailViewController {
     
-    func setupBinding() {
+    private func setupBinding() {
         
         let product = detailProductViewModel.getProduct()
         
-        titleDetailView.onCloseButtonTaped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
-        }
+        closeScreenDetailViewController()
         
         detailProductViewModel.onProductUpdate = { [weak self] in
             self?.titleDetailView.update(product)
@@ -237,7 +236,7 @@ extension DetailViewController {
             }
         }
     }
-//MARK: - Cell Binding
+    //MARK: - Cell Binding
     private func setupDetailProductCellBinding(_ cell: DetailProductViewCell) {
         
         cell.onSegmentControlSizeTapped = { [weak self] namePizzaSize in
@@ -325,7 +324,7 @@ extension DetailViewController {
         self.present(removeVC, animated: true)
     }
     
-    func updateTitleDetailView() {
+    private func updateTitleDetailView() {
         let product = detailProductViewModel.getProduct()
         titleDetailView.update(product)
     }
@@ -336,21 +335,21 @@ extension DetailViewController {
         }
     }
     
-    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+    private func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         isPopoverPresented = false
     }
 }
 
-//MARK: - Data fetching from DetailProductViewModel
+//MARK: - Business logic
 
 extension DetailViewController {
     
-    func fetchOrder() {
+    private func fetchOrder() {
         switch detailProductViewModel.detailProductState {
         case .createOrder:
             break
         case .editOrder:
-            detailProductViewModel.syncOrderAndEditProduct()
+            detailProductViewModel.convertFromOrderToDataForDetailVM()
             tableView.reloadData()
         }
     }
@@ -360,7 +359,7 @@ extension DetailViewController {
 
 extension DetailViewController {
     
-    func createPopover(sender: UIButton, nutritionValueProduct: NutritionValue) {
+    private func createPopover(sender: UIButton, nutritionValueProduct: NutritionValue) {
         guard !isPopoverPresented else { return }
         
         self.ingredientDetailProductTableView.onInfoButtonTapped?(sender)
@@ -387,6 +386,17 @@ extension DetailViewController {
             }
         } else {
             self.presentPopover()
+        }
+    }
+}
+
+//MARK: - Close screen
+
+extension DetailViewController {
+    
+    private func closeScreenDetailViewController() {
+        titleDetailView.onCloseButtonTaped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
         }
     }
 }

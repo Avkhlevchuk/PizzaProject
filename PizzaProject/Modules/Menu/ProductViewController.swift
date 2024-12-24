@@ -8,11 +8,11 @@
 import UIKit
 import SnapKit
 
-class ProductViewController: UIViewController {
-    let productContainer = CategoryContainerHeader()
+final class ProductViewController: UIViewController {
+    private let productContainer = CategoryContainerHeader()
     private var productViewModel: IProductViewModel
-    let productShortContainer = ShortProductContainerCell()
-    let cartView = CartView()
+    private let productShortContainer = ShortProductContainerCell()
+    private let cartView = CartView()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -29,7 +29,7 @@ class ProductViewController: UIViewController {
         tableView.estimatedSectionHeaderHeight = 40
         
         if #available(iOS 15.0, *) {
-          tableView.sectionHeaderTopPadding = 0.0
+            tableView.sectionHeaderTopPadding = 0.0
         }
         
         return tableView
@@ -47,7 +47,6 @@ class ProductViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         setupViews()
         setupConstraints()
         setupBinding()
@@ -55,7 +54,6 @@ class ProductViewController: UIViewController {
         productViewModel.getProducts()
         productViewModel.fetchProducts()
         productViewModel.getCartTotal()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,14 +67,12 @@ class ProductViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    func setupViews() {
+    private func setupViews() {
         view.backgroundColor = Colors.backgroundColor
-        [tableView, cartView].forEach {
-            view.addSubview($0)
-        }
+        [tableView, cartView].forEach { view.addSubview($0) }
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         
         cartView.snp.makeConstraints { make in
             make.right.equalTo(view.snp.right).inset(20)
@@ -91,8 +87,11 @@ class ProductViewController: UIViewController {
             make.bottom.equalTo(view)
         }
     }
-    
-    func setupBinding() {
+}
+//MARK: - Binding
+
+extension ProductViewController {
+    private func setupBinding() {
         
         productViewModel.onProductUpdate = { [weak self] in
             DispatchQueue.main.async {
@@ -117,6 +116,25 @@ class ProductViewController: UIViewController {
             self.present(vc, animated: true)
         }
     }
+    //MARK: - Cell Binding
+    private func setupShortProductCellBinding(_ cell: ShortProductContainerCell) {
+        cell.onShortProductTapped = { [weak self] index in
+            
+            guard let self = self else { return }
+            
+            let selectedProduct = productViewModel.products[index]
+            
+            navigateToProductDetail(selectedProduct: selectedProduct)
+        }
+    }
+    
+    private func setupCategoryCellBinding(_ header: CategoryContainerHeader) {
+        header.onFilterButtonTapped = { [weak self] selectedFoodType in
+            guard let self = self else { return }
+            let indexPath = self.productViewModel.fetchIndexSelectedCategory(selectedFoodType: selectedFoodType)
+            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+    }
 }
 
 //MARK: - TableViewDataSource, TableViewDelegate
@@ -138,9 +156,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         guard let menuSection = MenuSection(rawValue: section) else { return 0 }
         
         switch menuSection {
-        case .stories:
-            return 1
-        case .shortProducts:
+        case .stories, .shortProducts:
             return 1
         case .products:
             return productViewModel.products.count
@@ -159,23 +175,9 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueCell(indexPath) as ShortProductContainerCell
             let product = productViewModel.products
             cell.bind(product: product)
-            
-            cell.onShortProductTapped = { [weak self] index in
-                
-                guard let self = self else { return }
-                
-                let selectedProduct = productViewModel.products[index]
-                
-                let cobainerDI = productViewModel.di
-                let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
-                detailVC.modalPresentationStyle = .fullScreen
-                
-                present(detailVC, animated: true)
-            }
-            
+            setupShortProductCellBinding(cell)
             return cell
         case .products:
-           
             let product = productViewModel.products[indexPath.row]
             
             if product.isPromo {
@@ -195,11 +197,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedProduct = productViewModel.products[indexPath.row]
         
-        let cobainerDI = productViewModel.di
-        let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
-        detailVC.modalPresentationStyle = .fullScreen
-        
-        present(detailVC, animated: true)
+        navigateToProductDetail(selectedProduct: selectedProduct)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -207,27 +205,16 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         guard let menuSection = MenuSection(rawValue: section) else { return 0 }
         
         return menuSection.rawValue == 2 ? UITableView.automaticDimension : 0
-        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         guard let menuSection = MenuSection(rawValue: section) else { return UIView() }
-       
+        
         switch menuSection {
         case .products:
             let header = tableView.dequeueHeader() as CategoryContainerHeader
-            
-            header.onFilterButtonTapped = { [weak self] selectedFoodType in
-                guard let self = self else { return }
-//                self.productContainer.onFilterButtonTapped?()
-                //TODO: - fix add in ViewModel
-                if let index = self.productViewModel.products.firstIndex(where: {$0.foodType == selectedFoodType}) {
-                    let indexPath = IndexPath(row: index, section: 2)
-                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-                }
-            }
-            
+            setupCategoryCellBinding(header)
             let filter = productViewModel.allFilters
             header.update(filter)
             return header
@@ -247,5 +234,17 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         if let header = tableView.headerView(forSection: 2) as? CategoryContainerHeader {
             header.selectedFilter(foodType: foodType)
         }
+    }
+}
+
+//MARK: - Navigation
+
+extension ProductViewController {
+    private func navigateToProductDetail(selectedProduct: Pizza) {
+        let cobainerDI = productViewModel.di
+        let detailVC = cobainerDI.screenFactory.createDetailProductScreen(product: selectedProduct)
+        detailVC.modalPresentationStyle = .fullScreen
+        
+        present(detailVC, animated: true)
     }
 }

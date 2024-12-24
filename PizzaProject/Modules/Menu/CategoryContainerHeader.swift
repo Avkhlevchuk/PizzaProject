@@ -34,11 +34,6 @@ final class CategoryContainerHeader: UITableViewHeaderFooterView, UICollectionVi
         return collectionView
     }()
     
-//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        
-//    }
-    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setupView()

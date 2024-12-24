@@ -28,6 +28,10 @@ protocol IProductViewModel {
     
     func getCartTotal()
     
+    //Event Handler
+    
+    func fetchIndexSelectedCategory(selectedFoodType: String) -> IndexPath
+    
 }
 
 class ProductViewModel: IProductViewModel {
@@ -78,6 +82,7 @@ class ProductViewModel: IProductViewModel {
     func fetchFilters() {
         onFilterFetch?()
     }
+    
     //MARK: - Cart func
     func getCartTotal() {
         let cart =  di.orderArchiver.load()
@@ -91,5 +96,16 @@ class ProductViewModel: IProductViewModel {
         } else {
             onCartUpdate?(0.0)
         }
+    }
+}
+
+//MARK: - Event Handler
+
+extension ProductViewModel {
+    func fetchIndexSelectedCategory(selectedFoodType: String) -> IndexPath {
+        if let index = products.firstIndex(where: {$0.foodType == selectedFoodType}) {
+            return IndexPath(row: index, section: 2)
+        }
+        return IndexPath(row: 0, section: 2)
     }
 }

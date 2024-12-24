@@ -66,13 +66,13 @@ protocol IDetailProductViewModel {
     func updateSizeOfPizza(namePizzaSize: String)
     
     //MARK: - Setting for EditProductView
-    func syncOrderAndEditProduct()
+    func convertFromOrderToDataForDetailVM()
     
 }
 
 class DetailProductViewModel: IDetailProductViewModel {
     
-    var product: Pizza 
+    var product: Pizza
     
     var nutrition: [NutritionValue] = [
         NutritionValue(id: 1, namePizza: "Arriva", weight: 580, calories: 300, protein: 14, fats: 13, carbohydrates: 28, mayContain: "gluten, milk and its products (including lactose)", allergens: "vdo.do/ru_nutrition"),
@@ -302,7 +302,7 @@ class DetailProductViewModel: IDetailProductViewModel {
 
 //MARK: - Setting for EditProductView
 extension DetailProductViewModel {
-    func syncOrderAndEditProduct() {
+    func convertFromOrderToDataForDetailVM() {
         
         guard let selectedOrder = order?[0] else { return }
         //SelectedSegmentControl
