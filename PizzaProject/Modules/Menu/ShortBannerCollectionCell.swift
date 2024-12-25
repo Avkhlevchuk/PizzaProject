@@ -10,24 +10,15 @@ import SnapKit
 
 final class ShortBannerCollectionCell: UICollectionViewCell {
     
-    lazy var containerView: UIView = {
-       let view = UIView()
+    private lazy var containerView: UIView = {
+        let view = UIView()
         view.backgroundColor = .white
         return view
     }()
     
-    lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "pepperoni")
-        imageView.contentMode = .scaleAspectFill
-        let width = UIScreen.main.bounds.width
-        imageView.heightAnchor.constraint(equalToConstant: 0.25 * width).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 0.25 * width).isActive = true
-        
-        return imageView
-    }()
+    private lazy var imageView = ImageView(style: .shortProduct)
     
-    lazy var verticalStackView: UIStackView = {
+    private lazy var verticalStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
@@ -35,27 +26,9 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
         return stackView
     }()
     
-    var nameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Пеперони"
-        label.textColor = .black
-        label.numberOfLines = 0
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        return label
-    }()
+    private lazy var nameLabel = Label(style: .promoTitle)
     
-    var priceButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("от 100 ₽", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .lightGray.withAlphaComponent(0.25)
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 6, bottom: 5, right: 6)
-       
-        return button
-    }()
+    private lazy var priceButton = Button(style: .product)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,8 +40,13 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+//MARK: - Layout
+
+extension ShortBannerCollectionCell {
     
-    func setupViews() {
+    private func setupViews() {
         contentView.addSubview(containerView)
         
         [imageView, verticalStackView].forEach {
@@ -80,7 +58,7 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
         }
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         
         containerView.snp.makeConstraints { make in
             make.edges.equalTo(containerView)
@@ -94,9 +72,6 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
         }
         
         verticalStackView.snp.makeConstraints { make in
-            //FIXME: - error about constraints
-//            make.width.equalTo(120)
-//            make.height.greaterThanOrEqualTo(50)
             make.centerY.equalTo(contentView)
             make.left.equalTo(imageView.snp.right).offset(5)
             make.right.equalTo(contentView).inset(10)
@@ -105,7 +80,7 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
     }
 }
 
-//MARK: - Update view
+//MARK: - Public
 
 extension ShortBannerCollectionCell {
     func update(_ product: Pizza) {

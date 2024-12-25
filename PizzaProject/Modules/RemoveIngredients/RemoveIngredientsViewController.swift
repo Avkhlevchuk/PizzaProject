@@ -8,13 +8,14 @@
 import UIKit
 import SnapKit
 
-class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
+final class RemoveIngredientsViewController: UIViewController {
+    
+    ///Subscription Close screen
+    var onDismissTapped: (()->())?
     
     private var detailProductViewModel: IDetailProductViewModel
     
-    var saveAndBackView = SaveAndBackView()
-    
-    var onDismissTapped: (()->())?
+    private var saveAndBackView = SaveAndBackView()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -57,12 +58,13 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
             onDismissTapped?()
         }
     }
-    
+}
+
+//MARK: - Layout
+extension RemoveIngredientsViewController {
     func setupViews() {
-        [saveAndBackView, tableView].forEach {
-            view.addSubview($0)
-        }
         view.backgroundColor = .white
+        [saveAndBackView, tableView].forEach { view.addSubview($0) }
     }
     
     func setupConstraints() {
@@ -76,7 +78,28 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
             make.left.right.bottom.equalTo(view)
         }
     }
+}
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
+extension RemoveIngredientsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(indexPath) as RemoveContainerIngredientsCell
+        
+        cell.bind(ingredients: detailProductViewModel.product.ingredients, ingredientStates: detailProductViewModel.ingredientStatesInOrder, saved: detailProductViewModel.saveRemovedIngredients)
+        
+        setupRemoveIngredientsCell(cell)
+        
+        return cell
+    }
+}
+
+//MARK: - Binding
+
+extension RemoveIngredientsViewController {
     func setupBinding() {
         saveAndBackView.onCloseButtonTapped = { [weak self] in
             guard let self = self else { return }
@@ -104,20 +127,12 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(indexPath) as RemoveContainerIngredientsCell
-        
-        cell.bind(ingredients: detailProductViewModel.product.ingredients, ingredientStates: detailProductViewModel.ingredientStatesInOrder, saved: detailProductViewModel.saveRemovedIngredients)
-        
+    private func setupRemoveIngredientsCell(_ cell: RemoveContainerIngredientsCell) {
         cell.onSelectItemTapped = { [weak self] ingredientStates in
             guard let self = self else { return }
-           
+            
             let countRemovedIngredients = ingredientStates.filter { $0.isRemoved }.count
-           
+            
             if countRemovedIngredients == 0 {
                 self.saveAndBackView.showCloseButton()
             } else if countRemovedIngredients > 0 {
@@ -125,6 +140,5 @@ class RemoveIngredientsViewController: UIViewController, UITableViewDelegate, UI
             }
             self.detailProductViewModel.ingredientStatesInOrder = ingredientStates
         }
-        return cell
     }
 }

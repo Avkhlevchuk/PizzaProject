@@ -116,6 +116,7 @@
 		2967698F2CFFBA4200E1F7FB /* Base */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Base; sourceTree = "<group>"; };
 		296769962CFFBA4A00E1F7FB /* Endpoints */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Endpoints; sourceTree = "<group>"; };
 		2967699B2CFFBA4E00E1F7FB /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		29B96BC92D1C4B1D00853AB7 /* Factory */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Factory; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,9 +135,9 @@
 		2920A55D2CF4BD3F00BC1198 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
-				2920A5642CF4CA2B00BC1198 /* Cell */,
 				2920A5622CF4C30200BC1198 /* CloseAndTitleView.swift */,
 				2920A5602CF4BDB600BC1198 /* CartViewController.swift */,
+				2920A5642CF4CA2B00BC1198 /* Cell */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -318,6 +319,7 @@
 				294F56182CC05E1A0015E241 /* CustomeSegmentControl.swift */,
 				296302C02CD586AF005545C8 /* ToolTipView.swift */,
 				296B83412CDA88D1003CFFD7 /* OrderArchiver.swift */,
+				29B96BC92D1C4B1D00853AB7 /* Factory */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -361,6 +363,7 @@
 				2967698F2CFFBA4200E1F7FB /* Base */,
 				296769962CFFBA4A00E1F7FB /* Endpoints */,
 				2967699B2CFFBA4E00E1F7FB /* Services */,
+				29B96BC92D1C4B1D00853AB7 /* Factory */,
 			);
 			name = PizzaProject;
 			packageProductDependencies = (

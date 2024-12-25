@@ -59,10 +59,10 @@ final class DetailViewController: UIViewController {
         setupBinding()
         updateTitleDetailView()
     }
-    
-    
-    //MARK: - Setup
-    
+}
+
+//MARK: - Layout
+extension DetailViewController {
     private func setupViews() {
         [tableView, titleDetailView].forEach { view.addSubview($0) }
         setupStateView()
@@ -198,7 +198,6 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
-    
 }
 //MARK: - Binding
 

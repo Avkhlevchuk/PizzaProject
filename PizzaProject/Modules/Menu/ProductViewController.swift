@@ -66,6 +66,10 @@ final class ProductViewController: UIViewController {
     @objc private func dismissVC() {
         dismiss(animated: true)
     }
+}
+
+//MARK: - Layout
+extension ProductViewController {
     
     private func setupViews() {
         view.backgroundColor = Colors.backgroundColor
@@ -88,6 +92,7 @@ final class ProductViewController: UIViewController {
         }
     }
 }
+
 //MARK: - Binding
 
 extension ProductViewController {

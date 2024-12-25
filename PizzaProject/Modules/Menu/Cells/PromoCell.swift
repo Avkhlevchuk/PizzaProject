@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import SnapKit
 
 class PromoCell: UITableViewCell {
     
-    lazy var containerPromoView: UIView = {
+    private lazy var containerPromoView: UIView = {
         let view = UIView()
         view.backgroundColor = Colors.backGroundBeige
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -19,7 +20,7 @@ class PromoCell: UITableViewCell {
         return view
     }()
     
-    var verticalStackView: UIStackView = {
+    private lazy var verticalStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
@@ -28,50 +29,13 @@ class PromoCell: UITableViewCell {
         return stackView
     }()
     
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 15)
-        label.textAlignment = .left
-        
-        return label
-    }()
+    private lazy var titleLabel = Label(style: .promoTitle)
     
-    lazy var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .gray
-        label.font = .systemFont(ofSize: 12)
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        
-        return label
-    }()
+    private lazy var descriptionLabel = Label(style: .promoDescription)
     
-    var priceButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("20 £", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .lightGray.withAlphaComponent(0.25)
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 20, bottom: 5, right: 20)
-        
-        return button
-    }()
+    private lazy var priceButton = Button(style: .promo)
     
-    var photoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "pepperoni")
-        imageView.contentMode = .scaleAspectFill
-        let width = UIScreen.main.bounds.width
-        imageView.heightAnchor.constraint(equalToConstant: 0.23 * width).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 0.23 * width).isActive = true
-        
-        return imageView
-    }()
-    
-    
+    private lazy var photoImageView = ImageView(style: .product)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -83,8 +47,13 @@ class PromoCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+//MARK: - Layout
+
+extension PromoCell {
     
-    func setupViews() {
+    private func setupViews() {
         self.addSubview(containerPromoView)
         
         [photoImageView, verticalStackView].forEach {
@@ -95,7 +64,7 @@ class PromoCell: UITableViewCell {
             verticalStackView.addSubview($0)
         }
     }
-    func setupConstraints() {
+    private func setupConstraints() {
         
         containerPromoView.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self).inset(10)
@@ -123,7 +92,6 @@ class PromoCell: UITableViewCell {
         descriptionLabel.snp.makeConstraints { make in
             make.left.right.equalTo(verticalStackView).offset(10)
             make.top.equalTo(titleLabel.snp.bottom).offset(5)
-//            make.bottom.equalTo(verticalStackView.snp.bottom)
         }
         priceButton.snp.makeConstraints { make in
             make.right.bottom.equalTo(verticalStackView).inset(10)
@@ -132,7 +100,7 @@ class PromoCell: UITableViewCell {
     }
 }
 
-//MARK: - EVENTS HEANDLER
+//MARK: - Public
 
 extension PromoCell {
     func bind(_ product: Pizza) {
