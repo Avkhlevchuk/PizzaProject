@@ -18,13 +18,7 @@ class ProductCell: UITableViewCell {
         return view
     }()
     
-    private lazy var verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.spacing = 10
-        return stackView
-    }()
+    private lazy var verticalStackView = StackView(style: .vertical)
         
     private lazy var photoImageView = ImageView(style: .product)
     

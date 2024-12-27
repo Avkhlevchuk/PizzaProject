@@ -12,20 +12,15 @@ class CartCell: UITableViewCell {
     var onIncrementButtonTapped: (()->())?
     var onDecrementButtonTapped: (()->())?
     
-    private let containerView: UIView = {
+    private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
     
-    var verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        return stackView
-    }()
+    private lazy var verticalStackView = StackView(style: .vertical)
     
-    var photoImageView: UIImageView = {
+    private lazy var photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "peperoni")
         imageView.contentMode = .scaleAspectFit
@@ -36,23 +31,9 @@ class CartCell: UITableViewCell {
         return imageView
     }()
     
-    var nameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Pepperoni"
-        label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 14)
-        return label
-    }()
+    private lazy var nameLabel = Label(style: .title)
     
-    var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Medium 30 cm, tradutional dough"
-        label.textColor = .black
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.font = UIFont.systemFont(ofSize: 12)
-        return label
-    }()
+    private lazy var descriptionLabel = Label(style: .description)
     
     var containerPriceAndChangeView: UIView = {
         let view = UIView()
@@ -60,7 +41,7 @@ class CartCell: UITableViewCell {
         return view
     }()
     
-    var priceForPizzaLabel: UILabel = {
+    private lazy var priceForPizzaLabel: UILabel = {
         let label = UILabel()
         label.text = "50 £"
         label.textColor = .black
@@ -68,7 +49,7 @@ class CartCell: UITableViewCell {
         return label
     }()
     
-    var changeLabel: UILabel = {
+    private lazy var changeLabel: UILabel = {
         let label = UILabel()
         label.text = "Change"
         label.textColor = Colors.darkOrange
@@ -76,9 +57,9 @@ class CartCell: UITableViewCell {
         return label
     }()
     
-    var spacer = UIView()
+    private lazy var spacer = UIView()
     
-    var decrementButton: UIButton = {
+    private lazy var decrementButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("-", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -91,7 +72,7 @@ class CartCell: UITableViewCell {
         onDecrementButtonTapped?()
     }
     
-    var incrementButton: UIButton = {
+    private lazy var incrementButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("+", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -105,7 +86,7 @@ class CartCell: UITableViewCell {
     }
     
     
-    var countPizzaLabel: UILabel = {
+    private lazy var countPizzaLabel: UILabel = {
         let label = UILabel()
         label.text = "1"
         label.textAlignment = .center
@@ -114,7 +95,7 @@ class CartCell: UITableViewCell {
         return label
     }()
     
-    var customStepperView: UIStackView = {
+    private lazy var customStepperView: UIStackView = {
         let stackView = UIStackView()
         stackView.backgroundColor = Colors.backgroundColor
         stackView.layer.cornerRadius = 13
@@ -296,7 +277,7 @@ extension CartCell {
         var totalDescription = ""
         
         if !addIngredientsDescription.isEmpty && !removedIngredientsDescription.isEmpty {
-             totalDescription = titleDescription + "\n" + addIngredientsDescription + "\n" + removedIngredientsDescription
+            totalDescription = titleDescription + "\n" + addIngredientsDescription + "\n" + removedIngredientsDescription
         } else if addIngredientsDescription.isEmpty {
             totalDescription = titleDescription + "\n" + removedIngredientsDescription
         } else if removedIngredientsDescription.isEmpty {

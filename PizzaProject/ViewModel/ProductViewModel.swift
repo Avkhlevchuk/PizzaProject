@@ -8,28 +8,20 @@
 import Foundation
 
 protocol IProductViewModel {
-    
+
     var di: DependencyContainer { get set }
-    
     var onProductUpdate: (() -> ())? { get set }
     var onFilterFetch: (() -> ())? { get set }
-    
+    var onCartUpdate: ((Double)->())? { get set }
     var products: [Pizza] { get }
     var allFilters: [String] { get }
+    var allStories: [String] { get }
     
     func fetchProduct(index: Int) -> Pizza
     func fetchProducts()
     func getProducts()
     func fetchFilters()
-    
-    //Cart
-    
-    var onCartUpdate: ((Double)->())? { get set }
-    
     func getCartTotal()
-    
-    //Event Handler
-    
     func fetchIndexSelectedCategory(selectedFoodType: String) -> IndexPath
     
 }
@@ -37,15 +29,13 @@ protocol IProductViewModel {
 class ProductViewModel: IProductViewModel {
     
     var di: DependencyContainer
-    
-    let orderArchiver: OrderArchiver
+    private let orderArchiver: OrderArchiver
     
     var onProductUpdate: (()-> ())?
     var onFilterFetch: (()-> ())?
-    
     var onCartUpdate: ((Double)->())?
     
-    var products: [Pizza] = []
+    private(set) var products: [Pizza] = []
     
     init (di: DependencyContainer) {
         self.di = di
@@ -73,7 +63,7 @@ class ProductViewModel: IProductViewModel {
                 DispatchQueue.main.async {
                     self.onProductUpdate?()
                 }
-            case .failure(let error):
+            case .failure(_):
                 print("Error")
             }
         }
@@ -102,6 +92,7 @@ class ProductViewModel: IProductViewModel {
 //MARK: - Event Handler
 
 extension ProductViewModel {
+    
     func fetchIndexSelectedCategory(selectedFoodType: String) -> IndexPath {
         if let index = products.firstIndex(where: {$0.foodType == selectedFoodType}) {
             return IndexPath(row: index, section: 2)

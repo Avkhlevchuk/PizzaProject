@@ -6,15 +6,17 @@
 //
 
 import UIKit
+import SnapKit
 
-class CartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
- 
-    private var cartViewModel: ICartViewModel
-    var closeAndTitleView = CloseAndTitleView()
+final class CartViewController: UIViewController {
     
+    private var cartViewModel: ICartViewModel
+    private var closeAndTitleView = CloseAndTitleView()
+    
+    /// subscription to close screen CartView
     var onDismissTapped: (()->())?
     
-    let headerLabel: UILabel = {
+    private lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.text = "2 Items for 50 £ "
         label.textAlignment = .left
@@ -27,13 +29,13 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     lazy var tableview: UITableView = {
         let tableView = UITableView()
-         tableView.backgroundColor = .white
-         tableView.dataSource = self
-         tableView.delegate = self
-         tableView.rowHeight = UITableView.automaticDimension
-         tableView.estimatedRowHeight = 130
-         tableView.registerCell(CartCell.self)
-         tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        tableView.backgroundColor = .white
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 130
+        tableView.registerCell(CartCell.self)
+        tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         return tableView
     }()
     
@@ -41,7 +43,7 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.cartViewModel = cartViewModel
         super.init(nibName: nil, bundle: nil)
     }
-        
+    
     override func viewDidLoad() {
         
         reloadData()
@@ -58,17 +60,24 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+//MARK: - Layout
+
+extension CartViewController {
     
     func setupViews() {
+        
         view.backgroundColor = .white
         tableview.tableHeaderView = headerLabel
         
         [tableview, closeAndTitleView].forEach {
             view.addSubview($0)
         }
-        
     }
+    
     func setupConstraints() {
+        
         closeAndTitleView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.height.greaterThanOrEqualTo(50)
@@ -84,25 +93,11 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-    
-    func setupBinding() {
-        closeAndTitleView.onCloseButtonTapped = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
-        }
-        
-    }
-    
-    func reloadData() {
-        cartViewModel.getOrder()
-        cartViewModel.getСalculateTotalPriceForOrder()
-        
-        let countItems = cartViewModel.order.reduce(0) { $0 + $1.count }
-        
-        let headerTitle = "\(countItems) items for \(cartViewModel.totalPrice) £"
-        headerLabel.text = headerTitle
-        
-        tableview.reloadData()
-    }
+}
+
+//MARK: - UITableViewDataSource, UITableViewDelegate
+
+extension CartViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cartViewModel.order.count
@@ -145,5 +140,33 @@ class CartViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         self.present(vc, animated: true)
+    }
+}
+
+//MARK: - Binding
+
+extension CartViewController {
+    
+    func setupBinding() {
+        closeAndTitleView.onCloseButtonTapped = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+    }
+}
+
+//MARK: - Event Handler
+
+extension CartViewController {
+    
+    private func reloadData() {
+        cartViewModel.getOrder()
+        cartViewModel.getСalculateTotalPriceForOrder()
+        
+        let countItems = cartViewModel.order.reduce(0) { $0 + $1.count }
+        
+        let headerTitle = "\(countItems) items for \(cartViewModel.totalPrice) £"
+        headerLabel.text = headerTitle
+        
+        tableview.reloadData()
     }
 }

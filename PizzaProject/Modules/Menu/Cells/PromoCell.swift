@@ -19,15 +19,8 @@ class PromoCell: UITableViewCell {
         
         return view
     }()
-    
-    private lazy var verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.spacing = 10
         
-        return stackView
-    }()
+    private lazy var verticalStackView = StackView(style: .vertical)
     
     private lazy var titleLabel = Label(style: .promoTitle)
     
@@ -56,14 +49,11 @@ extension PromoCell {
     private func setupViews() {
         self.addSubview(containerPromoView)
         
-        [photoImageView, verticalStackView].forEach {
-            self.addSubview($0)
-        }
+        [photoImageView, verticalStackView].forEach { self.addSubview($0) }
         
-        [titleLabel, descriptionLabel, priceButton].forEach {
-            verticalStackView.addSubview($0)
-        }
+        [titleLabel, descriptionLabel, priceButton].forEach { verticalStackView.addSubview($0) }
     }
+    
     private func setupConstraints() {
         
         containerPromoView.snp.makeConstraints { make in

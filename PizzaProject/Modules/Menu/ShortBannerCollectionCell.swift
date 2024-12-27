@@ -17,14 +17,8 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
     }()
     
     private lazy var imageView = ImageView(style: .shortProduct)
-    
-    private lazy var verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.spacing = 10
-        return stackView
-    }()
+        
+    private lazy var verticalStackView = StackView(style: .vertical)
     
     private lazy var nameLabel = Label(style: .promoTitle)
     
