@@ -17,4 +17,12 @@ class ProductLoader: HTTPClient, IProductLoader {
     func getProduct() async -> Result<[Pizza], RequestError> {
         return await sendRequest(endpoint: ProductEndpoint.product, responseModel: [Pizza].self)
     }
+    
+    func getFilter() async -> Result<[String], RequestError> {
+        return await sendRequest(endpoint: ProductEndpoint.filter, responseModel: [String].self)
+    }
+    
+    func getStory() async -> Result<[String], RequestError> {
+        return await sendRequest(endpoint: ProductEndpoint.story, responseModel: [String].self)
+    }
 }

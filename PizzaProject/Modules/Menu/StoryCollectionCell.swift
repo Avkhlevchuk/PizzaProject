@@ -10,7 +10,7 @@ import SnapKit
 
 final class StoryCollectionCell: UICollectionViewCell {
             
-    lazy var imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "stories")
         imageView.contentMode = .scaleAspectFill
@@ -32,12 +32,17 @@ final class StoryCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+//MARK: - Layout
+
+extension StoryCollectionCell {
     
-    func setupViews() {
+    private func setupViews() {
         contentView.addSubview(imageView)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         
         imageView.snp.makeConstraints { make in
             make.left.equalTo(contentView).inset(10)
@@ -47,7 +52,9 @@ final class StoryCollectionCell: UICollectionViewCell {
     }
 }
 
-//MARK: - Update view
+
+//MARK: - Public
+
 extension StoryCollectionCell {
     func update(_ story: String) {
         imageView.image = UIImage(named: story)

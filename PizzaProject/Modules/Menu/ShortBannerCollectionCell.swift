@@ -19,7 +19,7 @@ final class ShortBannerCollectionCell: UICollectionViewCell {
     private lazy var imageView = ImageView(style: .shortProduct)
         
     private lazy var verticalStackView = StackView(style: .vertical)
-    
+
     private lazy var nameLabel = Label(style: .promoTitle)
     
     private lazy var priceButton = Button(style: .product)

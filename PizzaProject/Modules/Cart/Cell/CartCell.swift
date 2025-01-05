@@ -152,7 +152,7 @@ class CartCell: UITableViewCell {
             make.left.top.equalTo(containerView).inset(15)
             make.bottom.lessThanOrEqualTo(containerPriceAndChangeView.snp.top).offset(-10).priority(.medium)
             make.width.equalTo(photoImageView.snp.height)
-            make.height.lessThanOrEqualTo(100) // Максимальная высота
+            make.height.lessThanOrEqualTo(100)
         }
         
         verticalStackView.snp.makeConstraints { make in

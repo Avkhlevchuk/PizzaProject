@@ -51,24 +51,23 @@ final class ProductViewController: UIViewController {
         setupConstraints()
         setupBinding()
         
+        productViewModel.getFilters()
+        productViewModel.getStories()
         productViewModel.getProducts()
         productViewModel.fetchProducts()
         productViewModel.getCartTotal()
     }
-    
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         productViewModel.getCartTotal()
         tableView.reloadData()
     }
-    
-    @objc private func dismissVC() {
-        dismiss(animated: true)
-    }
 }
 
 //MARK: - Layout
+
 extension ProductViewController {
     
     private func setupViews() {
@@ -104,6 +103,14 @@ extension ProductViewController {
             }
         }
         
+        productViewModel.onFilterUpdate = { [weak self] in
+            self?.tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+        }
+        
+        productViewModel.onStoriesUpdate = { [weak self] in
+            self?.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+        }
+        
         productViewModel.onCartUpdate = { [weak self] totalPrice in
             guard let self = self else { return }
             self.cartView.bind(totalPrice: totalPrice)
@@ -122,6 +129,7 @@ extension ProductViewController {
         }
     }
     //MARK: - Cell Binding
+    
     private func setupShortProductCellBinding(_ cell: ShortProductContainerCell) {
         cell.onShortProductTapped = { [weak self] index in
             
@@ -175,6 +183,7 @@ extension ProductViewController: UITableViewDataSource, UITableViewDelegate {
         switch menuSection {
         case .stories:
             let cell = tableView.dequeueCell(indexPath) as StoryContainerCell
+            cell.bind(stories: productViewModel.allStories)
             return cell
         case .shortProducts:
             let cell = tableView.dequeueCell(indexPath) as ShortProductContainerCell

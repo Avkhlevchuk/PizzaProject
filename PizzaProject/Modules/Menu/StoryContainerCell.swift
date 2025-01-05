@@ -8,10 +8,11 @@
 import UIKit
 import SnapKit
 
-final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
-    let productViewModel = ProductViewModel(di: DependencyContainer())
+final class StoryContainerCell: UITableViewCell {
     
-    lazy var containerView: UICollectionView = {
+    private var stories = [String]()
+    
+    private lazy var containerView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -42,26 +43,45 @@ final class StoryContainerCell: UITableViewCell, UICollectionViewDelegate, UICol
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupViews() {
+}
+
+//MARK: - Layout
+
+extension StoryContainerCell {
+    
+    private func setupViews() {
         contentView.backgroundColor = Colors.backgroundColor
         contentView.addSubview(containerView)
     }
     
-    func setupConstaints() {
+    private func setupConstaints() {
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.height.equalTo(130)
         }
     }
+}
+
+//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+
+extension StoryContainerCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return productViewModel.allStories.count
+        return stories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueCell(indexPath) as StoryCollectionCell
-        let story = productViewModel.allStories[indexPath.row]
+        let story = stories[indexPath.row]
         cell.update(story)
         return cell
+    }
+}
+
+//MARK: - Public
+
+extension StoryContainerCell {
+    func bind(stories: [String]) {
+        self.stories = stories
     }
 }
