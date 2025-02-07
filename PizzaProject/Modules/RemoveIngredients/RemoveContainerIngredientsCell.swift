@@ -1,10 +1,3 @@
-//
-//  RemoveIngredientsCell.swift
-//  PizzaProject
-//
-//  Created by Artem Khlevchuk on 18.11.2024.
-//
-//
 import UIKit
 
 class RemoveContainerIngredientsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {

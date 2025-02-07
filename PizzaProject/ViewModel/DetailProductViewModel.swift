@@ -211,22 +211,22 @@ class DetailProductViewModel: IDetailProductViewModel {
         
         let order = Order(orderId: orderId, product: product, count: 1, removedIngredients: ingredientStatesInOrder, toppings: toppingsInOrder, sumForToppings: sumToppings, priceForPizza: priceForPizza, sizePizza: sizePizza, typeBasePizza: typeBasePizza)
         
-        
         if currentOrder.isEmpty {
             di.orderArchiver.save(order: [order])
         }else {
             
-            for (index, item) in currentOrder.enumerated() {
-                
-                if order == item {
-                    currentOrder[index].count += 1
-                    di.orderArchiver.addCountPosition(index: index)
-                    return
-                }
+            if let index = checkPositionInOrder(orders: currentOrder, newPosition: order) {
+                currentOrder[index].count += 1
+                di.orderArchiver.addCountPosition(index: index)
+                return
             }
-            di.orderArchiver.addPosition(order: order)
             
+            di.orderArchiver.addPosition(order: order)
         }
+    }
+    
+    func checkPositionInOrder(orders: [Order], newPosition: Order ) -> Int? {
+        return orders.firstIndex { $0 == newPosition }
     }
     
     func editPosition() {
